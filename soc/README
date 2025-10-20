@@ -1,0 +1,81 @@
+OR1k SoC on Altera Reference Design Quickstart
+==============================================
+
+**Requirements:
+
+1. Altera Quartus II 9.0 + SP1 for Linux
+
+  Currently, we are using this version to synthesize our SoC. Not yet test on other
+  version, may be work.
+
+  Vist this link to download it:
+	
+	https://www.altera.com/support/software/download/altera_design/quartus_sub/dnl-quartus_sub.jsp
+  
+
+2. ModelSim-Altera
+
+  For simulation, use the version should need to be meet with QuartusII's
+
+  Download also from above link
+
+
+3. libftdi
+
+  we need the lib to drive USB-Blaster for adv_debug_system.
+
+  If you are using Fedora 10/11/12, congratulations, you can easily use yum to 
+  install it by follow
+
+	su -c "yum install libftdi.i586 libftdi-devel.i586"
+
+
+
+4. OR1k toolchain
+
+  We need to the toolchain to build our bootloader, linux kernel and Busybox, etc.
+
+  To install the toolchain, you can use the script 
+
+	http://www.opencores.org/svnget,or1k?file=/trunk/toolchain_install_scripts/MOF_ORSOC_TCHN_v5c_or32-elf.sh
+
+  and follow this install guide line to install it. 
+
+	http://www.opencores.org/openrisc,gnu_toolchain
+  
+
+
+**Hardware configuration
+
+  This SoC includes the following functions:
+  - OR1200 processor (8KB page, with cache and MMU)
+  - Altera DDR SDRAM controller (32MB on-baord DDR)
+  - UART
+  - GPIO
+  - MAC 10/100 core
+  - Internal ROM (16KB)
+
+
+**Memory Mapping:
+  0x00000000	: DDR SDRAM  32MB
+  0x20000000	: Open Eth
+  0x30000000	: UART
+  0x40000000	: GPIO
+  0x50000000	: SD/MMC
+  0xF0000000	: SRAM 16KB as the boot rom
+
+
+
+Let us know if you have any problems!
+
+Enjoy,
+
+
+
+Xianfeng Zeng
+
+xianfeng.zeng@SierraAtlantic.com
+Xianfeng.zeng@gmail.com
+
+11 26, 2009
+
