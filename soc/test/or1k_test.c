@@ -29,9 +29,9 @@ void main()
   }
 
   // try lmr ?
-  *((unsigned int *) (MC_CSR_BASE + 0x14)) = 0x22; // load mode reg req mc_cs_0 [CAS latency=2, Sequential Burst Type, Pro
-grammed Burst Length]
-
+  // load mode reg req mc_cs_0 [CAS latency=2, Sequential Burst Type, Programmed Burst Length]
+  *((unsigned int *) (MC_CSR_BASE + 0x14)) = 0x22; 
+ 
   // try writes
   *((unsigned int *) (DRAM_BASE + 0x5000)) = 0x11111111;
   *((unsigned int *) (DRAM_BASE + 0x5004)) = 0x22222222;
