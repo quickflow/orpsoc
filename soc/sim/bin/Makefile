@@ -27,7 +27,9 @@ sim:
 #       iverilog -D LXT -osim.out ${INC} -s or1k_soc_top -c ../bin/iver.cmd
 #       /home/xzeng/Project/iverilog/build/bin/iverilog -D LXT -osim.out ${INC} -s CPUboard_tb -c ../bin/iver.cmd
 	./sim.out -lxt
-#       gtkwave ./wavedump.lxt wave_signals.sav &
+
+show_wave:
+	gtkwave ./wavedump.lxt wave_signals.sav &
 
 sim_vcd:
 	iverilog -D VCD -osim.out -s CPUboard_tb -c ../bin/iver.cmd
