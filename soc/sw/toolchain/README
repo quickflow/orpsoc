@@ -1,0 +1,3 @@
+run make to get or32 toolchain and build
+
+After make, put build/tools/or32-uclinux/bin to your search PATH
