@@ -24,17 +24,17 @@ INC += -I${TOPDIR}/rtl/adv_debug_sys/Hardware/adv_dbg_if/rtl/verilog
 
 sim:
 	iverilog -D LXT -osim.out ${INC} -s CPUboard_tb  -c ../bin/iver.cmd
-#       iverilog -D LXT -osim.out ${INC} -s or1k_soc_top -c ../bin/iver.cmd
-#       /home/xzeng/Project/iverilog/build/bin/iverilog -D LXT -osim.out ${INC} -s CPUboard_tb -c ../bin/iver.cmd
 	./sim.out -lxt
 
 show_wave:
-	gtkwave ./wavedump.lxt wave_signals.sav &
+	gtkwave ./wavedump.vcd wave_signals.sav &
 
 sim_vcd:
-	iverilog -D VCD -osim.out -s CPUboard_tb -c ../bin/iver.cmd
+	iverilog -D VCD -osim.out ${INC} -s CPUboard_tb -c ../bin/iver.cmd
 	./sim.out
-	gtkwave ./wavedump.vcd ../bin/wave_signals.sav &
+
+show_wave_lxt:
+	gtkwave ./wavedump.lxt wave_signals.sav &
 
 clean:
 	rm -rf *.key *.log *.shm INCA* .simvision *.out *.vcd *.lxt *~
