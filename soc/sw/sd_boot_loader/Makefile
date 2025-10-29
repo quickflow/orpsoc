@@ -1,5 +1,5 @@
 ifndef CROSS_COMPILE
-CROSS_COMPILE = /home/aray/fpga2/orpsoc_git/orpsoc/soc/toolchain/or1k-linux/bin/or1k-linux-
+CROSS_COMPILE = ../../toolchain/or1k-linux/bin/or1k-linux-
 #CROSS_COMPILE = or32-elf-
 #CROSS_COMPILE = or32-uclinux-
 CC = $(CROSS_COMPILE)gcc
@@ -50,9 +50,7 @@ boot.ihex: boot.or32 Makefile
 #########################################################################
 
 clean:
-	@rm *.o
-	@rm boot.*
-	@rm System.map
+	rm *.o boot.* System.map ss
 
 
 distclean: clean
