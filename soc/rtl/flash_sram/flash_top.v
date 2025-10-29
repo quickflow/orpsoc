@@ -127,7 +127,7 @@ output			a_oe;
 //
 // Internal wires and regs
 //
-reg	[7:0]		mem [8388607:0];
+reg	[7:0]		mem [1024*1024:0];
 wire	[31:0]		adr;
 `ifdef FLASH_GENERIC_REGISTERED
 reg			wb_err_o;
