@@ -14,7 +14,8 @@ INC += -I${TOPDIR}/rtl/rom_wb
 INC += -I${TOPDIR}/rtl/or1200/rtl/verilog
 INC += -I${TOPDIR}/rtl/mem_if/rtl/verilog
 INC += -I${TOPDIR}/rtl/flash_sram
-INC += -I${TOPDIR}/rtl/uart16550/rtl/verilog
+#INC += -I${TOPDIR}/rtl/uart16550/rtl/verilog
+INC += -I${TOPDIR}/rtl/wbuart/rtl
 INC += -I${TOPDIR}/rtl/gpio/rtl/verilog
 INC += -I${TOPDIR}/rtl/spi/rtl/verilog
 INC += -I${TOPDIR}/rtl/ethernet/rtl/verilog
@@ -31,7 +32,7 @@ show_wave:
 
 sim_vcd:
 	iverilog -D VCD -osim.out ${INC} -s CPUboard_tb -c ../bin/iver.cmd
-	./sim.out
+	./sim.out | tee output.log
 
 show_wave_lxt:
 	gtkwave ./wavedump.lxt wave_signals.sav &

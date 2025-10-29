@@ -19,19 +19,21 @@
  
 ../../rtl/rom_wb/rom_wb.v
  
-../../rtl/uart16550/rtl/verilog/uart_top.v
-../../rtl/uart16550/rtl/verilog/uart_wb.v
-../../rtl/uart16550/rtl/verilog/uart_regs.v
-../../rtl/uart16550/rtl/verilog/raminfr.v
-../../rtl/uart16550/rtl/verilog/uart_defines.v
-../../rtl/uart16550/rtl/verilog/timescale.v
-../../rtl/uart16550/rtl/verilog/uart_rfifo.v
-../../rtl/uart16550/rtl/verilog/uart_debug_if.v
-../../rtl/uart16550/rtl/verilog/uart_tfifo.v
-../../rtl/uart16550/rtl/verilog/uart_receiver.v
-../../rtl/uart16550/rtl/verilog/uart_sync_flops.v
-../../rtl/uart16550/rtl/verilog/uart_transmitter.v
- 
+//../../rtl/uart16550/rtl/verilog/uart_top.v
+//../../rtl/uart16550/rtl/verilog/uart_wb.v
+//../../rtl/uart16550/rtl/verilog/uart_regs.v
+//../../rtl/uart16550/rtl/verilog/raminfr.v
+//../../rtl/uart16550/rtl/verilog/uart_defines.v
+//../../rtl/uart16550/rtl/verilog/timescale.v
+//../../rtl/uart16550/rtl/verilog/uart_rfifo.v
+//../../rtl/uart16550/rtl/verilog/uart_debug_if.v
+//../../rtl/uart16550/rtl/verilog/uart_tfifo.v
+//../../rtl/uart16550/rtl/verilog/uart_receiver.v
+//../../rtl/uart16550/rtl/verilog/uart_sync_flops.v
+//../../rtl/uart16550/rtl/verilog/uart_transmitter.v
+
+../../rtl/wbuart/rtl/wb_uart.v
+
 ../../rtl/mem_if/rtl/verilog/mc_wb_if.v
 ../../rtl/mem_if/rtl/verilog/mc_defines.v
 ../../rtl/mem_if/rtl/verilog/mc_top.v
