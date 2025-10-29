@@ -570,41 +570,34 @@ mc_top mem_if(
    assign 	 mem_ba_pad_o = (mem_con_pad_oe) ? mc_addr_wire_o[14:13] : {2{1'bz}};
 
 //
-// Instantiation of the UART16550
+// Instantiation of the WBUART
 //
-uart_top uart_top (
 
-	// WISHBONE common
-	.wb_clk_i	( clk_cpu_25 ), 
-	.wb_rst_i	( wb_rst_pad_i ),
-
-	// WISHBONE slave
-	.wb_adr_i	( wb_us_adr_i[4:0] ),
-	.wb_dat_i	( wb_us_dat_i ),
-	.wb_dat_o	( wb_us_dat_o ),
-	.wb_we_i	( wb_us_we_i  ),
-	.wb_stb_i	( wb_us_stb_i ),
-	.wb_cyc_i	( wb_us_cyc_i ),
-	.wb_ack_o	( wb_us_ack_o ),
-	.wb_sel_i	( wb_us_sel_i ),
-
-	// Interrupt request
-	.int_o		( pic_ints[`APP_INT_UART] ),
-
-	// UART signals
-	// serial input/output
-	.stx_pad_o	( uart_stx_pad_o ),
-	.srx_pad_i	( uart_srx_pad_i ),
-
-	// modem signals
-	.rts_pad_o	( ),
-	.cts_pad_i	( 1'b0 ),
-	.dtr_pad_o	( ),
-	.dsr_pad_i	( 1'b0 ),
-	.ri_pad_i	( 1'b0 ),
-	.dcd_pad_i	( 1'b0 )
-);
-
+uart_wishbone uart_top
+  (
+   
+   // WISHBONE common
+   .clk	( clk_cpu_25 ), 
+   .rst	( wb_rst_pad_i ),
+   
+   // WISHBONE slave
+   .wb_adr_i	( wb_us_adr_i ),
+   .wb_dat_i	( wb_us_dat_i ),
+   .wb_dat_o	( wb_us_dat_o ),
+   .wb_we_i	( wb_us_we_i  ),
+   .wb_stb_i	( wb_us_stb_i ),
+   .wb_cyc_i	( wb_us_cyc_i ),
+   .wb_ack_o	( wb_us_ack_o ),
+   .wb_sel_i	( wb_us_sel_i ),
+   
+   // Interrupt request
+   .irq_out	( pic_ints[`APP_INT_UART] ),
+   
+   // UART signals
+   // serial input/output
+   .tx	( uart_stx_pad_o ),
+   .rx	( uart_srx_pad_i )   
+   );
 
    // GPIO
 // wbs_gpio_led
