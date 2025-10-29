@@ -144,7 +144,7 @@ _reset:
 	
 // Jump to start of program
 
-        load32i r2, (_Start)
+        load32i r2, (main)
         l.jr    r2
         l.nop
 
@@ -178,7 +178,7 @@ __external_IRQ:
         l.bnf   JUMP                      // external irq enabled, all ok.
         l.nop
 
-JUMP:	  l.jal (_external_exeption)
+JUMP:	  l.jal (external_exeption)
         l.nop
 
         l.jal (restore_state)
@@ -306,24 +306,12 @@ ic_enable:
 ENTRY(_early_uart_init)
         l.movhi	r3,hi(UART_BASE_ADD)
 
-        l.addi	r4,r0,0x00c0	//0x2 FIFO Control
-        l.sb	0x2(r3),r4        
+        l.addi	r4,r0,0x00c0	//0x8 TXDAT < 0xc0
+        l.sb	0x08(r3),r4        
 
-        l.addi	r4,r0,0x0
-        l.sb	0x1(r3),r4	//0x1 Interrupt Enable
+        l.addi	r4,r0,0x00c1
+        l.sb	0x08(r3),r4	//0x8 TXDAT < 0xc1
 
-        l.addi	r4,r0,0x0003
-        l.sb	0x3(r3),r4	//0x3 Line Control Register
-
-        l.lbz	r5,3(r3)	//Line Control Register
-        l.ori	r4,r5,0x0080
-        l.sb	0x3(r3),r4
-	l.addi	r4,r0,((UART_DEVISOR>>8) & 0x000000ff)
-        l.sb	UART_DLM(r3),r4
-        l.addi  r4,r0,((UART_DEVISOR) & 0x000000ff)
-        l.sb	UART_DLL(r3),r4
-        l.sb	0x3(r3),r5
-  
         l.jr	r9
         l.nop
 
@@ -372,10 +360,10 @@ ENTRY(_emergency_print)
 
 /* Jump to 0x0000100 after the Image was copied to this section */
 
-.global _jumpToRAM
+.global jumpToRAM
 
         .section .text, "ax"
-_jumpToRAM:
+jumpToRAM:
         l.movhi r2,hi(0x00000100)
         l.ori   r2,r2,lo(0x00000100)
         l.jr    r2
