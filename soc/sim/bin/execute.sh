@@ -1,4 +1,4 @@
-pushd .; cd ../../test; source ./compile.sh ; popd;
+pushd .; cd ../../sw/sd_boot_loader; make ; popd;
 
-cp ../../test/tt flash.in; make sim_vcd
+make sim_vcd
 
