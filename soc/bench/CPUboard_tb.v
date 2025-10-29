@@ -202,19 +202,25 @@ wire [1:0]	flash_rpblevel;		// Special flash inputs
          );
 
 
+   reg [7:0] old_gpio_val;
+
  	 always @(posedge clk) begin
-		if (gpio_pad_io[7:0] == 8'hff) begin
-			// 0xff has been written to GPIO, so the
-			// sofware has completed its tests
-			$display("Software execution complete.");
-			$finish();
-		end else if (gpio_pad_io[7:0] == 8'h55) begin
-			// 0x55 has been written to GPIO, so the
-			// there was an error during the tests
-			$display("***Error during software tests. Finishing simulation.");
-			$finish();
-		end
-	end   
+	    old_gpio_val <= gpio_pad_io;
+	    if (old_gpio_val != gpio_pad_io)
+	      $display("[%m]GPIO val = %h", gpio_pad_io);
+	    
+	    if (gpio_pad_io[7:0] == 8'hff) begin
+	       // 0xff has been written to GPIO, so the
+	       // sofware has completed its tests
+	       $display("Software execution complete.");
+	       $finish();
+	    end else if (gpio_pad_io[7:0] == 8'h55) begin
+	       // 0x55 has been written to GPIO, so the
+	       // there was an error during the tests
+	       $display("***Error during software tests. Finishing simulation.");
+	       $finish();
+	    end
+	 end   
 
 
 	always @(posedge clk or rstn) begin
@@ -222,7 +228,7 @@ wire [1:0]	flash_rpblevel;		// Special flash inputs
 			counter = 0;
 		end
 	   else begin
-	      if (counter == 5000) begin
+	      if (counter == 20000) begin
 		 $display("Completed");
 //		 Flash.StoreToFile;
 		 

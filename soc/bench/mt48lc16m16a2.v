@@ -357,7 +357,7 @@ module mt48lc16m16a2 (Dq, Addr, Ba, Clk, Cke, Cs_n, Ras_n, Cas_n, We_n, Dqm);
             // Activate an open bank can corrupt data
             if ((Ba === 2'b00 && Act_b0 === 1'b1) || (Ba === 2'b01 && Act_b1 === 1'b1) ||
                 (Ba === 2'b10 && Act_b2 === 1'b1) || (Ba === 2'b11 && Act_b3 === 1'b1)) begin
-                $display ("%m : at time %t ERROR: Bank already activated -- data can be corrupted", $time);
+//                $display ("%m : at time %t ERROR: Bank already activated -- data can be corrupted", $time);
             end
 
             // Activate Bank 0
