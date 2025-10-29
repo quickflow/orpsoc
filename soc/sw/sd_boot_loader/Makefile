@@ -1,5 +1,6 @@
 ifndef CROSS_COMPILE
-CROSS_COMPILE = or32-elf-
+CROSS_COMPILE = /home/aray/fpga2/orpsoc_git/orpsoc/soc/toolchain/or1k-linux/bin/or1k-linux-
+#CROSS_COMPILE = or32-elf-
 #CROSS_COMPILE = or32-uclinux-
 CC = $(CROSS_COMPILE)gcc
 LD = $(CROSS_COMPILE)ld
@@ -24,7 +25,10 @@ boot.or32: $(OBJECTS) Makefile
 	@$(NM) $< | \
 		grep -v '\(compiled\)\|\(\.o$$\)\|\( [aUw] \)\|\(\.\.ng$$\)\|\(LASH[RL]DI\)' | \
 		sort >> System.map
-		$(OBJ) -x -d -S boot.or32 >> System.map
+		$(OBJ) -x -z -d -S boot.or32 >> System.map
+	echo "@100" > ss
+	od -t x1 -w1 -v --skip-bytes=8448 --address-radix=n boot.or32 >> ss
+	cp ss ../../sim/bin/flash.in
 
 boot.ihex: boot.or32 Makefile
 	@printf "\r\n\t--- Creating Ihex file: $@ ---\r\n"
@@ -32,7 +36,7 @@ boot.ihex: boot.or32 Makefile
 	$(OBJC) -O binary boot.or32 boot.bin
 	sed "/:04/d" boot.ihex > boot.hex
 	perl ../utils/hex2mif8.pl < boot.ihex > boot.mif
-	cp boot.mif '../../prj/altera/bootrom/'
+#	cp boot.mif '../../prj/altera/bootrom/'
 
 %.o:%.S $(INCL) Makefile
 	@printf "\r\n\t--- Assembling $(<) ---\r\n"

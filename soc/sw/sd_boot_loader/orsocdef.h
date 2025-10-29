@@ -42,7 +42,7 @@ typedef unsigned int        uint;
 
 #if defined (__GNUC__)
 
-  typedef unsigned char     bool;
+/*  typedef unsigned char     bool; */
 
   typedef signed char       int8;
   typedef signed short      int16;

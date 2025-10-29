@@ -21,6 +21,7 @@
 #include "orsocdef.h"
 #include "board.h"
 
+extern void  jumpToRAM();
 
 #define DEBUG 1
 
@@ -29,22 +30,22 @@
 #ifdef DEBUG
 void or1k_putc(int c)
 {
-	while ( 0x20 != (REG8(UART_BASE_ADD+5) & 0x20) )
+  while ( REG8(UART_BASE_ADD+0x10) & 0x4 ) // wait if fifo_full
 		;
 
-	REG8(UART_BASE_ADD) = c;
+  REG8(UART_BASE_ADD + 0x08) = c;
 }
 
 void print(unsigned char *c)
 {
-	uint32 i;
-
-	if (c == NULL)
-		return;
-
-	for (i = 0; c[i] != 0; i++) {
-		or1k_putc(c[i]);
-	}
+  uint32 i;
+  
+  if (c == NULL)
+    return;
+  
+  for (i = 0; c[i] != 0; i++) {
+    or1k_putc(c[i]);
+  }
 }
 
 void print32bit (long unsigned int val)
@@ -167,7 +168,7 @@ int copy_sd2ddr(void)
 		if ( transError == SD_READ_NO_ERROR) {
 			for (i = 0; i < 512; i++) {
 				data = REG8(SD_BASE_ADD + SD_RX_FIFO_DATA_REG) ;			
-				REG8(DDR_SDRAM_BASE_ADDR + ddr_offset + i) = data ;
+				REG8(DRAM_BASE + ddr_offset + i) = data ;
 //				print32bit((long unsigned int)data);
 			}
 			if ((blockCnt % 0x40) == 0) {
@@ -200,52 +201,47 @@ int copy_sd2ddr(void)
 /*                        TEST EXTERNAL DDR SDRAM                             */
 /******************************************************************************/
 
-void ddr_sdram_sample_test()
+void ddr_sdram_init()
 {
-	uint32 int32;
-	uint16 int16;
-	uint8  int8;
-	int    i;
+  *((unsigned int *) MC_CSR_INIT) = 0x1; // mc_ reg rf0  mc_cs_0 // csr_r2[31:24], csr_r[10:1] (init)
 
-	REG32(DDR_SDRAM_BASE_ADDR) = 0x12345678;
-	int32 = REG32(DDR_SDRAM_BASE_ADDR);
+  // delay a while
+  *((unsigned int *) SRAM_BASE) = 0; // zero out SRAM [0]
+  while(*((unsigned int *) SRAM_BASE) < 64) {
+    *((unsigned int *) SRAM_BASE) = *((unsigned int *) SRAM_BASE) + 1; // increment it
+  }
 
-	REG16(DDR_SDRAM_BASE_ADDR + 10) = 0x55aa;
-	int16 = REG16(DDR_SDRAM_BASE_ADDR + 10);
-
-	REG8(DDR_SDRAM_BASE_ADDR + 20) = 0x5a;
-	int8 = REG8(DDR_SDRAM_BASE_ADDR + 20);
-
-	if (REG8(DDR_SDRAM_BASE_ADDR + 20)  != 0x5a)
-		print ("DDR SDRAM accesses short type Error:20!\n\r");
-
-	REG8(DDR_SDRAM_BASE_ADDR + 100) = 0x12;
-	REG8(DDR_SDRAM_BASE_ADDR + 101) = 0x34;
-	REG8(DDR_SDRAM_BASE_ADDR + 102) = 0x56;
-	REG8(DDR_SDRAM_BASE_ADDR + 103) = 0x78;
-
-	int32 = REG32(DDR_SDRAM_BASE_ADDR + 100);
-
-	if (REG8(DDR_SDRAM_BASE_ADDR + 100)  != 0x12)
-		print ("DDR SDRAM accesses char type Error:100!\n\r");
-	if (REG8(DDR_SDRAM_BASE_ADDR + 101)  != 0x34)
-		print ("DDR SDRAM accesses char type Error:101!\n\r");
-	if (REG8(DDR_SDRAM_BASE_ADDR + 102)  != 0x56)
-		print ("DDR SDRAM accesses char type Error:102!\n\r");
-	if (REG8(DDR_SDRAM_BASE_ADDR + 103)  != 0x78)
-		print ("DDR SDRAM accesses char type Error:103!\n\r");
-
-	for (i=0;i<64;i++) {
-		REG8(DDR_SDRAM_BASE_ADDR + i) = i;	
-	}
-
-	for (i=0;i<64;i++) {
-		REG8(0x3900+i) = REG8(DDR_SDRAM_BASE_ADDR + i);	
-	}
-
-	print ("DDR SDRAM sample test done.\n\r");
+  // try lmr ?
+  // load mode reg req mc_cs_0 [CAS latency=2, Sequential Burst Type, Programmed Burst Length]
+  *((unsigned int *) (MC_CSR_BASE + 0x14)) = 0x22; 
 }
 
+void ddr_sdram_sample_test()
+{
+
+  // try writes
+  *((unsigned int *) (DRAM_BASE + 0x5000)) = 0x11111111;
+  *((unsigned int *) (DRAM_BASE + 0x5004)) = 0x22222222;
+  *((unsigned int *) (DRAM_BASE + 0x5008)) = 0x33333333;
+  *((unsigned int *) (DRAM_BASE + 0x500c)) = 0x44444444;
+
+  // try reads
+  *((unsigned int *) (DRAM_BASE + 0x8000)) = *((unsigned int *) (DRAM_BASE + 0x5000));
+  *((unsigned int *) (DRAM_BASE + 0x8004)) = *((unsigned int *) (DRAM_BASE + 0x5004));
+  *((unsigned int *) (DRAM_BASE + 0x8008)) = *((unsigned int *) (DRAM_BASE + 0x5008));
+  *((unsigned int *) (DRAM_BASE + 0x800c)) = *((unsigned int *) (DRAM_BASE + 0x500c));
+
+  if (*((unsigned int *) 0x8000) == 0x11111111)
+    GPIO_Write(0x11);
+  if (*((unsigned int *) 0x8004) == 0x22222222)
+    GPIO_Write(0x12);
+  if (*((unsigned int *) 0x8008) == 0x33333333)
+    GPIO_Write(0x13);
+  if (*((unsigned int *) 0x800c) == 0x44444444)
+    GPIO_Write(0x14);
+
+  print ("DDR SDRAM sample test done.\n\r");
+}
 
 /*$$EXTERNAL EXEPTIONS*/
 /******************************************************************************/
@@ -266,7 +262,7 @@ void external_exeption()
 /*                                                                            */
 /******************************************************************************/
 
-void Start()
+void main()
 {
   uint32 i;
   uint8  str[9];
@@ -277,15 +273,17 @@ void Start()
 
   print("\n\r\n\t");
   print("==OpenRisc 1200 SOC==\n\r\n");
-  GPIO_Write(~0x0);
+  GPIO_Write(0x1);
 
   print("\n\r");
 
+  GPIO_Write(0x2);
   print("SD Card Bootloader, v0.2\n\r");
   print("Xianfeng Zeng, 2009 SA\n\r");
   print("Xianfeng@opencores.org\n\r");
   print("http://www.opencores.org/project,or1k_soc_on_altera_embedded_dev_kit\n\r");
 
+  GPIO_Write(0x3);
   print("\n\r");
 
   print("System Clock: 30MHz\n\r\n");
@@ -298,6 +296,7 @@ void Start()
   print("SRAM Base Address:      0xF0000000 - 16KB\n\r");
   print("\r\n\n");
 
+  GPIO_Write(0x4);
 
   print("Init SD Card:");
   REG8(SD_BASE_ADD + SD_TRANS_CTRL_REG) = 0x1;  /* reset spiMaster */
@@ -305,19 +304,36 @@ void Start()
   REG8(SD_BASE_ADD + SD_TRANS_CTRL_REG) = 0x0;
   if (spiMaster_init() == 0) {
 	print("Passed!\n\r");
+	GPIO_Write(0x51);
   } else {
 	print("Failed!\n\r");
+	GPIO_Write(0x55);
   }
 
-  ddr_sdram_sample_test();
-  copy_sd2ddr();
+  GPIO_Write(0x5);
 
-  GPIO_Write(~0x1);
+  ddr_sdram_init();
+  
+  GPIO_Write(0x54);
+
+  ddr_sdram_sample_test();
+
+  GPIO_Write(0x6);
+
+  ddr_sdram_sample_test();
+
+  GPIO_Write(0x61);
+
+  copy_sd2ddr();
 
   print("\n\r");
 
+  GPIO_Write(0x7);
+
   print("Jump to DDR SDRAM: 0x100\n\r");
   jumpToRAM();
+
+  GPIO_Write(0x8);
 
   print("Should not get here!!:\n\r");
   while(TRUE) {
