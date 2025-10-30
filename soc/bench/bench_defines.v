@@ -1,4 +1,4 @@
-`define FLASH_GENERIC
+//`define FLASH_GENERIC
 //`define FLASH_GENERIC_REGISTERED
 
 `define SRAM_GENERIC
