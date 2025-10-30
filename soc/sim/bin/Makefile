@@ -27,6 +27,10 @@ sim:
 	iverilog -D LXT -osim.out ${INC} -s CPUboard_tb  -c ../bin/iver.cmd
 	./sim.out -lxt
 
+sim_vcs:
+	vcs -f vcs.flist
+	./simv | tee output.log
+
 show_wave:
 	gtkwave ./wavedump.vcd wave_signals.sav &
 
