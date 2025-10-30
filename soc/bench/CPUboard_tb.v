@@ -228,7 +228,7 @@ wire [1:0]	flash_rpblevel;		// Special flash inputs
 			counter = 0;
 		end
 	   else begin
-	      if (counter == 20000) begin
+	      if (counter == 100000) begin
 		 $display("Completed");
 //		 Flash.StoreToFile;
 		 
