@@ -97,10 +97,10 @@ _reset:
 	l.nop
 
 	/*
-	 * Set stack pointer (r1) to 0xf0003560
+	 * Set stack pointer (r1) to 0xe0003560 (SRAM)
 	 * Clear all other registers
 	 */
-	.equ sp,0xf0003560	;
+	.equ sp,0xe0003560	;
 	l.movhi r0,0x0000	; #r0 = 0
 	l.ori r0,r0,0x0000	; 
 	l.movhi r1,hi(sp)	; #r1 = sp

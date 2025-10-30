@@ -150,6 +150,8 @@ int copy_sd2ddr(void)
 	print("Blocks:");
 	print32bit((long unsigned int)numBlocks);
 
+	GPIO_Write(0x77);
+
 	for (blockCnt = 0; blockCnt < numBlocks; blockCnt++) {
 		REG8(SD_BASE_ADD + SD_ADDR_7_0_REG)   = 0;
 		REG8(SD_BASE_ADD + SD_ADDR_15_8_REG)  = (unsigned char) ((ddr_offset >> 8) & 0xff);
@@ -164,8 +166,11 @@ int copy_sd2ddr(void)
 			;
 		}
 
+		GPIO_Write(0x78);
+
 		transError = REG8(SD_BASE_ADD + SD_TRANS_ERROR_REG) & 0xc;
 		if ( transError == SD_READ_NO_ERROR) {
+		  GPIO_Write(0x79);
 			for (i = 0; i < 512; i++) {
 				data = REG8(SD_BASE_ADD + SD_RX_FIFO_DATA_REG) ;			
 				REG8(DRAM_BASE + ddr_offset + i) = data ;
@@ -182,6 +187,7 @@ int copy_sd2ddr(void)
 
 			ddr_offset += 512;		
 		} else {
+		  GPIO_Write(0x7a);
 			or1k_putc('R');
 			j++;
                         if (j == 20) {
