@@ -557,7 +557,7 @@
   assign  CSR [0] = 1'b0 ;
 
   // Output Drivers //
-  assign dq[7:0] = (DriveOutputs == `TRUE) ? InternalOutput : 8'hz ;
+  assign dq[7:0] = (!ceb && (DriveOutputs == `TRUE)) ? InternalOutput : 8'hz ;
 
   always @(Reset) begin : Reset_process
     if (Reset) begin
@@ -582,12 +582,13 @@
   end
 
 
-  always @(Internal_RE or ReadMode or addr) begin : array_read
+  always @(Internal_RE or ReadMode or addr or DriveOutputs) begin : array_read
     if (Internal_RE && ReadMode == `rdARRAY)
       ArrayOut  = MainArray[addr] ;      // x8 outputs
   end
 
-  always @(Internal_RE or ReadMode or addr or Internal_OE2) begin
+//  always @(Internal_RE or ReadMode or addr or Internal_OE2) begin
+  always @(*) begin
     // output mux
     // Determine and generate the access time .
     ToOut = 0;
@@ -1077,6 +1078,7 @@
   end
 
   // record the time for addr changes from ADDR change to posedge CEB.
+`ifdef ASSERT_CE_ADDR_VIOLATION
   always @(addr or posedge ceb) begin
        if ($time != 0 & flash_cycle & ceb) begin
           if ((curr_addr_time + TAVAV) > $time)    //Read/Write Cycle Time
@@ -1085,7 +1087,8 @@
        curr_addr_time = $time ;
        flash_cycle = ~ceb;
   end
-
+`endif
+   
   // start of flash cycle
   always @(negedge ceb) begin
        flash_cycle = 1;
@@ -1385,7 +1388,7 @@
         TempTime = WriteRecovery + TGLQX ;
         DriveOutputs = `FALSE ;
         WriteRecovery = WriteRecovery + TGLQV -TempTime;
-        DriveOutputs <= #WriteRecovery `TRUE ;
+         DriveOutputs <= #WriteRecovery `TRUE ;
       end
       else begin
        InternalOutput <= #TOH `MaxOutputs'hx;
