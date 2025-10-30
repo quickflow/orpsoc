@@ -211,7 +211,7 @@ initial fflash = $fopen("flash.log");
 always @(posedge wb_clk_i)
 	if (wb_cyc_i)
 		if (wb_stb_i & wb_we_i) begin
-//			$fdisplay(fflash, "%t Trying to write into flash at %h (%b)", $time, wb_adr_i, wb_we_i);
+			$fdisplay(fflash, "%t Trying to write into flash at %h (%b)", $time, wb_adr_i, wb_we_i);
 //			00 $finish;
 			if (wb_sel_i[3])
 				mem[{wb_adr_i[23:2], 2'b00}+0] = wb_dat_i[31:24];
@@ -288,7 +288,14 @@ reg	[15:0]		counter;
 assign wb_ack_o = ~wb_err_o & ack;
 assign wb_err_o = 1'b0;
 assign flash_rstn = ~wb_rst_i;
-assign a = { wb_adr_i[20:2], counter[9:8] };	// Lower 1MB is used by FPGA design conf.
+//assign a = { wb_adr_i[20:2], counter[4:3] };	// Lower 1MB is used by FPGA design conf.
+wire [1:0] addr_lo =
+	   (counter > 7) ? 3 :
+	   (counter > 6) ? 2 :
+	   (counter > 5) ? 1 : 0;
+   
+	   
+assign a = { wb_adr_i[20:2], addr_lo[1:0] };	// Lower 1MB is used by FPGA design conf.
 assign a_oe = (wb_cyc_i &! (|middle_tphqv));
 assign oen = |middle_tphqv;
 assign wen = 1'b1;
@@ -302,7 +309,8 @@ begin
   if (wb_rst_i)
     counter <=  8'h00;
   else 
-  if (!wb_cyc_i | (counter == 8'h1f) | (|middle_tphqv))
+//  if (!wb_cyc_i | (counter == 8'h1f) | (|middle_tphqv))
+  if (!wb_cyc_i | (counter == 8) | (|middle_tphqv))
     counter <=  8'h0;
   else
     counter <=  counter + 1;
@@ -316,7 +324,8 @@ begin
   if (wb_rst_i)
     ack <=  1'h0;
   else 
-  if (counter == 8'h1f && !(|middle_tphqv))
+//  if (counter == 8'h1f && !(|middle_tphqv))
+  if ((counter == 8) && !(|middle_tphqv))
     ack <=  1'h1;
   else
     ack <=  1'h0;
@@ -356,13 +365,13 @@ begin
   if (wb_rst_i)
     wb_dat_o <=  32'h0000_0000;
   else
-  if (counter[2:0] == 3'h7)
     begin
-      case (counter[4:3])
-        2'h0 : wb_dat_o[31:24] <=  d;
-        2'h1 : wb_dat_o[23:16] <=  d;
-        2'h2 : wb_dat_o[15:8]  <=  d;
-        2'h3 : wb_dat_o[7:0]   <=  d;
+//      case (counter[4:3])
+      case (counter)
+        5 : wb_dat_o[31:24] <=  d;
+        6 : wb_dat_o[23:16] <=  d;
+        7 : wb_dat_o[15:8]  <=  d;
+        8 : wb_dat_o[7:0]   <=  d;
       endcase
     end
 end
