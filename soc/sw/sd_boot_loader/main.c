@@ -21,6 +21,9 @@
 #include "orsocdef.h"
 #include "board.h"
 
+#define PASS_CODE 0xc001
+#define FAIL_CODE 0xdead
+
 extern void  jumpToRAM();
 
 #define DEBUG 1
@@ -107,28 +110,28 @@ void GPIO_Write(uint32 GPIO_data)
 //Initialize
 int spiMaster_init()
 {
-	uint8 data;
-	int   i;
-
-	REG8(SD_BASE_ADD + SD_CLK_DEL_REG) = 0x1;
-
-	for (i = 0; i < 5; i++) {
-		REG8(SD_BASE_ADD + SD_TRANS_TYPE_REG) = SD_INIT_SD;
-		REG8(SD_BASE_ADD + SD_TRANS_CTRL_REG) = 1; // TRANS_START;
-
-		do_sleep();
-
-		while (REG8(SD_BASE_ADD + SD_TRANS_STS_REG) & 0x1) { // exit while !TRABS_BUSY
-			;
-		}
-
-		data = REG8(SD_BASE_ADD + SD_TRANS_ERROR_REG) & 0x3;
-
-		if (data == 0) {
-			return 0;
-		}
-	}
-	return data;
+  uint8 data;
+  int   i;
+  
+  REG8(SD_BASE_ADD + SD_CLK_DEL_REG) = 0x1;
+  
+  for (i = 0; i < 5; i++) {
+    REG8(SD_BASE_ADD + SD_TRANS_TYPE_REG) = SD_INIT_SD;
+    REG8(SD_BASE_ADD + SD_TRANS_CTRL_REG) = 1; // TRANS_START;
+    
+    do_sleep();
+    
+    while (REG8(SD_BASE_ADD + SD_TRANS_STS_REG) & 0x1) { // exit while !TRABS_BUSY
+      ;
+    }
+    
+    data = REG8(SD_BASE_ADD + SD_TRANS_ERROR_REG) & 0x3;
+    
+    if (data == 0) {
+      return 0;
+    }
+  }
+  return data;
 }
 
 unsigned char data[512];
@@ -136,70 +139,70 @@ unsigned char data[512];
 int copy_sd2ddr(void)
 {
 
-	int i, j;
-	uint8 data;
-	unsigned char transError;
-
-	uint32 blockCnt;
-	uint32 numBlocks = 2 * 1024 * 10; // How mang blocks will be copied
-
-	uint32 ddr_offset = 0;
-
+  int i, j;
+  uint8 data;
+  unsigned char transError;
+  
+  uint32 blockCnt;
+  uint32 numBlocks = 2 * 1024 * 10; // How mang blocks will be copied
+  
+  uint32 ddr_offset = 0;
+  
+  print("\n\r");
+  print("Copying SD image to DDR SDRAM...\n\r");
+  print("Blocks:");
+  print32bit((long unsigned int)numBlocks);
+  
+  GPIO_Write(0x77);
+  
+  for (blockCnt = 0; blockCnt < numBlocks; blockCnt++) {
+    REG8(SD_BASE_ADD + SD_ADDR_7_0_REG)   = 0;
+    REG8(SD_BASE_ADD + SD_ADDR_15_8_REG)  = (unsigned char) ((ddr_offset >> 8) & 0xff);
+    REG8(SD_BASE_ADD + SD_ADDR_23_16_REG) = (unsigned char) ((ddr_offset >> 16) & 0xff);
+    REG8(SD_BASE_ADD + SD_ADDR_31_24_REG) = (unsigned char) ((ddr_offset >> 24) & 0xff);
+    
+    
+    REG8(SD_BASE_ADD + SD_TRANS_TYPE_REG) = SD_RW_READ_SD_BLOCK;
+    REG8(SD_BASE_ADD + SD_RX_FIFO_CONTROL_REG) = 0x1; // Clean the RX FIFO
+    REG8(SD_BASE_ADD + SD_TRANS_CTRL_REG) = 0x1; //TRANS_START
+    while (REG8(SD_BASE_ADD + SD_TRANS_STS_REG) & 0x1) { // exit while !TRABS_BUSY
+      ;
+    }
+    
+    GPIO_Write(0x78);
+    
+    transError = REG8(SD_BASE_ADD + SD_TRANS_ERROR_REG) & 0xc;
+    if ( transError == SD_READ_NO_ERROR) {
+      GPIO_Write(0x79);
+      for (i = 0; i < 512; i++) {
+	data = REG8(SD_BASE_ADD + SD_RX_FIFO_DATA_REG) ;			
+	REG8(DRAM_BASE + ddr_offset + i) = data ;
+	//				print32bit((long unsigned int)data);
+      }
+      if ((blockCnt % 0x40) == 0) {
+	or1k_putc('.');
+	j++;
+      }
+      if (j == 20) {
+	j = 0;
 	print("\n\r");
-	print("Copying SD image to DDR SDRAM...\n\r");
-	print("Blocks:");
-	print32bit((long unsigned int)numBlocks);
-
-	GPIO_Write(0x77);
-
-	for (blockCnt = 0; blockCnt < numBlocks; blockCnt++) {
-		REG8(SD_BASE_ADD + SD_ADDR_7_0_REG)   = 0;
-		REG8(SD_BASE_ADD + SD_ADDR_15_8_REG)  = (unsigned char) ((ddr_offset >> 8) & 0xff);
-		REG8(SD_BASE_ADD + SD_ADDR_23_16_REG) = (unsigned char) ((ddr_offset >> 16) & 0xff);
-		REG8(SD_BASE_ADD + SD_ADDR_31_24_REG) = (unsigned char) ((ddr_offset >> 24) & 0xff);
-	
-
-		REG8(SD_BASE_ADD + SD_TRANS_TYPE_REG) = SD_RW_READ_SD_BLOCK;
-		REG8(SD_BASE_ADD + SD_RX_FIFO_CONTROL_REG) = 0x1; // Clean the RX FIFO
-		REG8(SD_BASE_ADD + SD_TRANS_CTRL_REG) = 0x1; //TRANS_START
-		while (REG8(SD_BASE_ADD + SD_TRANS_STS_REG) & 0x1) { // exit while !TRABS_BUSY
-			;
-		}
-
-		GPIO_Write(0x78);
-
-		transError = REG8(SD_BASE_ADD + SD_TRANS_ERROR_REG) & 0xc;
-		if ( transError == SD_READ_NO_ERROR) {
-		  GPIO_Write(0x79);
-			for (i = 0; i < 512; i++) {
-				data = REG8(SD_BASE_ADD + SD_RX_FIFO_DATA_REG) ;			
-				REG8(DRAM_BASE + ddr_offset + i) = data ;
-//				print32bit((long unsigned int)data);
-			}
-			if ((blockCnt % 0x40) == 0) {
-				or1k_putc('.');
-				j++;
-			}
-			if (j == 20) {
-				j = 0;
-				print("\n\r");
-			}
-
-			ddr_offset += 512;		
-		} else {
-		  GPIO_Write(0x7a);
-			or1k_putc('R');
-			j++;
-                        if (j == 20) {
-                                j = 0;
-                                print("\n\r");
-                        }
-			spiMaster_init(); // Init again and retry
-			blockCnt--; // read the same block again
-		}
-	}
-
-	print("\r\nSD Copy Done!\n\r");
+      }
+      
+      ddr_offset += 512;		
+    } else {
+      GPIO_Write(0x7a);
+      or1k_putc('R');
+      j++;
+      if (j == 20) {
+	j = 0;
+	print("\n\r");
+      }
+      spiMaster_init(); // Init again and retry
+      blockCnt--; // read the same block again
+    }
+  }
+  
+  print("\r\nSD Copy Done!\n\r");
 }
 
 
@@ -232,19 +235,27 @@ void ddr_sdram_sample_test()
   *((unsigned int *) (DRAM_BASE + 0x500c)) = 0x44444444;
 
   // try reads
-  *((unsigned int *) (DRAM_BASE + 0x8000)) = *((unsigned int *) (DRAM_BASE + 0x5000));
-  *((unsigned int *) (DRAM_BASE + 0x8004)) = *((unsigned int *) (DRAM_BASE + 0x5004));
-  *((unsigned int *) (DRAM_BASE + 0x8008)) = *((unsigned int *) (DRAM_BASE + 0x5008));
-  *((unsigned int *) (DRAM_BASE + 0x800c)) = *((unsigned int *) (DRAM_BASE + 0x500c));
+  *((unsigned int *) (SRAM_BASE + 0x8000)) = *((unsigned int *) (DRAM_BASE + 0x5000));
+  *((unsigned int *) (SRAM_BASE + 0x8004)) = *((unsigned int *) (DRAM_BASE + 0x5004));
+  *((unsigned int *) (SRAM_BASE + 0x8008)) = *((unsigned int *) (DRAM_BASE + 0x5008));
+  *((unsigned int *) (SRAM_BASE + 0x800c)) = *((unsigned int *) (DRAM_BASE + 0x500c));
 
-  if (*((unsigned int *) 0x8000) == 0x11111111)
+  if (*((unsigned int *) (SRAM_BASE + 0x8000)) == 0x11111111)
     GPIO_Write(0x11);
-  if (*((unsigned int *) 0x8004) == 0x22222222)
+  else
+    GPIO_Write(FAIL_CODE);
+  if (*((unsigned int *) (SRAM_BASE + 0x8004)) == 0x22222222)
     GPIO_Write(0x12);
-  if (*((unsigned int *) 0x8008) == 0x33333333)
+  else
+    GPIO_Write(FAIL_CODE);
+  if (*((unsigned int *) (SRAM_BASE + 0x8008)) == 0x33333333)
     GPIO_Write(0x13);
-  if (*((unsigned int *) 0x800c) == 0x44444444)
+  else
+    GPIO_Write(FAIL_CODE);
+  if (*((unsigned int *) (SRAM_BASE + 0x800c)) == 0x44444444)
     GPIO_Write(0x14);
+  else
+    GPIO_Write(FAIL_CODE);
 
   print ("DDR SDRAM sample test done.\n\r");
 }
@@ -274,7 +285,7 @@ void main()
   uint8  str[9];
 
   // Configure GPIO
-  REG32(GPIO_BASE + RGPIO_OE)   = 0xff;  // bit0-7 = outputs, bit8-31 = inputs
+  REG32(GPIO_BASE + RGPIO_OE)   = 0xffff;  // bit0-7 = outputs, bit8-31 = inputs
   REG32(GPIO_BASE + RGPIO_INTE) = 0x0;   // Disable interrupts from GPIO
 
   print("\n\r\n\t");
@@ -329,6 +340,8 @@ void main()
   ddr_sdram_sample_test();
 
   GPIO_Write(0x61);
+
+  GPIO_Write(PASS_CODE);
 
   copy_sd2ddr();
 
