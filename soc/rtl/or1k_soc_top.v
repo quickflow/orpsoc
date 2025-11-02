@@ -38,7 +38,7 @@ module or1k_soc_top(
 	flash_rdy, flash_d, flash_a, flash_clk_pad_i,
 
 	// SDRAM
-	mc_clk_pad_i,
+	mc_clk_pad_o,
 	mem_dat_pad_io,
 	mem_adr_pad_o,
 	mem_dqm_pad_o,
@@ -123,7 +123,7 @@ inout	[7:0]	flash_d;
 inout	[20:0]	flash_a;
 
 // Memory controller pads
-input		mc_clk_pad_i;
+output		mc_clk_pad_o;
 
 //
 // SDR SDRAM
@@ -388,6 +388,14 @@ assign pic_ints[`APP_INT_RES3] = 'b0;
 //);
 
    assign clk_cpu_25 = wb_clk_pad_i;
+
+   reg mc_clk_pad_o;
+   always@(posedge clk_cpu_25 or posedge wb_rst_pad_i)
+     if (wb_rst_pad_i)
+       mc_clk_pad_o <= 0;
+     else
+       mc_clk_pad_o <= !mc_clk_pad_o;
+   
    
 //
 // OR1K CPU
@@ -554,7 +562,7 @@ mc_top mem_if(
 	.mc_coe_pad_coe_o	(mem_con_pad_oe),
 	.susp_req_i		(1'b0),
 	.resume_req_i		(1'b0),
-	.mc_clk_i		(mc_clk_pad_i),
+	.mc_clk_i		(mc_clk_pad_o),
 	.mc_br_pad_i		(1'b0),
 	.mc_ack_pad_i		(1'b0),
 	.mc_data_pad_i		(mem_dat_pad_i),
