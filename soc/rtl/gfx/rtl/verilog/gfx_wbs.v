@@ -207,6 +207,15 @@ module gfx_wbs(
 
   wire        [1:0] active_point;
 
+  wire        instruction_fifo_wreq;
+  wire [31:0] instruction_fifo_q_data;
+  wire        instruction_fifo_rreq;
+  wire        instruction_fifo_valid_out;
+  reg         fifo_read_ack;
+  reg         fifo_write_ack;
+  wire [REG_ADR_HIBIT:0] instruction_fifo_q_adr;
+  wire    [fifo_depth:0] instruction_fifo_count;
+
   // Wishbone access wires
   wire acc, acc32, reg_acc, reg_wacc;
 
@@ -522,14 +531,6 @@ module gfx_wbs(
     endcase
 
   /* Instruction fifo */
-  wire        instruction_fifo_wreq;
-  wire [31:0] instruction_fifo_q_data;
-  wire        instruction_fifo_rreq;
-  wire        instruction_fifo_valid_out;
-  reg         fifo_read_ack;
-  reg         fifo_write_ack;
-  wire [REG_ADR_HIBIT:0] instruction_fifo_q_adr;
-  wire    [fifo_depth:0] instruction_fifo_count;
 
   always @(posedge clk_i or posedge rst_i)
     if(rst_i)

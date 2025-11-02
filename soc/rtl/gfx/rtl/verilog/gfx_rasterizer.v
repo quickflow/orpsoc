@@ -138,6 +138,11 @@ parameter wait_state           = 3'b000,
 // Write/ack counter
 reg [delay_width-1:0] ack_counter;
 
+wire                   triangle_ack;
+wire [point_width-1:0] triangle_x_o;
+wire [point_width-1:0] triangle_y_o;
+wire                   triangle_write_o;
+
 always @(posedge clk_i or posedge rst_i)
 if(rst_i)
   ack_counter <= 1'b0;
@@ -400,11 +405,6 @@ bresenham_line bresenham(
 
 defparam bresenham.point_width = point_width;
 defparam bresenham.subpixel_width = subpixel_width;
-
-wire                   triangle_ack;
-wire [point_width-1:0] triangle_x_o;
-wire [point_width-1:0] triangle_y_o;
-wire                   triangle_write_o;
 
 // Triangle module instanciated
 gfx_triangle triangle(

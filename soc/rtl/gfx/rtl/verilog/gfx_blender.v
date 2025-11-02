@@ -96,6 +96,8 @@ assign pixel_offset = (color_depth_i == 2'b00) ? (target_size_x_i*y_counter_i + 
 
 assign target_addr_o = target_base_i + pixel_offset[31:2];
 
+wire [31:0] dest_color;
+
 // Split colors for alpha blending (render color)
 wire [7:0] blend_color_r = (color_depth_i == 2'b00) ? pixel_color_i[7:0] :
                            (color_depth_i == 2'b01) ? pixel_color_i[15:11] :
@@ -124,7 +126,6 @@ wire [15:0] alpha_color_r = blend_color_r * alpha + target_color_r * (8'hff - al
 wire [15:0] alpha_color_g = blend_color_g * alpha + target_color_g * (8'hff - alpha);
 wire [15:0] alpha_color_b = blend_color_b * alpha + target_color_b * (8'hff - alpha);
 
-wire [31:0] dest_color;
 // Memory to color converter
 memory_to_color memory_proc(
 .color_depth_i (color_depth_i),

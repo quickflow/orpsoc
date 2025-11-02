@@ -135,9 +135,11 @@ assign triangle_edge0_o = triangle_edge0;
 assign triangle_edge1_o = triangle_edge1;
 
 // Triangle iteration variables
-wire triangle_done        = (triangle_y_counter >= triangle_bound_max_y ) & (triangle_line_done);
-wire triangle_line_done   = (triangle_x_counter > triangle_bound_max_x) | (!triangle_valid_pixel & triangle_line_active);
-wire triangle_valid_pixel = (triangle_edge0 >= 0 && triangle_edge1 >= 0 && triangle_edge2 >= 0)
+   wire				triangle_done, triangle_line_done, triangle_valid_pixel;
+
+assign triangle_done        = (triangle_y_counter >= triangle_bound_max_y ) & (triangle_line_done);
+assign triangle_line_done   = (triangle_x_counter > triangle_bound_max_x) | (!triangle_valid_pixel & triangle_line_active);
+assign triangle_valid_pixel = (triangle_edge0 >= 0 && triangle_edge1 >= 0 && triangle_edge2 >= 0)
                             && (triangle_x_counter >= 1'b0 && triangle_y_counter >= 1'b0);
 
 // State machine
