@@ -120,7 +120,7 @@ wire [1:0]	flash_rpblevel;		// Special flash inputs
 		#15 pll_rstn <= 1'b1;
 	end
 
-
+`ifdef ARAY_PLL
 	//    
 	// CLKs Genericed
 	// clk2x goes to wishbone clock (wb_clk), clk1x to memory contr.
@@ -133,13 +133,19 @@ wire [1:0]	flash_rpblevel;		// Special flash inputs
 		// old one we want everything to be on same freq
 		.clk1x		(mc_clk),
 		.clk2x		(wb_clk),
-		.clkdiv		(flash_clk),
+//		.clkdiv		(flash_clk),
 		.locked		(pll_lock),
 
 		//Input
 		.clk_in		(clk),
 		.rst_in		(~pll_rstn)
 	); 
+`else // !`ifdef ARAY_PLL
+   assign wb_clk = clk;
+   
+`endif //  `ifdef ARAY_PLL
+   
+   
 //
 //==================================================================
 //
@@ -148,8 +154,9 @@ wire [1:0]	flash_rpblevel;		// Special flash inputs
 		.wb_clk_pad_i		(wb_clk),
 		.rst_n_pad_i		(rstn),
 
-		.mc_clk_pad_i		(mc_clk),
-		.flash_clk_pad_i	(flash_clk),
+		.mc_clk_pad_o		(dram_clk),
+//		.mc_clk_pad_i		(mc_clk),
+//		.flash_clk_pad_i	(flash_clk),
 
 		.flash_rstn		(flash_rstn),
 		.flash_cen		(flash_cen),
@@ -209,21 +216,21 @@ wire [1:0]	flash_rpblevel;		// Special flash inputs
 	    if (old_gpio_val != gpio_pad_io)
 	      $display("[%m]GPIO val = %h", gpio_pad_io);
 	    
-	    if (gpio_pad_io[7:0] == 8'hff) begin
+	    if (gpio_pad_io[15:0] == 16'hc001) begin
 	       // 0xff has been written to GPIO, so the
 	       // sofware has completed its tests
-	       $display("Software execution complete.");
+	       $display("\n\n**** PASS **** indicator for Software execution complete.\n\n");
 	       $finish();
-	    end else if (gpio_pad_io[7:0] == 8'h55) begin
+	    end else if (gpio_pad_io[15:0] == 16'hc001) begin
 	       // 0x55 has been written to GPIO, so the
 	       // there was an error during the tests
-	       $display("***Error during software tests. Finishing simulation.");
+	       $display("\n\n**** FAIL ****r indicatoe during software tests. Finishing simulation.");
 	       $finish();
 	    end
 	 end   
 
 
-	always @(posedge clk or rstn) begin
+	always @(posedge clk or posedge rstn) begin
 		if (!rstn) begin
 			counter = 0;
 		end
@@ -264,7 +271,7 @@ mt48lc16m16a2 i_sdram0(
 	.Dq    (mem_dat_pad_io[15:0]),
 	.Addr  (mem_adr_pad_o[12:0]),
 	.Ba    (mem_ba_pad_o[1:0]),
-	.Clk   (clk),
+	.Clk   (dram_clk),
 	.Cke   (mem_cke_pad_o),
 	.Cs_n  (mem_cs_pad_o),
 	.Ras_n (mem_ras_pad_o),
@@ -277,7 +284,7 @@ mt48lc16m16a2 i_sdram1(
 	.Dq    (mem_dat_pad_io[31:16]),
 	.Addr  (mem_adr_pad_o[12:0]),
 	.Ba    (mem_ba_pad_o[1:0]),
-	.Clk   (clk),
+	.Clk   (dram_clk),
 	.Cke   (mem_cke_pad_o),
 	.Cs_n  (mem_cs_pad_o),
 	.Ras_n (mem_ras_pad_o),
