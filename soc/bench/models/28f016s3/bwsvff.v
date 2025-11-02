@@ -970,13 +970,10 @@
               Protected <= `TRUE;
             end
             else begin
-              for (LoopCntr = BlocksBegin[Algorithm[`OpBlock]];
-                   LoopCntr <= BlocksEnd[Algorithm[`OpBlock]]; LoopCntr
-  = LoopCntr + 1)
-                MainArray [LoopCntr] = 'hFF ;
-              BlocksEraseCount[Algorithm[`OpBlock]] =
-  BlocksEraseCount[Algorithm[
-  `OpBlock]] + 1;
+//              for (LoopCntr = BlocksBegin[Algorithm[`OpBlock]];
+//                   LoopCntr <= BlocksEnd[Algorithm[`OpBlock]]; LoopCntr = LoopCntr + 1)
+//                MainArray [LoopCntr] = 'hFF ;
+              BlocksEraseCount[Algorithm[`OpBlock]] = BlocksEraseCount[Algorithm[`OpBlock]] + 1;
               $display("%m:: Block %d Erase Count: %d", Algorithm[`OpBlock],
   BlocksEraseCount[Algorithm[`OpBlock]]);
             end
