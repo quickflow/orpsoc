@@ -1,0 +1,21 @@
+vcs_exec_command ./vcs_dut.csh
+debug -all true
+#debug -offline_debug_params {INCL_XTORS=true}
+dpi_synthesis -enable ALL -enable_wls true
+
+#architecture_file -filename /remote/vginterfaces1/zebu_system_dir/CONFIG.TD/rt_ZEBU_COMMON_H100_MU_1/config/zse_configuration.tcl
+architecture_file -filename /projects/prj1/ZEBU_SYSTEM_DIR1/config//zse_configuration.tcl
+#architecture_file -filename $::env(ZEBU_ROOT)/etc/sys/ZS5/configs/sample_ZS5_2U_2H_19p_v1.tcl
+
+system_tasks -enable -task {$display}
+system_tasks -enable -task {$value$plusargs}
+system_tasks -enable -task {$test$plusargs}
+
+
+design_size -mode auto
+set_hwtop -module CPUboard_tb
+clock_delay -module {CPUboard_tb}
+#-auto_tolerance t -perf_mode 2 -sdc_mcp_mode 2
+probe_signals -rtlname "CPUboard_tb.*" -fnmatch
+zforce -rtlname "CPUboard_tb.*" -fnmatch
+

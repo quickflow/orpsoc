@@ -24,19 +24,19 @@ INC += -I${TOPDIR}/rtl/altera_pll
 INC += -I${TOPDIR}/rtl/adv_debug_sys/Hardware/adv_dbg_if/rtl/verilog
 
 sim:
-	iverilog -D LXT -osim.out ${INC} -s CPUboard_tb  -c ../bin/iver.cmd
+	iverilog -disable-timing -D LXT -osim.out ${INC} -s CPUboard_tb  -c ../bin/iver.cmd
 	./sim.out -lxt
-
-sim_vcs:
-	vcs -f vcs.flist
-	./simv | tee output.log
 
 show_wave:
 	gtkwave ./wavedump.vcd wave_signals.sav &
 
 sim_vcd:
-	iverilog -D VCD -osim.out ${INC} -s CPUboard_tb -c ../bin/iver.cmd
-	./sim.out | tee output.log
+	iverilog -disable-timing -D VCD -osim.out ${INC} -s CPUboard_tb -c ../bin/iver.cmd
+	./sim.out # | tee output.log
+
+sim_vcs:
+	vcs -full64 -f vcs.flist
+	./simv | tee output.log
 
 show_wave_lxt:
 	gtkwave ./wavedump.lxt wave_signals.sav &
