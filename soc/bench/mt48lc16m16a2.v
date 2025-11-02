@@ -99,9 +99,6 @@ module mt48lc16m16a2 (Dq, Addr, Ba, Clk, Cke, Cs_n, Ras_n, Cas_n, We_n, Dqm);
     reg       [addr_bits - 1 : 0] Row;
     reg        [col_bits - 1 : 0] Col, Col_brst;
 
-    // Internal system clock
-    reg                           CkeZ, Sys_clk;
-
     // Commands Decode
     wire      Active_enable    = ~Cs_n & ~Ras_n &  Cas_n &  We_n;
     wire      Aref_enable      = ~Cs_n & ~Ras_n & ~Cas_n &  We_n;
@@ -125,7 +122,10 @@ module mt48lc16m16a2 (Dq, Addr, Ba, Clk, Cke, Cs_n, Ras_n, Cas_n, We_n, Dqm);
     // Write Burst Mode
     wire      Write_burst_mode = Mode_reg[9];
 
-    wire      Debug            = 1'b1;                          // Debug messages : 1 = On
+       wire Sys_clk = Clk & Cke;
+       
+
+    wire      Debug            = 1'b0;                          // Debug messages : 1 = On
     wire      Dq_chk           = Sys_clk & Data_in_enable;      // Check setup/hold time for DQ
     
     assign    Dq               = Dq_reg;                        // DQ buffer
@@ -177,17 +177,6 @@ module mt48lc16m16a2 (Dq, Addr, Ba, Clk, Cke, Cs_n, Ras_n, Cas_n, We_n, Dqm);
         RC_chk0 = 0; RC_chk1 = 0; RC_chk2 = 0; RC_chk3 = 0;
         RP_chk0 = 0; RP_chk1 = 0; RP_chk2 = 0; RP_chk3 = 0;
         $timeformat (-9, 1, " ns", 12);
-    end
-
-    // System clock generator
-    always begin
-        @ (posedge Clk) begin
-            Sys_clk = CkeZ;
-            CkeZ = Cke;
-        end
-        @ (negedge Clk) begin
-            Sys_clk = 1'b0;
-        end
     end
 
     always @ (posedge Sys_clk) begin
