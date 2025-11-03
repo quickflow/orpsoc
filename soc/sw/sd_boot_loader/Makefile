@@ -27,8 +27,10 @@ boot.or32: $(OBJECTS) Makefile
 		sort >> System.map
 		$(OBJ) -x -z -d -S boot.or32 >> System.map
 	echo "@100" > ss
-	od -t x1 -w1 -v --skip-bytes=8448 --address-radix=n boot.or32 >> ss
+	od -t x1 -w1 -v --skip-bytes=8448 --address-radix=n boot.or32 > memory.txt
+	cat memory.txt >> ss
 	cp ss ../../sim/bin/flash.in
+	cp memory.txt ../../sim/bin/.
 
 boot.ihex: boot.or32 Makefile
 	@printf "\r\n\t--- Creating Ihex file: $@ ---\r\n"
