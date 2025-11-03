@@ -209,7 +209,7 @@ wire [1:0]	flash_rpblevel;		// Special flash inputs
          );
 
 
-   reg [7:0] old_gpio_val;
+   reg [31:0] old_gpio_val;
 
  	 always @(posedge clk) begin
 	    old_gpio_val <= gpio_pad_io;
