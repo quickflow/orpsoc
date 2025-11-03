@@ -32,7 +32,7 @@ show_wave:
 
 sim_vcd:
 	iverilog -disable-timing -D VCD -osim.out ${INC} -s CPUboard_tb -c ../bin/iver.cmd
-	./sim.out # | tee output.log
+	./sim.out | tee output.log
 
 sim_vcs:
 	vcs -full64 -f vcs.flist
