@@ -113,25 +113,42 @@ int spiMaster_init()
   uint8 data;
   int   i;
   
-  REG8(SD_BASE_ADD + SD_CLK_DEL_REG) = 0x1;
+  REG32(SD_BASE_ADD + (SPI_DEVIDE << 2)) = 0x2;
+  REG32(SD_BASE_ADD + (SPI_SS << 2)) = 0xffffffff;
+
+  REG32(SD_BASE_ADD + (SPI_TX_0 << 2)) = 0x03000000; /* 0x3 for Read Array; rest is address */
+
+  uint32 ctrl_csr_val = 
+    (1 << SPI_CTRL_GO) |
+    (1 << SPI_CTRL_RX_NEGEDGE) |
+    (1 << SPI_CTRL_TX_NEGEDGE) |
+    (0 << SPI_CTRL_LSB) |
+    (0 << SPI_CTRL_IE) |
+    (0 << SPI_CTRL_ASS);
+
+  REG32(SD_BASE_ADD + (SPI_CTRL << 2)) = ctrl_csr_val | 32; /* 32 bit transfer of command = 0x03 (READ ARRAY) */
+
+  uint32 tip_count = 0;
+  while(REG32(SD_BASE_ADD + (SPI_CTRL << 2)) & (1 << SPI_CTRL_GO)) { // wait while SPI in progress
+    GPIO_Write(0x9000 + tip_count);
+    tip_count++;
+  };
   
-  for (i = 0; i < 5; i++) {
-    REG8(SD_BASE_ADD + SD_TRANS_TYPE_REG) = SD_INIT_SD;
-    REG8(SD_BASE_ADD + SD_TRANS_CTRL_REG) = 1; // TRANS_START;
-    
-    do_sleep();
-    
-    while (REG8(SD_BASE_ADD + SD_TRANS_STS_REG) & 0x1) { // exit while !TRABS_BUSY
-      ;
-    }
-    
-    data = REG8(SD_BASE_ADD + SD_TRANS_ERROR_REG) & 0x3;
-    
-    if (data == 0) {
-      return 0;
-    }
-  }
-  return data;
+  REG32(SD_BASE_ADD + (SPI_CTRL << 2)) = ctrl_csr_val | 128; /* 128 bits transfer (READ ARRAY) */
+
+  tip_count = 0;
+  while(REG32(SD_BASE_ADD + (SPI_CTRL << 2)) & (1 << SPI_CTRL_GO)) { // wait while SPI in progress
+    GPIO_Write(0x9000 + tip_count);
+    tip_count++;
+  };
+  
+  // try reads
+  *((unsigned int *) (SRAM_BASE + 0x8000)) = REG32(SD_BASE_ADD + (SPI_RX_3 << 2));
+  *((unsigned int *) (SRAM_BASE + 0x8004)) = REG32(SD_BASE_ADD + (SPI_RX_2 << 2));
+  *((unsigned int *) (SRAM_BASE + 0x8008)) = REG32(SD_BASE_ADD + (SPI_RX_1 << 2));
+  *((unsigned int *) (SRAM_BASE + 0x800c)) = REG32(SD_BASE_ADD + (SPI_RX_0 << 2));
+  
+  return 0;
 }
 
 unsigned char data[512];

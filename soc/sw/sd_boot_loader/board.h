@@ -57,6 +57,31 @@
 /******************************************************************************/
 #define SD_BASE_ADD	0x10000000
 
+#define SPI_RX_0                0
+#define SPI_RX_1                1
+#define SPI_RX_2                2
+#define SPI_RX_3                3
+#define SPI_TX_0                0
+#define SPI_TX_1                1
+#define SPI_TX_2                2
+#define SPI_TX_3                3
+#define SPI_CTRL                4
+#define SPI_DEVIDE              5
+#define SPI_SS                  6
+
+/* Control register bit position */
+
+#define SPI_CTRL_ASS            13    /* auto slave sel */
+#define SPI_CTRL_IE             12    /* interrupt en */
+#define SPI_CTRL_LSB            11    /* lab first */
+#define SPI_CTRL_TX_NEGEDGE     10    /* sample tx on negedge */
+#define SPI_CTRL_RX_NEGEDGE     9     /* sample rx on negedge */
+#define SPI_CTRL_GO             8     /* transfer in progress */
+#define SPI_CTRL_RES_1          7     /* reserved */
+#define SPI_CTRL_CHAR_LEN       0     /* num bits (low 7 bits) */
+
+
+
 #define SD_TRANS_TYPE_REG	0x2
 #define SD_TRANS_CTRL_REG	0x3
 #define SD_TRANS_STS_REG	0x4
