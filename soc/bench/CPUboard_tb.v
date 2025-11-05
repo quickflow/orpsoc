@@ -216,12 +216,12 @@ wire [1:0]	flash_rpblevel;		// Special flash inputs
 	    if (old_gpio_val != gpio_pad_io)
 	      $display("[%m]GPIO val = %h", gpio_pad_io);
 	    
-	    if (gpio_pad_io[15:0] == 16'hc001) begin
+	    if (gpio_pad_io == 32'hc001c0de) begin
 	       // 0xff has been written to GPIO, so the
 	       // sofware has completed its tests
 	       $display("\n\n**** PASS **** indicator for Software execution complete.\n\n");
 	       $finish();
-	    end else if (gpio_pad_io[15:0] == 16'hc001) begin
+	    end else if (gpio_pad_io == 32'hdeadbeef) begin
 	       // 0x55 has been written to GPIO, so the
 	       // there was an error during the tests
 	       $display("\n\n**** FAIL ****r indicatoe during software tests. Finishing simulation.");
@@ -235,7 +235,7 @@ wire [1:0]	flash_rpblevel;		// Special flash inputs
 			counter = 0;
 		end
 	   else begin
-	      if (counter == 100000) begin
+	      if (counter == 2000000) begin
 		 $display("Completed");
 //		 Flash.StoreToFile;
 		 
