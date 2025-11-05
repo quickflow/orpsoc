@@ -1,15 +1,15 @@
 
-module uart_receiver
+module uart_mon
   (
    input wire	    clk, // System clock
    input wire	    reset, // Reset signal
-   input wire	    rx, // UART receive line
-   output reg [7:0] data, // Received ASCII data
-   output reg	    data_ready    // Data ready flag
+   input wire	    rx // UART receive line
    );
    
+   reg [7:0]	    data;
+   reg		    data_ready;
    
-   parameter	    BAUD_TICKS = 10416;
+   parameter	    BAUD_TICKS = 816;
    // Adjust for your clock frequency and baud rate
    parameter	    IDLE = 0, START = 1, DATA = 2, STOP = 3;
    
