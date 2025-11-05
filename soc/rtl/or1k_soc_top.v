@@ -711,7 +711,8 @@ wire wbs_spi_0_err_o;
 
    assign	spi_flash_w_n_pad_o    = 1'b1;
    assign	spi_flash_hold_n_pad_o = 1'b1;
-   assign	spi_flash_ss_pad_o = spi_flash_ss_o[0];
+   assign       spi_flash_ss_pad_o = spi_flash_ss_o[0];
+   
    
 //
 // Instantiation of the Ethernet 10/100 MAC
