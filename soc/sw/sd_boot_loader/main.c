@@ -21,8 +21,8 @@
 #include "orsocdef.h"
 #include "board.h"
 
-#define PASS_CODE 0xc001
-#define FAIL_CODE 0xdead
+#define PASS_CODE 0xc001c0de
+#define FAIL_CODE 0xdeadbeef
 
 extern void  jumpToRAM();
 
@@ -107,21 +107,49 @@ void GPIO_Write(uint32 GPIO_data)
 /*                           F O R   s p i M A S T E R                        */
 /******************************************************************************/
 
+void spiRead4words(uint32 *dat0, uint32 *dat1, uint32 *dat2, uint32 *dat3)
+{
+  uint32 ctrl_csr_val = 
+    (1 << SPI_CTRL_GO) |
+    (0 << SPI_CTRL_RX_NEGEDGE) |
+    (0 << SPI_CTRL_TX_NEGEDGE) |
+    (0 << SPI_CTRL_LSB) |
+    (0 << SPI_CTRL_IE) |
+    (0 << SPI_CTRL_ASS);
+
+  uint32 tip_count = 0;
+  
+  REG32(SD_BASE_ADD + (SPI_CTRL << 2)) = ctrl_csr_val | 128; /* 128 bits transfer (READ ARRAY) */
+
+  while(REG32(SD_BASE_ADD + (SPI_CTRL << 2)) & (1 << SPI_CTRL_GO)) { // wait while SPI in progress
+    //    GPIO_Write(0x9000 + tip_count);
+    tip_count++;
+  };
+  
+  // try reads
+  *dat0 = REG32(SD_BASE_ADD + (SPI_RX_3 << 2));
+  *dat1 = REG32(SD_BASE_ADD + (SPI_RX_2 << 2));
+  *dat2 = REG32(SD_BASE_ADD + (SPI_RX_1 << 2));
+  *dat3 = REG32(SD_BASE_ADD + (SPI_RX_0 << 2));
+
+}
+  
 //Initialize
-int spiMaster_init()
+void spiMaster_init()
 {
   uint8 data;
   int   i;
   
   REG32(SD_BASE_ADD + (SPI_DEVIDE << 2)) = 0x2;
+  REG32(SD_BASE_ADD + (SPI_SS << 2)) = 0x00000000;
   REG32(SD_BASE_ADD + (SPI_SS << 2)) = 0xffffffff;
 
   REG32(SD_BASE_ADD + (SPI_TX_0 << 2)) = 0x03000000; /* 0x3 for Read Array; rest is address */
 
   uint32 ctrl_csr_val = 
     (1 << SPI_CTRL_GO) |
-    (1 << SPI_CTRL_RX_NEGEDGE) |
-    (1 << SPI_CTRL_TX_NEGEDGE) |
+    (0 << SPI_CTRL_RX_NEGEDGE) |
+    (0 << SPI_CTRL_TX_NEGEDGE) |
     (0 << SPI_CTRL_LSB) |
     (0 << SPI_CTRL_IE) |
     (0 << SPI_CTRL_ASS);
@@ -133,6 +161,19 @@ int spiMaster_init()
     GPIO_Write(0x9000 + tip_count);
     tip_count++;
   };
+}
+
+int spiMaster_test()
+{
+  uint32 tip_count = 0;
+
+  uint32 ctrl_csr_val =
+    (1 << SPI_CTRL_GO) |
+    (0 << SPI_CTRL_RX_NEGEDGE) |
+    (0 << SPI_CTRL_TX_NEGEDGE) |
+    (0 << SPI_CTRL_LSB) |
+    (0 << SPI_CTRL_IE) |
+    (0 << SPI_CTRL_ASS);
   
   REG32(SD_BASE_ADD + (SPI_CTRL << 2)) = ctrl_csr_val | 128; /* 128 bits transfer (READ ARRAY) */
 
@@ -143,11 +184,60 @@ int spiMaster_init()
   };
   
   // try reads
-  *((unsigned int *) (SRAM_BASE + 0x8000)) = REG32(SD_BASE_ADD + (SPI_RX_3 << 2));
-  *((unsigned int *) (SRAM_BASE + 0x8004)) = REG32(SD_BASE_ADD + (SPI_RX_2 << 2));
-  *((unsigned int *) (SRAM_BASE + 0x8008)) = REG32(SD_BASE_ADD + (SPI_RX_1 << 2));
-  *((unsigned int *) (SRAM_BASE + 0x800c)) = REG32(SD_BASE_ADD + (SPI_RX_0 << 2));
+  REG32(SRAM_BASE + 0x8000) = REG32(SD_BASE_ADD + (SPI_RX_3 << 2));
+  REG32(SRAM_BASE + 0x8004) = REG32(SD_BASE_ADD + (SPI_RX_2 << 2));
+  REG32(SRAM_BASE + 0x8008) = REG32(SD_BASE_ADD + (SPI_RX_1 << 2));
+  REG32(SRAM_BASE + 0x800c) = REG32(SD_BASE_ADD + (SPI_RX_0 << 2));
   
+  if (REG32(SRAM_BASE + 0x8000) != 0xa8600001)
+    GPIO_Write(FAIL_CODE);
+  if (REG32(SRAM_BASE + 0x8004) != 0xc0001811)
+    GPIO_Write(FAIL_CODE);
+  if (REG32(SRAM_BASE + 0x8008) != 0x0400020a)
+    GPIO_Write(FAIL_CODE);
+  if (REG32(SRAM_BASE + 0x800c) != 0x15000000)
+    GPIO_Write(FAIL_CODE);
+
+  GPIO_Write(0x9191);
+  
+  uint32 dat0, dat1, dat2, dat3;
+  spiRead4words(&dat0, &dat1, &dat2, &dat3);
+  GPIO_Write(dat0);
+  GPIO_Write(dat1);
+  GPIO_Write(dat2);
+  GPIO_Write(dat3);
+
+#if 1
+  if (dat0 != 0x18000000)
+    GPIO_Write(FAIL_CODE);
+  if (dat1 != 0xa8000000)
+    GPIO_Write(FAIL_CODE);
+  if (dat2 != 0x1820e000)
+    GPIO_Write(FAIL_CODE);
+  if (dat3 != 0xa8213560)
+    GPIO_Write(FAIL_CODE);
+#endif
+
+#if 1
+  uint32 *Faddr= (uint32 *)0xf0000110;
+  uint32 count;
+  for(count=0; count<1500; count++) {
+    GPIO_Write(count);
+    if (dat0 != *Faddr)
+      GPIO_Write(FAIL_CODE);
+    Faddr++;
+    if (dat1 != *Faddr)
+      GPIO_Write(FAIL_CODE);
+    Faddr++;
+    if (dat2 != *Faddr)
+      GPIO_Write(FAIL_CODE);
+    Faddr++;
+    if (dat3 != *Faddr)
+      GPIO_Write(FAIL_CODE);
+    Faddr++;
+    spiRead4words(&dat0, &dat1, &dat2, &dat3);
+  }
+#endif
   return 0;
 }
 
@@ -171,52 +261,34 @@ int copy_sd2ddr(void)
   print32bit((long unsigned int)numBlocks);
   
   GPIO_Write(0x77);
-  
-  for (blockCnt = 0; blockCnt < numBlocks; blockCnt++) {
-    REG8(SD_BASE_ADD + SD_ADDR_7_0_REG)   = 0;
-    REG8(SD_BASE_ADD + SD_ADDR_15_8_REG)  = (unsigned char) ((ddr_offset >> 8) & 0xff);
-    REG8(SD_BASE_ADD + SD_ADDR_23_16_REG) = (unsigned char) ((ddr_offset >> 16) & 0xff);
-    REG8(SD_BASE_ADD + SD_ADDR_31_24_REG) = (unsigned char) ((ddr_offset >> 24) & 0xff);
-    
-    
-    REG8(SD_BASE_ADD + SD_TRANS_TYPE_REG) = SD_RW_READ_SD_BLOCK;
-    REG8(SD_BASE_ADD + SD_RX_FIFO_CONTROL_REG) = 0x1; // Clean the RX FIFO
-    REG8(SD_BASE_ADD + SD_TRANS_CTRL_REG) = 0x1; //TRANS_START
-    while (REG8(SD_BASE_ADD + SD_TRANS_STS_REG) & 0x1) { // exit while !TRABS_BUSY
-      ;
-    }
-    
-    GPIO_Write(0x78);
-    
-    transError = REG8(SD_BASE_ADD + SD_TRANS_ERROR_REG) & 0xc;
-    if ( transError == SD_READ_NO_ERROR) {
-      GPIO_Write(0x79);
-      for (i = 0; i < 512; i++) {
-	data = REG8(SD_BASE_ADD + SD_RX_FIFO_DATA_REG) ;			
-	REG8(DRAM_BASE + ddr_offset + i) = data ;
-	//				print32bit((long unsigned int)data);
-      }
-      if ((blockCnt % 0x40) == 0) {
-	or1k_putc('.');
-	j++;
-      }
-      if (j == 20) {
-	j = 0;
-	print("\n\r");
-      }
-      
-      ddr_offset += 512;		
-    } else {
-      GPIO_Write(0x7a);
-      or1k_putc('R');
-      j++;
-      if (j == 20) {
-	j = 0;
-	print("\n\r");
-      }
-      spiMaster_init(); // Init again and retry
-      blockCnt--; // read the same block again
-    }
+
+  uint32 dat0, dat1, dat2, dat3;
+  uint32 *Faddr= (uint32 *)0xf0000100;
+  uint32 *Daddr= (uint32 *)0x00000100;
+  uint32 count;
+
+  for(count=0; count<1500; count++) {
+    GPIO_Write(count);
+
+    spiRead4words(&dat0, &dat1, &dat2, &dat3);
+    *Daddr++ = dat0;
+    *Daddr++ = dat1;
+    *Daddr++ = dat2;
+    *Daddr++ = dat3;
+
+#if 0
+    if (dat0 != *Faddr++)
+      GPIO_Write(FAIL_CODE);
+
+    if (dat1 != *Faddr++)
+      GPIO_Write(FAIL_CODE);
+
+    if (dat2 != *Faddr++)
+      GPIO_Write(FAIL_CODE);
+
+    if (dat3 != *Faddr++)
+      GPIO_Write(FAIL_CODE);
+#endif
   }
   
   print("\r\nSD Copy Done!\n\r");
@@ -302,7 +374,7 @@ void main()
   uint8  str[9];
 
   // Configure GPIO
-  REG32(GPIO_BASE + RGPIO_OE)   = 0xffff;  // bit0-7 = outputs, bit8-31 = inputs
+  REG32(GPIO_BASE + RGPIO_OE)   = 0xffffffff;  // bit0-7 = outputs, bit8-31 = inputs
   REG32(GPIO_BASE + RGPIO_INTE) = 0x0;   // Disable interrupts from GPIO
 
   print("\n\r\n\t");
@@ -333,16 +405,9 @@ void main()
   GPIO_Write(0x4);
 
   print("Init SD Card:");
-  REG8(SD_BASE_ADD + SD_TRANS_CTRL_REG) = 0x1;  /* reset spiMaster */
-  do_sleep();
-  REG8(SD_BASE_ADD + SD_TRANS_CTRL_REG) = 0x0;
-  if (spiMaster_init() == 0) {
-	print("Passed!\n\r");
-	GPIO_Write(0x51);
-  } else {
-	print("Failed!\n\r");
-	GPIO_Write(0x55);
-  }
+
+  spiMaster_init();
+  GPIO_Write(0x51);
 
   GPIO_Write(0x5);
 
@@ -358,13 +423,11 @@ void main()
 
   GPIO_Write(0x61);
 
-  GPIO_Write(PASS_CODE);
-
   copy_sd2ddr();
 
-  print("\n\r");
+  GPIO_Write(PASS_CODE);
 
-  GPIO_Write(0x7);
+  print("\n\r");
 
   print("Jump to DDR SDRAM: 0x100\n\r");
   jumpToRAM();
