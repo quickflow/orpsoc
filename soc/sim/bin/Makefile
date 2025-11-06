@@ -25,21 +25,21 @@ INC += -I${TOPDIR}/rtl/adv_debug_sys/Hardware/adv_dbg_if/rtl/verilog
 
 sim:
 	iverilog -disable-timing -D LXT2 -osim.out ${INC} -s CPUboard_tb  -c ../bin/iver.cmd
-	./sim.out -lxt2
+	./sim.out -lxt2 | tee output.log
 
 show_wave:
 	gtkwave ./wavedump.vcd wave_signals.sav &
 
 sim_vcd:
 	iverilog -disable-timing -D VCD -osim.out ${INC} -s CPUboard_tb -c ../bin/iver.cmd
-	./sim.out # | tee output.log
+	./sim.out | tee output.log
 
 sim_vcs:
 	vcs -full64 -f vcs.flist
 	./simv | tee output.log
 
 show_wave_lxt:
-	gtkwave ./wavedump.lxt wave_signals.sav &
+	gtkwave ./wavedump.lxt2 wave_signals.sav &
 
 clean:
 	rm -rf *.key *.log *.shm INCA* .simvision *.out *.vcd *.lxt *~
