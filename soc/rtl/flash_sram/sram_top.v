@@ -147,7 +147,7 @@ output			d_oe;
 //
 // Internal wires and regs
 //
-reg     [7:0]           mem [16*1024*1024-1:0];
+reg     [7:0]           mem [16*1024-1:0];
 integer			i;
 wire    [31:0]          adr;
 `ifdef SRAM_GENERIC_REGISTERED
