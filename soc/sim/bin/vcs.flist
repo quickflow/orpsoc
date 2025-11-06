@@ -29,6 +29,7 @@
 ../../bench/models/28f016s3/bwsvff.v
 //../../bench/ATMEL_FLASH/flash_verilog/flash_verilog_w_wo_hold/AT26DFxxx.v
 ../../bench/ATMEL_FLASH/flash_verilog/simple_model/flash_model.v
+../../bench/uart_mon.v
 
 ../../rtl/wb_conmax/rtl/verilog/wb_conmax_master_if.v
 ../../rtl/wb_conmax/rtl/verilog/wb_conmax_defines.v
