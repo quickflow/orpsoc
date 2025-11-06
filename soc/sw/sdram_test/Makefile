@@ -27,6 +27,7 @@ boot.or32: $(OBJECTS) Makefile
 		sort >> System.map
 		$(OBJ) -x -z -d -S boot.or32 >> System.map
 	od -t x1 -w1 -v --skip-bytes=8448 --address-radix=n boot.or32 > memory.txt
+	od -t x4 -w4 -v --skip-bytes=8448 --endian=big --address-radix=n boot.or32 > sss
 	cp memory.txt ../../sim/bin/.
 
 boot.ihex: boot.or32 Makefile
