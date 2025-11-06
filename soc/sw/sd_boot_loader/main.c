@@ -26,6 +26,17 @@
 
 extern void  jumpToRAM();
 
+/******************************************************************************/
+/*                           G P I O   W  R I T E                             */
+/******************************************************************************/
+
+// Write to the GPIO (32 bits)
+
+void GPIO_Write(uint32 GPIO_data)
+{   
+   REG32(GPIO_BASE + RGPIO_OUT) = GPIO_data;
+}
+
 #define DEBUG 1
 
 #define barrier() __asm__ __volatile__("": : :"memory")
@@ -33,8 +44,11 @@ extern void  jumpToRAM();
 #ifdef DEBUG
 void or1k_putc(int c)
 {
-  while ( REG8(UART_BASE_ADD+0x10) & 0x4 ) // wait if fifo_full
-		;
+  while ( (REG32(UART_BASE_ADD+0x10) & 0x4) == 0x4 ) // wait if fifo_full
+    {
+      //      GPIO_Write(0x1000f111);
+    }
+  //  GPIO_Write(0x1000ee33);
 
   REG8(UART_BASE_ADD + 0x08) = c;
 }
@@ -89,17 +103,6 @@ void do_sleep2()
 	uint32 i;
 	for (i = 0; i < 1000; i++)
 		;
-}
-
-/******************************************************************************/
-/*                           G P I O   W  R I T E                             */
-/******************************************************************************/
-
-// Write to the GPIO (32 bits)
-
-void GPIO_Write(uint32 GPIO_data)
-{   
-   REG32(GPIO_BASE + RGPIO_OUT) = GPIO_data;
 }
 
 
@@ -381,36 +384,18 @@ void main()
   print("==OpenRisc 1200 SOC==\n\r\n");
   GPIO_Write(0x1);
 
-  print("\n\r");
-
   GPIO_Write(0x2);
-  print("SD Card Bootloader, v0.2\n\r");
-  print("Xianfeng Zeng, 2009 SA\n\r");
-  print("Xianfeng@opencores.org\n\r");
-  print("http://www.opencores.org/project,or1k_soc_on_altera_embedded_dev_kit\n\r");
 
   GPIO_Write(0x3);
-  print("\n\r");
 
-  print("System Clock: 30MHz\n\r\n");
-
-  print("DDR SDRAM Base Address: 0x00000000 - 32MB\n\r");
-  print("Ethernet Base Address:  0x20000000  IRQ 4\n\r");
-  print("UART Base Address:      0x30000000  IRQ 2\n\r");
-  print("GPIO Base Address:      0x40000000  IRQ 3\n\r");
-  print("SD Card Base Address:   0x50000000\n\r");
-  print("SRAM Base Address:      0xF0000000 - 16KB\n\r");
-  print("\r\n\n");
-
-  GPIO_Write(0x4);
-
-  print("Init SD Card:");
+  print("Init SPI:");
 
   spiMaster_init();
   GPIO_Write(0x51);
 
   GPIO_Write(0x5);
 
+  print("Init DRAM:");
   ddr_sdram_init();
   
   GPIO_Write(0x54);
@@ -423,13 +408,14 @@ void main()
 
   GPIO_Write(0x61);
 
+  print("Copy code from Flash to DRAM:");
   copy_sd2ddr();
 
   GPIO_Write(PASS_CODE);
 
   print("\n\r");
 
-  print("Jump to DDR SDRAM: 0x100\n\r");
+  print("Jump to DRAM: 0x100\n\r");
   jumpToRAM();
 
   GPIO_Write(0x8);
