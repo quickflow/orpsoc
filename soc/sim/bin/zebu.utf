@@ -13,9 +13,16 @@ system_tasks -enable -task {$test$plusargs}
 
 
 design_size -mode auto
+#design_size -number_of_modules 5
+
 set_hwtop -module CPUboard_tb
 clock_delay -module {CPUboard_tb}
 #-auto_tolerance t -perf_mode 2 -sdc_mcp_mode 2
 probe_signals -rtlname "CPUboard_tb.*" -fnmatch
 zforce -rtlname "CPUboard_tb.*" -fnmatch
+
+#memories -flops -instance {list of <moduleRTLName.arrayName>}
+memories -flops -instance { eth_spram_256x32.mem0 eth_spram_256x32.mem1 eth_spram_256x32.mem2 eth_spram_256x32.mem3 basic_fifo.fifo_data or1200_spram_2048x32.mem or1200_spram_2048x32_bw.mem_0 or1200_spram_2048x32_bw.mem_1 or1200_spram
+_2048x32_bw.mem_2 or1200_spram_2048x32_bw.mem_3 or1200_spram_512x20.mem }
+memories -zmem -instance {sram_top.mem i28f016s3.BlocksEnd i28f016s3.BlocksBegin i28f016s3.MainArray } -type BRAM
 
