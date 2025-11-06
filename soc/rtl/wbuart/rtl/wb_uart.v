@@ -43,6 +43,8 @@ module uart_wishbone (
             baud_div <= 16'd868; // default 115200 @ 100 MHz
             tx_data  <= 8'd0;
 	   wb_ack_o <= 0;
+	   rx_done <= 0;
+	   tx_done <= 0;
 	   
         end else if (wb_cyc_i && wb_stb_i && wb_we_i) begin
             case (wb_adr_i[4:2])
@@ -73,12 +75,15 @@ module uart_wishbone (
     // ------------------------------------------------------------
     // TX FIFO and engine
     // ------------------------------------------------------------
-    reg [7:0] tx_fifo [0:15];
-    reg [3:0] tx_wr_ptr, tx_rd_ptr;
+    reg [7:0] tx_fifo [0:255];
+    reg [7:0] tx_wr_ptr, tx_rd_ptr;
     reg [9:0] tx_shift;
     reg [3:0] tx_bit_cnt;
     reg       tx_busy;
 
+   wire [8:0] tx_wr_ptr_x = {1'b0, tx_wr_ptr};
+   wire [8:0] tx_rd_ptr_x = {1'b0, tx_rd_ptr};
+	  
     always @(posedge clk or posedge rst) begin
        if (rst) begin
 	   baud_cnt <= 0;
@@ -93,7 +98,7 @@ module uart_wishbone (
             tx_wr_ptr <= tx_wr_ptr + 1;
         end
 
-        fifo_full <= (tx_wr_ptr + 1 == tx_rd_ptr);
+        fifo_full <= ((tx_wr_ptr_x + 1) & 9'hff) == tx_rd_ptr;
 
         if (baud_tick && !tx_busy && tx_wr_ptr != tx_rd_ptr) begin
             tx_shift <= {1'b1, tx_fifo[tx_rd_ptr], 1'b0}; // stop, data, start
