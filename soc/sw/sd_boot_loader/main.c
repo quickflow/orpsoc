@@ -266,34 +266,36 @@ int copy_sd2ddr(void)
   GPIO_Write(0x77);
 
   uint32 dat0, dat1, dat2, dat3;
-  uint32 *Faddr= (uint32 *)0xf0000100;
-  uint32 *Daddr= (uint32 *)0x00000100;
   uint32 count;
 
-  for(count=0; count<1500; count++) {
+  //  for(count=0; count<1500; count++) {
+  for(count=0x100; count<(0x100+128*175*4); count+=16) {
     GPIO_Write(count);
 
     spiRead4words(&dat0, &dat1, &dat2, &dat3);
-    *Daddr++ = dat0;
-    *Daddr++ = dat1;
-    *Daddr++ = dat2;
-    *Daddr++ = dat3;
 
-#if 0
-    if (dat0 != *Faddr++)
+    REG32(DRAM_BASE + count) = dat0;
+    REG32(DRAM_BASE + count+4) = dat1;
+    REG32(DRAM_BASE + count+8) = dat2;
+    REG32(DRAM_BASE + count+12) = dat3;
+
+#if 1
+    if (dat0 != REG32(DRAM_BASE + count))
       GPIO_Write(FAIL_CODE);
 
-    if (dat1 != *Faddr++)
+    if (dat1 != REG32(DRAM_BASE + count+4))
       GPIO_Write(FAIL_CODE);
 
-    if (dat2 != *Faddr++)
+    if (dat2 != REG32(DRAM_BASE + count+8))
       GPIO_Write(FAIL_CODE);
 
-    if (dat3 != *Faddr++)
+    if (dat3 != REG32(DRAM_BASE + count+12))
       GPIO_Write(FAIL_CODE);
 #endif
   }
   
+  GPIO_Write(0x789);
+
   print("\r\nSD Copy Done!\n\r");
 }
 
@@ -304,47 +306,47 @@ int copy_sd2ddr(void)
 
 void ddr_sdram_init()
 {
-  *((unsigned int *) MC_CSR_INIT) = 0x1; // mc_ reg rf0  mc_cs_0 // csr_r2[31:24], csr_r[10:1] (init)
+  REG32(MC_CSR_INIT) = 0x1; // mc_ reg rf0  mc_cs_0 // csr_r2[31:24], csr_r[10:1] (init)
 
   // delay a while
-  *((unsigned int *) SRAM_BASE) = 0; // zero out SRAM [0]
-  while(*((unsigned int *) SRAM_BASE) < 64) {
-    *((unsigned int *) SRAM_BASE) = *((unsigned int *) SRAM_BASE) + 1; // increment it
+  REG32(SRAM_BASE) = 0; // zero out SRAM [0]
+  while( REG32(SRAM_BASE) < 64) {
+    REG32(SRAM_BASE) = REG32(SRAM_BASE) + 1; // increment it
   }
 
   // try lmr ?
   // load mode reg req mc_cs_0 [CAS latency=2, Sequential Burst Type, Programmed Burst Length]
-  *((unsigned int *) (MC_CSR_BASE + 0x14)) = 0x22; 
+  REG32(MC_CSR_BASE + 0x14) = 0x22; 
 }
 
 void ddr_sdram_sample_test()
 {
 
   // try writes
-  *((unsigned int *) (DRAM_BASE + 0x5000)) = 0x11111111;
-  *((unsigned int *) (DRAM_BASE + 0x5004)) = 0x22222222;
-  *((unsigned int *) (DRAM_BASE + 0x5008)) = 0x33333333;
-  *((unsigned int *) (DRAM_BASE + 0x500c)) = 0x44444444;
+  REG32(DRAM_BASE + 0x5000) = 0x11111111;
+  REG32(DRAM_BASE + 0x5004) = 0x22222222;
+  REG32(DRAM_BASE + 0x5008) = 0x33333333;
+  REG32(DRAM_BASE + 0x500c) = 0x44444444;
 
   // try reads
-  *((unsigned int *) (SRAM_BASE + 0x8000)) = *((unsigned int *) (DRAM_BASE + 0x5000));
-  *((unsigned int *) (SRAM_BASE + 0x8004)) = *((unsigned int *) (DRAM_BASE + 0x5004));
-  *((unsigned int *) (SRAM_BASE + 0x8008)) = *((unsigned int *) (DRAM_BASE + 0x5008));
-  *((unsigned int *) (SRAM_BASE + 0x800c)) = *((unsigned int *) (DRAM_BASE + 0x500c));
+  REG32(SRAM_BASE + 0x8000) = REG32(DRAM_BASE + 0x5000);
+  REG32(SRAM_BASE + 0x8004) = REG32(DRAM_BASE + 0x5004);
+  REG32(SRAM_BASE + 0x8008) = REG32(DRAM_BASE + 0x5008);
+  REG32(SRAM_BASE + 0x800c) = REG32(DRAM_BASE + 0x500c);
 
-  if (*((unsigned int *) (SRAM_BASE + 0x8000)) == 0x11111111)
+  if ( REG32(SRAM_BASE + 0x8000) == 0x11111111)
     GPIO_Write(0x11);
   else
     GPIO_Write(FAIL_CODE);
-  if (*((unsigned int *) (SRAM_BASE + 0x8004)) == 0x22222222)
+  if ( REG32(SRAM_BASE + 0x8004) == 0x22222222)
     GPIO_Write(0x12);
   else
     GPIO_Write(FAIL_CODE);
-  if (*((unsigned int *) (SRAM_BASE + 0x8008)) == 0x33333333)
+  if ( REG32(SRAM_BASE + 0x8008) == 0x33333333)
     GPIO_Write(0x13);
   else
     GPIO_Write(FAIL_CODE);
-  if (*((unsigned int *) (SRAM_BASE + 0x800c)) == 0x44444444)
+  if ( REG32(SRAM_BASE + 0x800c) == 0x44444444)
     GPIO_Write(0x14);
   else
     GPIO_Write(FAIL_CODE);
@@ -411,14 +413,14 @@ void main()
   print("Copy code from Flash to DRAM:");
   copy_sd2ddr();
 
-  GPIO_Write(PASS_CODE);
-
   print("\n\r");
 
   print("Jump to DRAM: 0x100\n\r");
+  GPIO_Write(0x8);
+
   jumpToRAM();
 
-  GPIO_Write(0x8);
+  GPIO_Write(PASS_CODE);
 
   print("Should not get here!!:\n\r");
   while(TRUE) {

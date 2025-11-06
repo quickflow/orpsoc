@@ -30,8 +30,8 @@ boot.or32: $(OBJECTS) Makefile
 	od -t x1 -w1 -v --skip-bytes=8448 --address-radix=n boot.or32 >> ss
 	od -t x4 -w4 -v --skip-bytes=8448 --endian=big --address-radix=n boot.or32 > sss
 	cp ss ../../sim/bin/flash.in
-	od -t x1 -w1 -v --skip-bytes=8448 --address-radix=n boot.or32 > memory.txt
-	cp memory.txt ../../sim/bin
+#	od -t x1 -w1 -v --skip-bytes=8448 --address-radix=n boot.or32 > memory.txt
+#	cp memory.txt ../../sim/bin
 
 boot.ihex: boot.or32 Makefile
 	@printf "\r\n\t--- Creating Ihex file: $@ ---\r\n"
