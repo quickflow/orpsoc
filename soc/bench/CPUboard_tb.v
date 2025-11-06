@@ -92,6 +92,10 @@ wire [1:0]	flash_rpblevel;		// Special flash inputs
 		$dumpfile("wavedump.lxt");
 		$dumpvars(10, CPUboard_tb );
 `endif
+`ifdef LXT2
+		$dumpfile("wavedump.lxt2");
+		$dumpvars(10, CPUboard_tb );
+`endif
 `ifdef VCD
 		$dumpfile("wavedump.vcd");
 		$dumpvars(10, CPUboard_tb );
@@ -293,6 +297,7 @@ mt48lc16m16a2 i_sdram1(
 	.Dqm   (mem_dqm_pad_o[3:2])
 );
 
+
 uart_mon uart_mon
   (
    .clk (clk), // System clock
@@ -300,7 +305,7 @@ uart_mon uart_mon
    .rx (uart_stx_pad_o)
    );
 
-  
+// //   
    defparam CPUboard_tb.i_spi_flash.MEMORY_FILE="memory.txt";
      
    AT26DFxxx i_spi_flash(

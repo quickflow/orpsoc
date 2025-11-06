@@ -6,10 +6,10 @@ module uart_mon
    input wire	    rx // UART receive line
    );
    
-   reg [7:0]	    data;
-   reg		    data_ready;
+   reg [7:0]	    data;   // Received ASCII data
+   reg		    data_ready;    // Data ready flag
    
-   parameter	    BAUD_TICKS = 816;
+   parameter	    BAUD_TICKS = 868;
    // Adjust for your clock frequency and baud rate
    parameter	    IDLE = 0, START = 1, DATA = 2, STOP = 3;
    
@@ -23,6 +23,14 @@ module uart_mon
    reg [1:0]	    state;
    // State machine
    
+   integer 	    fd;
+   integer	    fcount;
+   
+   initial begin
+      fd = $fopen("uart.txt", "w");
+      fcount = 0;
+   end
+
    always @(posedge clk or posedge reset) begin
       if (reset) begin
 	 state <= IDLE;
@@ -67,6 +75,11 @@ module uart_mon
 		 data <= shift_reg;
 		 // Store received data
 		 data_ready <= 1;
+		 $fwrite(fd, "%s", shift_reg);
+		 fcount = fcount + 1;
+		 if ((fcount & 32'hf) == 32'hf)
+		   $fflush(fd);
+		 
 		 // Indicate data is ready
 	      end else begin
 		 baud_counter <= baud_counter + 1;
