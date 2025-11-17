@@ -126,6 +126,8 @@ module mt48lc16m16a2 (Dq, Addr, Ba, Clk, Cke, Cs_n, Ras_n, Cas_n, We_n, Dqm);
        
 
     wire      Debug            = 1'b0;                          // Debug messages : 1 = On
+    wire      Debug2           = 1'b1;                          // Debug messages : 1 = On
+    wire      Debug3           = 1'b0;                          // Debug messages : 1 = On
     wire      Dq_chk           = Sys_clk & Data_in_enable;      // Check setup/hold time for DQ
     
     assign    Dq               = Dq_reg;                        // DQ buffer
@@ -163,6 +165,8 @@ module mt48lc16m16a2 (Dq, Addr, Ba, Clk, Cke, Cs_n, Ras_n, Cas_n, We_n, Dqm);
     time  RCD_chk0, RCD_chk1, RCD_chk2, RCD_chk3;
     time  RP_chk0, RP_chk1, RP_chk2, RP_chk3;
 
+   integer fd;
+   
     initial begin
         Dq_reg = {data_bits{1'bz}};
         Data_in_enable = 0; Data_out_enable = 0;
@@ -278,7 +282,7 @@ module mt48lc16m16a2 (Dq, Addr, Ba, Clk, Cke, Cs_n, Ras_n, Cas_n, We_n, Dqm);
             Mode_reg = Addr;
 
             // Decode CAS Latency, Burst Length, Burst Type, and Write Burst Mode
-            if (Debug) begin
+            if (Debug || Debug2) begin
                 $display ("%m : at time %t LMR  : Load Mode Register", $time);
                 // CAS Latency
                 case (Addr[6 : 4])
@@ -932,13 +936,10 @@ module mt48lc16m16a2 (Dq, Addr, Ba, Clk, Cke, Cs_n, Ras_n, Cas_n, We_n, Dqm);
                 // Record tWR for manual precharge
                 WR_chkm [Bank] = $time;
 
-                if (Debug) begin
-                    $display("%m : at time %t WRITE: Bank = %h Row = %h, Col = %h, Data = %h", $time, Bank, Row, Col, Dq_dqm);
-                end
+               if (Debug || Debug3) $display("%m : at time %t WRITE: Bank = %h Row = %h, Col = %h, Data = %h", $time, Bank, Row, Col, Dq_dqm);
+
             end else begin
-                if (Debug) begin
-                    $display("%m : at time %t WRITE: Bank = %h Row = %h, Col = %h, Data = Hi-Z due to DQM", $time, Bank, Row, Col);
-                end
+               if (Debug || Debug3) $display("%m : at time %t WRITE: Bank = %h Row = %h, Col = %h, Data = Hi-Z due to DQM", $time, Bank, Row, Col);
             end
 
             // Advance burst counter subroutine
@@ -964,14 +965,10 @@ module mt48lc16m16a2 (Dq, Addr, Ba, Clk, Cke, Cs_n, Ras_n, Cas_n, We_n, Dqm);
             // Display debug message
             if (Dqm_reg0 !== 2'b11) begin
                 Dq_reg = #tAC Dq_dqm;
-                if (Debug) begin
-                    $display("%m : at time %t READ : Bank = %h Row = %h, Col = %h, Data = %h", $time, Bank, Row, Col, Dq_reg);
-                end
+               if (Debug || Debug3) $display("%m : at time %t READ : Bank = %h Row = %h, Col = %h, Data = %h", $time, Bank, Row, Col, Dq_reg);
             end else begin
                 Dq_reg = #tHZ {data_bits{1'bz}};
-                if (Debug) begin
-                    $display("%m : at time %t READ : Bank = %h Row = %h, Col = %h, Data = Hi-Z due to DQM", $time, Bank, Row, Col);
-                end
+               if (Debug || Debug3) $display("%m : at time %t READ : Bank = %h Row = %h, Col = %h, Data = Hi-Z due to DQM", $time, Bank, Row, Col);
             end
 
             // Advance burst counter subroutine
