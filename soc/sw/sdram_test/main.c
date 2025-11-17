@@ -21,8 +21,8 @@
 #include "orsocdef.h"
 #include "board.h"
 
-#define PASS_CODE 0xc001
-#define FAIL_CODE 0xdead
+#define PASS_CODE 0xc001c0de
+#define FAIL_CODE 0xdeadbeef
 
 #define DEBUG 1
 
@@ -306,7 +306,7 @@ void main()
   uint8  str[9];
 
   // Configure GPIO
-  REG32(GPIO_BASE + RGPIO_OE)   = 0xffff;  // bit0-7 = outputs, bit8-31 = inputs
+  REG32(GPIO_BASE + RGPIO_OE)   = 0xffffffff;  // bit0-7 = outputs, bit8-31 = inputs
   REG32(GPIO_BASE + RGPIO_INTE) = 0x0;   // Disable interrupts from GPIO
 
   print("\n\r\n\t");
@@ -316,77 +316,22 @@ void main()
   print("\n\r");
 
   GPIO_Write(0x2222);
-  print("SD Card Bootloader, v0.2\n\r");
-  print("Xianfeng Zeng, 2009 SA\n\r");
-  print("Xianfeng@opencores.org\n\r");
-  print("http://www.opencores.org/project,or1k_soc_on_altera_embedded_dev_kit\n\r");
+  print("Running from DRAM\n\r");
 
   GPIO_Write(0x3333);
   print("\n\r");
 
   print("System Clock: 30MHz\n\r\n");
 
-  print("DDR SDRAM Base Address: 0x00000000 - 32MB\n\r");
-  print("Ethernet Base Address:  0x20000000  IRQ 4\n\r");
-  print("UART Base Address:      0x30000000  IRQ 2\n\r");
-  print("GPIO Base Address:      0x40000000  IRQ 3\n\r");
-  print("SD Card Base Address:   0x50000000\n\r");
-  print("SRAM Base Address:      0xF0000000 - 16KB\n\r");
-  print("\r\n\n");
-
   GPIO_Write(0x4444);
 
-#if 0
-  print("Init SD Card:");
-  REG8(SD_BASE_ADD + SD_TRANS_CTRL_REG) = 0x1;  /* reset spiMaster */
-  do_sleep();
-  REG8(SD_BASE_ADD + SD_TRANS_CTRL_REG) = 0x0;
-
-  if (spiMaster_init() == 0) {
-	print("Passed!\n\r");
-	GPIO_Write(0x51);
-  } else {
-	print("Failed!\n\r");
-	GPIO_Write(0x55);
+  for(i=0; i<10; i++) {
+    or1k_putc('.');
+    do_sleep();
+    GPIO_Write(i);
   }
-#endif
   
-  GPIO_Write(0x5);
-
-  ddr_sdram_sample_test();
-
-  GPIO_Write(0x6);
-
-  ddr_sdram_sample_test();
-
-  GPIO_Write(0x61);
-
-  GPIO_Write(0x7);
-
-  //  print("Jump to DDR SDRAM: 0x100\n\r");
-
-  GPIO_Write(0x8);
-
+  print("\n\r");
   GPIO_Write(PASS_CODE);
-
-  while(TRUE) {
-	do_sleep();
-	or1k_putc('.');
-	GPIO_Write(~0x0);  // Test finished
-	do_sleep();
-    	GPIO_Write(~0x1);
-	do_sleep();
-	GPIO_Write(~0x2);
-	do_sleep();
-	GPIO_Write(~0x4);
-	do_sleep();
-	GPIO_Write(~0x8);
-
-	if (i == 39) {
-		print("\n\r");
-		i = 0;
-	} else 
-		i++;
-  }
 }
 
