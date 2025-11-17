@@ -269,8 +269,9 @@ int copy_sd2ddr(void)
   uint32 count;
 
   //  for(count=0; count<1500; count++) {
-  for(count=0x100; count<(0x100+128*175*4); count+=16) {
-    GPIO_Write(count);
+  for(count=0x100; count<0x4d00; count+=16) {
+    if ((count & 0xff) == 0)
+      GPIO_Write(count);
 
     spiRead4words(&dat0, &dat1, &dat2, &dat3);
 
@@ -279,21 +280,29 @@ int copy_sd2ddr(void)
     REG32(DRAM_BASE + count+8) = dat2;
     REG32(DRAM_BASE + count+12) = dat3;
 
-#if 1
-    if (dat0 != REG32(DRAM_BASE + count))
-      GPIO_Write(FAIL_CODE);
-
-    if (dat1 != REG32(DRAM_BASE + count+4))
-      GPIO_Write(FAIL_CODE);
-
-    if (dat2 != REG32(DRAM_BASE + count+8))
-      GPIO_Write(FAIL_CODE);
-
-    if (dat3 != REG32(DRAM_BASE + count+12))
-      GPIO_Write(FAIL_CODE);
+#if 0
+    if (count < (0x4200)) {
+      if (dat0 != REG32(DRAM_BASE + count))
+	GPIO_Write(FAIL_CODE);
+      
+      if (dat1 != REG32(DRAM_BASE + count+4))
+	GPIO_Write(FAIL_CODE);
+      
+      if (dat2 != REG32(DRAM_BASE + count+8))
+	GPIO_Write(FAIL_CODE);
+      
+      if (dat3 != REG32(DRAM_BASE + count+12))
+	GPIO_Write(FAIL_CODE);
+    }
 #endif
   }
   
+  GPIO_Write(0x788);
+
+  for(count=0x35600; count<0x35700; count+=4) {
+    REG32(DRAM_BASE + count) = count;
+  }
+
   GPIO_Write(0x789);
 
   print("\r\nSD Copy Done!\n\r");
@@ -316,7 +325,7 @@ void ddr_sdram_init()
 
   // try lmr ?
   // load mode reg req mc_cs_0 [CAS latency=2, Sequential Burst Type, Programmed Burst Length]
-  REG32(MC_CSR_BASE + 0x14) = 0x22; 
+  REG32(MC_CSR_BASE + 0x14) = 0x20; 
 }
 
 void ddr_sdram_sample_test()
@@ -417,6 +426,8 @@ void main()
 
   print("Jump to DRAM: 0x100\n\r");
   GPIO_Write(0x8);
+
+  
 
   jumpToRAM();
 
