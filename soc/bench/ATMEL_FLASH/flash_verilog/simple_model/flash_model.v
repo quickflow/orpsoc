@@ -57,7 +57,7 @@ module AT26DFxxx
 	      ((state == READ) && (bit_cnt == 7)) ? memory[addr + 1] :
 	      data_out;
    
-   always @(posedge clk or posedge cs_n) begin
+	always @(negedge clk or posedge cs_n) begin
       if (cs_n) begin
 	 state <= IDLE;
 	 bit_cnt <= 0;
