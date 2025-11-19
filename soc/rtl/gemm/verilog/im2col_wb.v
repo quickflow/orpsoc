@@ -1,15 +1,13 @@
 // ============================================================
-// Wishbone im2col: IFM[H x W x Cin] -> rows of Kh*Kw*Cin
+// im2col block (IFM and IM2 windows strictly separated)
 // ============================================================
-module im2col_wb #
-(
-    parameter MAX_H    = 128,
-    parameter MAX_W    = 128,
-    parameter MAX_CIN  = 32,
-    parameter MAX_KH   = 7,
-    parameter MAX_KW   = 7
-)
-(
+module im2col_wb #(
+    parameter MAX_H   = 128,
+    parameter MAX_W   = 128,
+    parameter MAX_CIN = 32,
+    parameter MAX_KH  = 7,
+    parameter MAX_KW  = 7
+)(
     input  wire        clk,
     input  wire        rst,
 
@@ -34,45 +32,45 @@ module im2col_wb #
     // Effective dims with padding
     wire [15:0] H_eff = H + (pad<<1);
     wire [15:0] W_eff = W + (pad<<1);
-
-    // Output dims
     wire [15:0] H_out = (H_eff >= Kh) ? ((H_eff - Kh)/stride + 1) : 0;
     wire [15:0] W_out = (W_eff >= Kw) ? ((W_eff - Kw)/stride + 1) : 0;
 
-    // Vector length per patch row
-    wire [15:0] VEC_LEN = Kh * Kw * Cin;
-    wire [31:0] TOTAL_ROWS = H_out * W_out;
+    // Capacities
+    localparam integer IFM_CAP = MAX_H * MAX_W * MAX_CIN;                   // 524,288 (0x80000)
+    localparam integer IM2_CAP = MAX_H * MAX_W * MAX_KH * MAX_KW * MAX_CIN; // 25,769,472 (0x01880000)
 
-    localparam integer IFM_CAP = MAX_H * MAX_W * MAX_CIN;
-    localparam integer IM2_CAP = MAX_H * MAX_W * MAX_KH * MAX_KW * MAX_CIN;
-
+    // Memories
     reg [7:0] IFM_mem [0:IFM_CAP-1];
     reg [7:0] IM2_mem [0:IM2_CAP-1];
 
-    // Wishbone map (for im2col):
+    // Sub-window bases and sizes (aligned, strictly bounded)
+    localparam [31:0] IFM_BASE  = 32'h0000_1000; // IFM: 0x0000_1000 .. 0x0008_0FFF (size 0x80000)
+    localparam integer IFM_SIZE = IFM_CAP;
+
+    // IM2_BASE aligned after IFM window
+    localparam [31:0] IM2_BASE_ALIGNED = ((IFM_BASE + IFM_SIZE + 32'hFFF) & 32'hFFFF_F000); // 0x0008_1000
+    localparam [31:0] IM2_BASE  = IM2_BASE_ALIGNED; // IM2: starts at 0x0008_1000
+    localparam integer IM2_SIZE = IM2_CAP;
+
+    // Wishbone map:
     // 0x000 CTRL       : [0]=start
     // 0x004 STATUS     : [0]=busy, [1]=done
     // 0x008 DIMS       : {8'h00, Cin, H, W}
     // 0x00C KCFG       : {pad, stride, Kh, Kw}
-    // 0x1000.. IFM     : input feature map
-    // 0x2000.. IM2     : im2col output rows
+    // IFM:  IFM_BASE .. IFM_BASE + IFM_SIZE - 1
+    // IM2:  IM2_BASE .. IM2_BASE + IM2_SIZE - 1
 
     always @(posedge clk) begin
         if (rst) begin
-            wb_ack_o <= 1'b0;
-            wb_dat_o <= 32'h0;
-            start    <= 1'b0;
-            busy     <= 1'b0;
-            done     <= 1'b0;
-            H <= 0; W <= 0; Cin <= 0;
-            Kh <= 0; Kw <= 0; stride <= 1; pad <= 0;
-            irq <= 1'b0;
+            wb_ack_o <= 0; wb_dat_o <= 0;
+            start<=0; busy<=0; done<=0; irq<=0;
+            H<=0; W<=0; Cin<=0; Kh<=0; Kw<=0; stride<=8'd1; pad<=0;
         end else begin
-            wb_ack_o <= 1'b0;
+            wb_ack_o <= 0;
             irq      <= done;
 
             if (wb_stb_i && wb_cyc_i && !wb_ack_o) begin
-                wb_ack_o <= 1'b1;
+                wb_ack_o <= 1;
                 if (wb_we_i) begin
                     case (wb_adr_i[11:0])
                         12'h000: start <= wb_dat_i[0];
@@ -80,14 +78,18 @@ module im2col_wb #
                         12'h00C: begin
                             Kw     <= wb_dat_i[7:0];
                             Kh     <= wb_dat_i[15:8];
-                            stride <= (wb_dat_i[23:16]==8'd0)?8'd1:wb_dat_i[23:16];
+                            stride <= (wb_dat_i[23:16]==8'd0) ? 8'd1 : wb_dat_i[23:16];
                             pad    <= wb_dat_i[31:24];
                         end
                         default: begin
-                            if (wb_adr_i >= 32'h00001000 && wb_adr_i < 32'h00002000)
-                                IFM_mem[wb_adr_i - 32'h00001000] <= wb_dat_i[7:0];
-                            else if (wb_adr_i >= 32'h00002000)
-                                IM2_mem[wb_adr_i - 32'h00002000] <= wb_dat_i[7:0];
+                            if (wb_adr_i>=IFM_BASE && wb_adr_i<IFM_BASE+IFM_SIZE) begin
+                                IFM_mem[wb_adr_i-IFM_BASE] <= wb_dat_i[7:0];
+			       $display("%m:: IFM_mem[%h] << %h", wb_adr_i-IFM_BASE, wb_dat_i[7:0]);
+			    end
+                            else if (wb_adr_i>=IM2_BASE && wb_adr_i<IM2_BASE+IM2_SIZE) begin
+                                IM2_mem[wb_adr_i-IM2_BASE] <= wb_dat_i[7:0];
+//			       $display("%m:: IM2_mem[%h] << %h", wb_adr_i-IM2_BASE, wb_dat_i[7:0]);
+			    end
                         end
                     endcase
                 end else begin
@@ -96,10 +98,10 @@ module im2col_wb #
                         12'h008: wb_dat_o <= {8'h0, Cin, H, W};
                         12'h00C: wb_dat_o <= {pad, stride, Kh, Kw};
                         default: begin
-                            if (wb_adr_i >= 32'h00001000 && wb_adr_i < 32'h00002000)
-                                wb_dat_o <= {24'h0, IFM_mem[wb_adr_i - 32'h00001000]};
-                            else if (wb_adr_i >= 32'h00002000)
-                                wb_dat_o <= {24'h0, IM2_mem[wb_adr_i - 32'h00002000]};
+                            if (wb_adr_i >= IFM_BASE && wb_adr_i < IFM_BASE + IFM_SIZE)
+                                wb_dat_o <= {24'h0, IFM_mem[wb_adr_i - IFM_BASE]};
+                            else if (wb_adr_i >= IM2_BASE && wb_adr_i < IM2_BASE + IM2_SIZE)
+                                wb_dat_o <= {24'h0, IM2_mem[wb_adr_i - IM2_BASE]};
                             else
                                 wb_dat_o <= 32'h0;
                         end
@@ -111,9 +113,10 @@ module im2col_wb #
         end
     end
 
-   parameter ST_IDLE=2'd0;
-   parameter ST_GEN=2'd1;
-   parameter ST_DONE=2'd2;
+    // FSM
+   parameter ST_IDLE=0;
+   parameter ST_GEN=1;
+   parameter ST_DONE=2;
 
    reg [1:0] state;
 
@@ -156,10 +159,17 @@ module im2col_wb #
                     h_in = (oh * stride) + kh_it - pad;
                     w_in = (ow * stride) + kw_it - pad;
 
-                    if (is_oob(h_in, w_in)) IM2_mem[im2_ptr] <= 8'h00;
-                    else IM2_mem[im2_ptr] <= IFM_mem[ ifm_index(h_in, w_in, c_it) ];
+                    if (is_oob(h_in, w_in)) begin
+		       IM2_mem[im2_ptr] <= 8'h00;
+		       $display("%m:: oob IM2_mem[%h] << 0", im2_ptr);
+		    end
+		   
+                    else begin
+		       IM2_mem[im2_ptr] <= IFM_mem[ ifm_index(h_in, w_in, c_it) ];
+		       $display("%m:: IM2_mem[%h] << %h  ifm_index(%h)", im2_ptr, IFM_mem[ ifm_index(h_in, w_in, c_it) ], ifm_index(h_in, w_in, c_it));
+		    end
+		   
 
-                    // advance inner indices
                     if (c_it == Cin - 1) begin
                         c_it <= 8'd0;
                         if (kw_it == Kw - 1) begin

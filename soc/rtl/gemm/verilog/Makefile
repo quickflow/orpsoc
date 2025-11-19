@@ -6,6 +6,10 @@ TOPDIR := ../..
 
 sim:
 	iverilog -disable-timing -D LXT2 -osim.out -s tb_conv_accel  -c iver.cmd
+	./sim.out -lxt2 
+
+sim_tee:
+	iverilog -disable-timing -D LXT2 -osim.out -s tb_conv_accel  -c iver.cmd
 	./sim.out -lxt2  | tee output.log
 
 show_wave_lxt:

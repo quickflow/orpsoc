@@ -5,9 +5,35 @@
 
 module tb_conv_accel;
 
-    // Base addresses (match top-level parameters)
-    localparam [31:0] IM2_BASE = 32'h00000000;
-    localparam [31:0] DNN_BASE = 32'h00010000;
+    // Global bases matching top-level
+    localparam [31:0] IM2_BASE = 32'h0000_0000;
+    localparam [31:0] DNN_BASE = 32'h0200_0000;
+
+    // Mirror DUT parameters
+    localparam integer ROWS   = 128;
+    localparam integer COLS   = 128;
+    localparam integer LANES  = 8;
+
+    localparam integer MAX_H   = 128;
+    localparam integer MAX_W   = 128;
+    localparam integer MAX_CIN = 32;
+    localparam integer MAX_KH  = 7;
+    localparam integer MAX_KW  = 7;
+
+    // Derived sub-window bases and sizes (must mirror module constants)
+    // DNN
+    localparam [31:0] DNN_A_BASE = 32'h0000_1000;
+    localparam [31:0] DNN_B_BASE = 32'h0000_5000;
+    localparam [31:0] DNN_C_BASE = 32'h0000_9000;
+    localparam integer A_SIZE = ROWS*COLS;   // 16384
+    localparam integer B_SIZE = COLS*COLS;   // 16384
+    localparam integer C_SIZE = ROWS*COLS;   // 16384
+
+    // IM2
+    localparam [31:0] IM2_IFM_BASE = 32'h0000_1000;
+    localparam integer IFM_SIZE    = MAX_H*MAX_W*MAX_CIN; // 524288
+    localparam [31:0] IM2_IM2_BASE = ((IM2_IFM_BASE + IFM_SIZE + 32'hFFF) & 32'hFFFF_F000); // 0x0008_1000
+    localparam integer IM2_SIZE    = MAX_H*MAX_W*MAX_KH*MAX_KW*MAX_CIN; // 25769472
 
     reg clk, rst;
     reg [31:0] wb_adr_i, wb_dat_i;
@@ -19,7 +45,7 @@ module tb_conv_accel;
     wire irq;
 
     conv_accel_wb #(
-        .ROWS(128), .COLS(128), .LANES(8),
+        .ROWS(ROWS), .COLS(COLS), .LANES(LANES),
         .IM2_BASE(IM2_BASE), .DNN_BASE(DNN_BASE)
     ) dut(
         .clk(clk), .rst(rst),
@@ -32,102 +58,153 @@ module tb_conv_accel;
     localparam CLK=10;
     integer i;
 
-    // Clock
     initial begin
 `ifdef LXT2
        $dumpfile("wavedump.lxt2");
        $dumpvars(0, tb_conv_accel );
 `endif
-       #0 clk=0;
-       forever
-	 #(CLK/2) clk=~clk;
+        clk = 0;
+        forever #(CLK/2) clk = ~clk;
     end
 
-    // Stimulus
     initial begin
         rst=1;
         wb_adr_i=0; wb_dat_i=0; wb_we_i=0; wb_sel_i=4'hF;
         wb_stb_i=0; wb_cyc_i=0;
         #(5*CLK) rst=0;
 
-        // --------------------------------
-        // Configure im2col (H=4,W=4,Cin=1, Kh=3,Kw=3, stride=1, pad=0)
-        // --------------------------------
-        wb_write(IM2_BASE + 32'h000008, {8'd1,8'd4,8'd4});         // Cin=1,H=4,W=4
-        wb_write(IM2_BASE + 32'h00000C, {8'd0,8'd1,8'd3,8'd3});   // pad=0,stride=1,Kh=3,Kw=3
+`ifdef INIT_ALL_MEM
+        // -----------------------------
+        // Initialize entire DUT memories via Wishbone writes
+        // -----------------------------
+        // DNN A_mem
+       $display("%m:: init DNN A_mem");
+        for (i=0; i<A_SIZE; i=i+1)
+            wb_write(DNN_BASE + DNN_A_BASE + i, 8'h00);
 
-        // IFM: 1..16 row-major
-        for(i=0;i<16;i=i+1) wb_write(IM2_BASE + 32'h00001000 + i, i+1);
+        // DNN B_mem
+       $display("%m:: init DNN B_mem");
+        for (i=0; i<B_SIZE; i=i+1)
+            wb_write(DNN_BASE + DNN_B_BASE + i, 8'h00);
 
-        // --------------------------------
-        // Kernel: 3x3 all ones into DNN B buffer
-        // --------------------------------
-        for(i=0;i<9;i=i+1) wb_write(DNN_BASE + 32'h00002000 + i, 8'd1);
+        // DNN C_mem
+       $display("%m:: init DNN C_mem");
+        for (i=0; i<C_SIZE; i=i+1)
+            wb_write(DNN_BASE + DNN_C_BASE + i, 8'h00);
 
-        // --------------------------------
+        // im2 IFM
+       $display("%m:: init im2 IFM");
+        for (i=0; i<IFM_SIZE; i=i+1)
+            wb_write(IM2_BASE + IM2_IFM_BASE + i, 8'h00);
+
+        // im2 IM2 (WARNING: very large; slow in simulation)
+       $display("%m:: init im2 IM2");
+        for (i=0; i<IM2_SIZE; i=i+1)
+            wb_write(IM2_BASE + IM2_IM2_BASE + i, 8'h00);
+
+`else       
+       // Initialize only occupied entries
+       
+       // DNN A_mem (36 entries)
+       $display("%m:: init DNN A_mem");
+       for (i=0; i<36; i=i+1)
+	 wb_write(DNN_BASE + DNN_A_BASE + i, 8'h00);
+       
+       // DNN B_mem (9 entries)
+       $display("%m:: init DNN B_mem");
+       for (i=0; i<9; i=i+1)
+	 wb_write(DNN_BASE + DNN_B_BASE + i, 8'h00);
+       
+       // DNN C_mem (4 entries)
+       $display("%m:: init DNN C_mem");
+       for (i=0; i<4; i=i+1)
+	 wb_write(DNN_BASE + DNN_C_BASE + i, 8'h00);
+       
+       // im2 IFM (16 entries)
+       $display("%m:: init im2 IFM");
+       for (i=0; i<16; i=i+1)
+	 wb_write(IM2_BASE + IM2_IFM_BASE + i, 8'h00);
+       
+       // im2 IM2 (36 entries)
+       $display("%m:: init im2 IM2");
+       for (i=0; i<36; i=i+1)
+	 wb_write(IM2_BASE + IM2_IM2_BASE + i, 8'h00);
+`endif // !`ifdef INIT_ALL_MEM
+       
+       $display("%m:: start here");
+        // -----------------------------
+        // Configure im2col: H=4, W=4, Cin=1; Kh=3, Kw=3, stride=1, pad=0
+        // -----------------------------
+        wb_write(IM2_BASE + 32'h0000_0008, {8'd1,8'd4,8'd4});       // Cin=1,H=4,W=4
+        wb_write(IM2_BASE + 32'h0000_000C, {8'd0,8'd1,8'd3,8'd3}); // pad=0,stride=1,Kh=3,Kw=3
+
+        // Load IFM: 1..16 row-major into IFM window
+        for (i=0; i<16; i=i+1) wb_write(IM2_BASE + IM2_IFM_BASE + i, i+1);
+
         // Run im2col
-        // --------------------------------
-        wb_write(IM2_BASE + 32'h00000000, 32'h1);
-        // You can poll STATUS at 0x004; here we wait some cycles
-        repeat(200) @(posedge clk);
+        wb_write(IM2_BASE + 32'h0000_0000, 32'h1);
 
-        // --------------------------------
-        // Configure DNN: Activation + Quantization
-        // ReLU, quant scale 0.5 (Q8.8=128), zero-point 0, saturation ON
-        // --------------------------------
-        wb_write(DNN_BASE + 32'h00000000, {26'h0, 3'd1 /*ReLU*/, 1'b1 /*quant*/, 1'b1 /*sat*/, 1'b0}); // CTRL
-        wb_write(DNN_BASE + 32'h0000000C, {8'd0 /*res*/, 8'd0 /*zp*/, 16'd128 /*scale*/});             // QUANT_CFG
-
-        // --------------------------------
-        // Start GEMM
-        // --------------------------------
-        wb_write(DNN_BASE + 32'h00000000, 32'h1); // start
-        wait(irq==1);
-        $display("Convolution + activation + quantization done.");
-
-        // --------------------------------
-        // Read 2x2 outputs from C buffer (row-major)
-        // Expected raw sums: [54,63,90,99]; with scale 0.5 => approx [27,31,45,49]
-        // --------------------------------
-        for(i=0;i<4;i=i+1) begin
-            wb_read(DNN_BASE + 32'h00003000 + i);
-            $display("C[%0d] = %0d", i, wb_dat_o[7:0]);
+        // Poll STATUS until not busy
+        wb_read(IM2_BASE + 32'h0000_0004);
+        while (wb_dat_o[0] == 1'b1) begin
+            @(posedge clk);
+            wb_read(IM2_BASE + 32'h0000_0004);
         end
 
-        // --------------------------------
-        // Try Sigmoid activation (no extra quantization)
-        // --------------------------------
-        wb_write(DNN_BASE + 32'h00000000, {26'h0, 3'd3 /*Sigmoid*/, 1'b0 /*quant*/, 1'b1 /*sat*/, 1'b0});
-        wb_write(DNN_BASE + 32'h00000000, 32'h1);
+        // -----------------------------
+        // Copy IM2_mem -> DNN A_mem for occupied region of this test (36 bytes)
+        // -----------------------------
+        for (i=0; i<36; i=i+1) begin
+            wb_read(IM2_BASE + IM2_IM2_BASE + i);
+            wb_write(DNN_BASE + DNN_A_BASE + i, wb_dat_o[7:0]);
+        end
+
+        // Load kernel (3x3 all ones) into DNN B buffer (first 9 entries)
+        for (i=0; i<9; i=i+1) wb_write(DNN_BASE + DNN_B_BASE + i, 8'd1);
+
+        // Configure DNN: ReLU + quant scale 0.5 (Q8.8=128), zero-point 0, saturation ON
+        wb_write(DNN_BASE + 32'h0000_0000, {26'h0, 3'd1 /*ReLU*/, 1'b1 /*quant*/, 1'b1 /*sat*/, 1'b0});
+        wb_write(DNN_BASE + 32'h0000_000C, {8'd0 /*res*/, 8'd0 /*zp*/, 16'd128 /*scale*/});
+
+        // Start GEMM
+        wb_write(DNN_BASE + 32'h0000_0000, 32'h1);
         wait(irq==1);
-        $display("Convolution + Sigmoid done (LUT).");
-        for(i=0;i<4;i=i+1) begin
-            wb_read(DNN_BASE + 32'h00003000 + i);
+        $display("Convolution + ReLU + quantization done.");
+
+        // Read 2x2 outputs from C buffer (row-major)
+        for (i=0; i<4; i=i+1) begin
+            wb_read(DNN_BASE + DNN_C_BASE + i);
+            $display("ReLU+Quant C[%0d] = %0d", i, wb_dat_o[7:0]);
+        end
+
+        // Sigmoid activation
+        wb_write(DNN_BASE + 32'h0000_0000, {26'h0, 3'd3 /*Sigmoid*/, 1'b0 /*quant*/, 1'b1 /*sat*/, 1'b0});
+        wb_write(DNN_BASE + 32'h0000_0000, 32'h1);
+        wait(irq==1);
+        $display("Convolution + Sigmoid done.");
+        for (i=0; i<4; i=i+1) begin
+            wb_read(DNN_BASE + DNN_C_BASE + i);
             $display("Sigmoid C[%0d] = %0d", i, wb_dat_o[7:0]);
         end
 
-        // --------------------------------
-        // Try Tanh activation (no extra quantization)
-        // --------------------------------
-        wb_write(DNN_BASE + 32'h00000000, {26'h0, 3'd4 /*Tanh*/, 1'b0 /*quant*/, 1'b1 /*sat*/, 1'b0});
-        wb_write(DNN_BASE + 32'h00000000, 32'h1);
+        // Tanh activation
+        wb_write(DNN_BASE + 32'h0000_0000, {26'h0, 3'd4 /*Tanh*/, 1'b0 /*quant*/, 1'b1 /*sat*/, 1'b0});
+        wb_write(DNN_BASE + 32'h0000_0000, 32'h1);
         wait(irq==1);
-        $display("Convolution + Tanh done (LUT).");
-        for(i=0;i<4;i=i+1) begin
-            wb_read(DNN_BASE + 32'h00003000 + i);
+        $display("Convolution + Tanh done.");
+        for (i=0; i<4; i=i+1) begin
+            wb_read(DNN_BASE + DNN_C_BASE + i);
             $display("Tanh C[%0d] = %0d", i, wb_dat_o[7:0]);
         end
 
-        // --------------------------------
-        // Try LeakyReLU with alpha=0.25 (Q0.8 = 64)
-        // --------------------------------
-        wb_write(DNN_BASE + 32'h00000010, {24'h0, 8'd64}); // LEAKY_ALPHA
-        wb_write(DNN_BASE + 32'h00000000, {26'h0, 3'd2 /*LeakyReLU*/, 1'b0 /*quant*/, 1'b1 /*sat*/, 1'b0});
-        wb_write(DNN_BASE + 32'h00000000, 32'h1);
+        // LeakyReLU alpha=0.25 (Q0.8 = 64)
+        wb_write(DNN_BASE + 32'h0000_0010, {24'h0, 8'd64});
+        wb_write(DNN_BASE + 32'h0000_0000, {26'h0, 3'd2 /*LeakyReLU*/, 1'b0 /*quant*/, 1'b1 /*sat*/, 1'b0});
+        wb_write(DNN_BASE + 32'h0000_0000, 32'h1);
         wait(irq==1);
         $display("Convolution + LeakyReLU (alpha=0.25) done.");
-        for(i=0;i<4;i=i+1) begin
-            wb_read(DNN_BASE + 32'h00003000 + i);
+        for (i=0; i<4; i=i+1) begin
+            wb_read(DNN_BASE + DNN_C_BASE + i);
             $display("LeakyReLU C[%0d] = %0d", i, wb_dat_o[7:0]);
         end
 
@@ -162,4 +239,4 @@ module tb_conv_accel;
     end
     endtask
 
-endmodule // tb_conv_accel_full
+endmodule // tb_conv_accel
