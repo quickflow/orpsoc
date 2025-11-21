@@ -352,3 +352,9 @@ uart_mon uart_mon
    pulldown(gpio_pad_io[31]);
 
 endmodule
+
+module dumpvars;
+   initial begin:qiwc
+      (*qiwc,no_opt*) $dumpvars(0,"CPUboard_tb");
+   end
+endmodule // dumpvars
