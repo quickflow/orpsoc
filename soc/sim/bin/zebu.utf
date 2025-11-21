@@ -1,15 +1,17 @@
 vcs_exec_command ./vcs_dut.csh
 debug -all true
 #debug -offline_debug_params {INCL_XTORS=true}
-dpi_synthesis -enable ALL -enable_wls true
+dpi_synthesis -enable ALL
+#-enable_wls true
 
 #architecture_file -filename /remote/vginterfaces1/zebu_system_dir/CONFIG.TD/rt_ZEBU_COMMON_H100_MU_1/config/zse_configuration.tcl
 architecture_file -filename /projects/prj1/ZEBU_SYSTEM_DIR1/config//zse_configuration.tcl
 #architecture_file -filename $::env(ZEBU_ROOT)/etc/sys/ZS5/configs/sample_ZS5_2U_2H_19p_v1.tcl
 
 system_tasks -enable -task {$display}
-system_tasks -enable -task {$value$plusargs}
-system_tasks -enable -task {$test$plusargs}
+system_tasks -enable -task {$finish}
+#system_tasks -enable -task {$value$plusargs}
+#system_tasks -enable -task {$test$plusargs}
 
 
 design_size -mode auto
@@ -22,7 +24,8 @@ probe_signals -rtlname "CPUboard_tb.*" -fnmatch
 zforce -rtlname "CPUboard_tb.*" -fnmatch
 
 #memories -flops -instance {list of <moduleRTLName.arrayName>}
-memories -flops -instance { eth_spram_256x32.mem0 eth_spram_256x32.mem1 eth_spram_256x32.mem2 eth_spram_256x32.mem3 basic_fifo.fifo_data or1200_spram_2048x32.mem or1200_spram_2048x32_bw.mem_0 or1200_spram_2048x32_bw.mem_1 or1200_spram
-_2048x32_bw.mem_2 or1200_spram_2048x32_bw.mem_3 or1200_spram_512x20.mem }
+memories -flops -instance { eth_spram_256x32.mem0 eth_spram_256x32.mem1 eth_spram_256x32.mem2 eth_spram_256x32.mem3 basic_fifo.fifo_data or1200_spram_2048x32.mem or1200_spram_2048x32_bw.mem_0 or1200_spram_2048x32_bw.mem_1 or1200_spram_20
+48x32_bw.mem_2 or1200_spram_2048x32_bw.mem_3 or1200_spram_512x20.mem }
 memories -zmem -instance {sram_top.mem i28f016s3.BlocksEnd i28f016s3.BlocksBegin i28f016s3.MainArray } -type BRAM
+
 
