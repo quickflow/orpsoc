@@ -1,8 +1,10 @@
 ../../bench/CPUboard_tb.v
+../../bench/sdram/sdr_sdram_model.v
 ../../bench/generic_pll/generic_pll.v
 //../../bench/models/512Kx8.v
-../../bench/models/28f016s3/dp016s3.v
-../../bench/models/28f016s3/bwsvff.v
+//../../bench/models/28f016s3/dp016s3.v
+//../../bench/models/28f016s3/bwsvff.v
+../../bench/models/28f016s3/simple_parallel_flash.v
 //../../bench/ATMEL_FLASH/flash_verilog/flash_verilog_w_wo_hold/AT26DFxxx.v
 ../../bench/ATMEL_FLASH/flash_verilog/simple_model/flash_model.v
 ../../bench/uart_mon.v
