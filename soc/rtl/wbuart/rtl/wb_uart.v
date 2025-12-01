@@ -37,12 +37,32 @@ module uart_wishbone (
     reg [7:0]  rx_data;
     reg        tx_done, rx_done, fifo_full;
 
+    reg [7:0] rx_fifo [0:15];
+    reg [3:0] rx_wr_ptr, rx_rd_ptr;
+    reg [9:0] rx_shift;
+    reg [3:0] rx_bit_cnt;
+    reg       rx_busy;
+
+    reg [7:0] tx_fifo [0:255];
+    reg [7:0] tx_wr_ptr, tx_rd_ptr;
+    reg [9:0] tx_shift;
+    reg [3:0] tx_bit_cnt;
+    reg       tx_busy;
+
+    // Wishbone write
+    always @(posedge clk or posedge rst) begin
+        if (rst) begin
+	   wb_ack_o <= 0;
+        end else begin
+	  wb_ack_o <= wb_cyc_i & wb_stb_i && !wb_ack_o;
+        end
+    end
+
     // Wishbone write
     always @(posedge clk or posedge rst) begin
         if (rst) begin
             baud_div <= 16'd868; // default 115200 @ 100 MHz
             tx_data  <= 8'd0;
-	   wb_ack_o <= 0;
 	   rx_done <= 0;
 	   tx_done <= 0;
 	   
@@ -56,11 +76,11 @@ module uart_wishbone (
 
     // Wishbone read
     always @(posedge clk) begin
-        wb_ack_o <= wb_cyc_i & wb_stb_i && !wb_ack_o;
         if (wb_cyc_i && wb_stb_i && !wb_we_i) begin
             case (wb_adr_i[4:2])
                 3'b011: wb_dat_o <= {24'd0, rx_data};
                 3'b100: wb_dat_o <= {29'd0, fifo_full, tx_done, rx_done};
+	      3'b101: wb_dat_o <= {8'h00, rx_wr_ptr, rx_rd_ptr, tx_wr_ptr, tx_rd_ptr};
                 default: wb_dat_o <= 32'd0;
             endcase
         end
@@ -75,11 +95,6 @@ module uart_wishbone (
     // ------------------------------------------------------------
     // TX FIFO and engine
     // ------------------------------------------------------------
-    reg [7:0] tx_fifo [0:255];
-    reg [7:0] tx_wr_ptr, tx_rd_ptr;
-    reg [9:0] tx_shift;
-    reg [3:0] tx_bit_cnt;
-    reg       tx_busy;
 
    wire [8:0] tx_wr_ptr_x = {1'b0, tx_wr_ptr};
    wire [8:0] tx_rd_ptr_x = {1'b0, tx_rd_ptr};
@@ -122,14 +137,17 @@ module uart_wishbone (
     // ------------------------------------------------------------
     // RX FIFO and engine
     // ------------------------------------------------------------
-    reg [7:0] rx_fifo [0:15];
-    reg [3:0] rx_wr_ptr, rx_rd_ptr;
-    reg [9:0] rx_shift;
-    reg [3:0] rx_bit_cnt;
-    reg       rx_busy;
 
-    always @(posedge clk) begin
-        if (!rx_busy && !rx) begin
+    always @(posedge clk or posedge rst) begin
+       if (rst) begin
+          rx_busy <= 0;
+          rx_bit_cnt <= 0;
+	  rx_rd_ptr <= 0;
+	  rx_wr_ptr <= 0;
+	  rx_shift <= 0;
+	  rx_done <= 0;
+       end
+       else if (!rx_busy && !rx) begin
             rx_busy <= 1;
             rx_bit_cnt <= 0;
 	   rx_rd_ptr <= 0;
