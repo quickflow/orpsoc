@@ -196,7 +196,7 @@ input         clk;
 input         rst;
 
 reg [3:0]     counter;
-wire [7:0]    do;
+wire [7:0]    d_o;
 
 parameter [31:0] NOP = 32'h15000000;
 
@@ -218,10 +218,10 @@ if (rst)
 	wb_dat_o <= NOP;
 else
 	case (counter)	
-	4'd15: wb_dat_o[31:24] <= do;
-	4'd11: wb_dat_o[23:16] <= do;
-	4'd7: wb_dat_o[15: 8] <= do;
-	4'd3: wb_dat_o[ 7: 0] <= do;
+	4'd15: wb_dat_o[31:24] <= d_o;
+	4'd11: wb_dat_o[23:16] <= d_o;
+	4'd7: wb_dat_o[15: 8] <= d_o;
+	4'd3: wb_dat_o[ 7: 0] <= d_o;
 	endcase
 
    // All target memory options exhausted
@@ -231,7 +231,7 @@ else
      flash0 (
 	     .clk  (counter[1] ^ counter[0]),
 	     .addr ({wb_adr_i,counter[3:2]}),
-	     .dout (do));
+	     .dout (d_o));
       
 endmodule // rom_wb
 
