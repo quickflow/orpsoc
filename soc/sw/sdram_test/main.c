@@ -325,7 +325,7 @@ void main()
 
   GPIO_Write(0x4444);
 
-  for(i=0; i<10; i++) {
+  for(i=0; i<1024; i++) {
     or1k_putc('.');
     do_sleep();
     GPIO_Write(i);
