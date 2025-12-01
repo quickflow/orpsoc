@@ -280,8 +280,8 @@ int copy_sd2ddr(void)
     REG32(DRAM_BASE + count+8) = dat2;
     REG32(DRAM_BASE + count+12) = dat3;
 
-#if 0
-    if (count < (0x4200)) {
+#if 1
+    if (count < (0x1200)) {
       if (dat0 != REG32(DRAM_BASE + count))
 	GPIO_Write(FAIL_CODE);
       
@@ -393,6 +393,7 @@ void main()
 
   print("\n\r\n\t");
   print("==OpenRisc 1200 SOC==\n\r\n");
+  print("Hi Andy\r\n");
   GPIO_Write(0x1);
 
   GPIO_Write(0x2);
@@ -411,11 +412,13 @@ void main()
   
   GPIO_Write(0x54);
 
-  ddr_sdram_sample_test();
+  //  ddr_sdram_sample_test();
 
   GPIO_Write(0x6);
 
-  ddr_sdram_sample_test();
+  //  ddr_sdram_sample_test();
+
+  //  simple_gfx_test();
 
   GPIO_Write(0x61);
 
@@ -426,8 +429,6 @@ void main()
 
   print("Jump to DRAM: 0x100\n\r");
   GPIO_Write(0x8);
-
-  
 
   jumpToRAM();
 
