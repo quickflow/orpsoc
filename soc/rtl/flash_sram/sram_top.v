@@ -148,6 +148,7 @@ output			d_oe;
 // Internal wires and regs
 //
 reg     [7:0]           mem [16*1024-1:0];
+//TBD reg     [7:0]           mem [16*1024*1024-1:0];
 integer			i;
 wire    [31:0]          adr;
 `ifdef SRAM_GENERIC_REGISTERED
@@ -243,7 +244,7 @@ initial begin
 //	for (i = 0; i < 16777216; i = i + 1)
 //		mem[i] = 0;
 
-	$readmemh("../src/sram.in", mem, 0);
+//TBD	$readmemh("../src/sram.in", mem, 0);
 end
 always @(posedge wb_clk_i)
         if (wb_cyc_i)

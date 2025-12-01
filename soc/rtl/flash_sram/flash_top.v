@@ -76,7 +76,7 @@
 // synopsys translate_off
 //`include "timescale.v"
 // synopsys translate_on
-//`include "bench_define.v"
+`include "bench_defines.v"
 
 `ifdef FLASH_GENERIC
 
@@ -153,7 +153,10 @@ assign adr = {6'h00, wb_adr_i[25:2], 2'b00};
 //
 // For simulation only
 //
-initial $readmemh("flash.in", mem, 0);
+initial begin
+   $readmemh("flash.in", mem, 0);
+   $display("%m:: reading from file flash.in");
+   end
 
 //
 // Reading from flash model
