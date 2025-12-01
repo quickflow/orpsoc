@@ -5,15 +5,11 @@
 TOPDIR := ../..
 
 sim:
-	iverilog -disable-timing -D LXT2 -osim.out -s tb_conv_accel  -c iver.cmd
-	./sim.out -lxt2 
-
-sim_tee:
-	iverilog -disable-timing -D LXT2 -osim.out -s tb_conv_accel  -c iver.cmd
-	./sim.out -lxt2  | tee output.log
+	iverilog -g2012 -o gemm_dp_tb tb_gemm_packed_pipe_dp.v gemm_dma_packed_pipe_dp.v dp_ram.v wishbone_mem.v
+	vvp gemm_dp_tb -lxt2 |tee output.log
 
 show_wave_lxt:
-	gtkwave ./wavedump.lxt2 wave_signals.sav &
+	gtkwave ./gemm_packet_pipe_dp.lxt2 wave_signals.sav &
 
 clean:
 	rm -rf *.log *.out *.lxt *~
