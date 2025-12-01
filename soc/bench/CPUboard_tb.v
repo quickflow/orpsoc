@@ -224,11 +224,15 @@ wire [1:0]	flash_rpblevel;		// Special flash inputs
 	       // 0xff has been written to GPIO, so the
 	       // sofware has completed its tests
 	       $display("\n\n**** PASS **** indicator for Software execution complete.\n\n");
+	       $fflush(uart_mon.fd);
+//	       repeat(1000000) @(posedge clk);
 	       $finish();
 	    end else if (gpio_pad_io == 32'hdeadbeef) begin
 	       // 0x55 has been written to GPIO, so the
 	       // there was an error during the tests
-	       $display("\n\n**** FAIL ****r indicatoe during software tests. Finishing simulation.");
+	       $display("\n\n**** FAIL **** indicator during Software tests. Finishing simulation.");
+	       $fflush(uart_mon.fd);
+	       repeat(1000000) @(posedge clk);
 	       $finish();
 	    end
 	 end   
@@ -243,6 +247,7 @@ wire [1:0]	flash_rpblevel;		// Special flash inputs
 		 $display("Completed");
 //		 Flash.StoreToFile;
 		 
+		 $fflush(uart_mon.fd);
 		 $finish();
 	      end
 	      counter = counter + 1;
@@ -271,30 +276,30 @@ i28f016s3 Flash (
 
 
 // This model contains actual timing  MT48LC16M16B2  (4 Meg x 16 x 4 banks)
-mt48lc16m16a2 i_sdram0(
-	.Dq    (mem_dat_pad_io[15:0]),
-	.Addr  (mem_adr_pad_o[12:0]),
-	.Ba    (mem_ba_pad_o[1:0]),
-	.Clk   (dram_clk),
-	.Cke   (mem_cke_pad_o),
-	.Cs_n  (mem_cs_pad_o),
-	.Ras_n (mem_ras_pad_o),
-	.Cas_n (mem_cas_pad_o),
-	.We_n  (mem_we_pad_o),
-	.Dqm   (mem_dqm_pad_o[1:0])
+mt48lc16m16a2_model i_sdram0(
+	.DQ    (mem_dat_pad_io[15:0]),
+	.A     (mem_adr_pad_o[12:0]),
+	.BA    (mem_ba_pad_o[1:0]),
+	.CLK   (dram_clk),
+	.CKE   (mem_cke_pad_o),
+	.CS_N  (mem_cs_pad_o),
+	.RAS_N (mem_ras_pad_o),
+	.CAS_N (mem_cas_pad_o),
+	.WE_N  (mem_we_pad_o),
+	.DQM   (mem_dqm_pad_o[1:0])
 );
 
-mt48lc16m16a2 i_sdram1(
-	.Dq    (mem_dat_pad_io[31:16]),
-	.Addr  (mem_adr_pad_o[12:0]),
-	.Ba    (mem_ba_pad_o[1:0]),
-	.Clk   (dram_clk),
-	.Cke   (mem_cke_pad_o),
-	.Cs_n  (mem_cs_pad_o),
-	.Ras_n (mem_ras_pad_o),
-	.Cas_n (mem_cas_pad_o),
-	.We_n  (mem_we_pad_o),
-	.Dqm   (mem_dqm_pad_o[3:2])
+mt48lc16m16a2_model i_sdram1(
+	.DQ    (mem_dat_pad_io[31:16]),
+	.A     (mem_adr_pad_o[12:0]),
+	.BA    (mem_ba_pad_o[1:0]),
+	.CLK   (dram_clk),
+	.CKE   (mem_cke_pad_o),
+	.CS_N  (mem_cs_pad_o),
+	.RAS_N (mem_ras_pad_o),
+	.CAS_N (mem_cas_pad_o),
+	.WE_N  (mem_we_pad_o),
+	.DQM   (mem_dqm_pad_o[3:2])
 );
 
 
@@ -354,7 +359,8 @@ uart_mon uart_mon
 endmodule
 
 module dumpvars;
-   initial begin:qiwc
-      (*qiwc,no_opt*) $dumpvars(0,"CPUboard_tb");
+  initial begin:qiwc
+	 (*qiwc,no_opt*) $dumpvars(0,"CPUboard_tb"); 
    end
-endmodule // dumpvars
+   
+endmodule

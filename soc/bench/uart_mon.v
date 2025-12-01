@@ -26,8 +26,9 @@ module uart_mon
    integer 	    fd;
    integer	    fcount;
    
+   reg 		    file_opened;
+ 	    
    initial begin
-      fd = $fopen("uart.txt", "w");
       fcount = 0;
    end
 
@@ -38,7 +39,14 @@ module uart_mon
 	 bit_count <= 0;
 	 shift_reg <= 0;
 	 data_ready <= 0;
+	 file_opened <= 0;
       end else begin // if (reset)
+	 if (!file_opened) begin
+	    fd = $fopen("uart.txt", "w");
+	    $display("%m:: executed uart.txt fopen");
+	    file_opened <= 1;
+	 end
+	 
 	 case (state)
 	   IDLE: begin
 	      data_ready <= 0;
@@ -59,7 +67,7 @@ module uart_mon
 	   DATA: begin
 	      if (baud_counter == BAUD_TICKS) begin
 		 baud_counter <= 0;
-		 shift_reg <= {rx, shift_reg[7:1]};
+		 shift_reg <= {rx, shift_reg[7:1] };
 		 // Shift in received bit
 		 bit_count <= bit_count + 1;
 		 if (bit_count == 7) begin
