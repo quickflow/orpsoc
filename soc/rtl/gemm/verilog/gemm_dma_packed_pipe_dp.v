@@ -156,8 +156,9 @@ module gemm_dma_packed_pipe_dp #(parameter N = 16)
 			S_W0_READ3= 8'h53,
 			S_W1_ACT =  8'h06,
 			S_W2_QUANT= 8'h07,
-			S_W3_WRITE= 8'h08,
-			S_DONE   =  8'h09;
+			S_W3_SAT=   8'h08,
+			S_W4_WRITE= 8'h09,
+			S_DONE   =  8'h0A;
    
    reg [7:0]		state, next_state;
    
@@ -684,21 +685,25 @@ module gemm_dma_packed_pipe_dp #(parameter N = 16)
                  w2_z1 <= apply_quant(w1_y1);
                  w2_z2 <= apply_quant(w1_y2);
                  w2_z3 <= apply_quant(w1_y3);
-		 state <= S_W3_WRITE;
+		 state <= S_W3_SAT;
               end
            end
 	   
-           // ---------------- W3: saturate and DMA write ----------------
-           S_W3_WRITE: begin
+           // ---------------- W3: saturate  ----------------
+	   S_W3_SAT: begin
+              // saturate
+              w0_x0 <= saturate_out(w2_z0);
+              w0_x1 <= saturate_out(w2_z1);
+              w0_x2 <= saturate_out(w2_z2);
+              w0_x3 <= saturate_out(w2_z3);
+	      state <= S_W4_WRITE;
+	   end
+	   
+           // ---------------- W3: DMA write ----------------
+           S_W4_WRITE: begin
+              // pack result
+              // use temporary regs declared at top; no mid-block declarations
               if (!wbm_stb_o && !dma_req) begin
-                 // pack result
-                 // use temporary regs declared at top; no mid-block declarations
-                 // saturate
-                 w0_x0 <= saturate_out(w2_z0);
-                 w0_x1 <= saturate_out(w2_z1);
-                 w0_x2 <= saturate_out(w2_z2);
-                 w0_x3 <= saturate_out(w2_z3);
-		 
                  // compose word
                  dma_wdata <= (mode_dw16) ? {w0_x1[15:0], w0_x0[15:0]} :
                               {w0_x3[7:0], w0_x2[7:0], w0_x1[7:0], w0_x0[7:0]};

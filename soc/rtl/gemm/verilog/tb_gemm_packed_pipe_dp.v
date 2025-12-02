@@ -68,7 +68,8 @@ module tb_gemm_packed_pipe_dp;
       if (last_gemm_state != dut.state) begin
 	 $display("%m:: gemm_state = %s",
 		  dut.state == dut.S_DONE ? "S_DONE" :
-		  dut.state == dut.S_W3_WRITE ? "S_W3_WRITE" :
+		  dut.state == dut.S_W4_WRITE ? "S_W4_WRITE" :
+		  dut.state == dut.S_W3_SAT ? "S_W3_SAT" :
 		  dut.state == dut.S_W2_QUANT ? "S_W2_QUANT" :
 		  dut.state == dut.S_W1_ACT ? "S_W1_ACT" :
 		  dut.state == dut.S_W0_READ ? "S_W0_READ" :
