@@ -1,0 +1,2 @@
+zSimzilla --zebu-work zcui.work/zebu.work --ztdb ZRCI_1/qiwc_dump.ztdb/ --zwd ZRCI_1/qiwc_dump.ztdb.zwd --timescale 1ns --mudb --threads 10 --jobs 10 --log simzilla_$$.log
+verdi -ssf ZRCI_1/qiwc_dump.ztdb.zwd -dbdir zcui.work/vcs_splitter/simv.daidir &
