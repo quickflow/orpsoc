@@ -1,6 +1,6 @@
 ../../bench/CPUboard_tb.v
-../../bench/sdram/sdr_sdram_model.v
 ../../bench/generic_pll/generic_pll.v
+../../bench/sdram/sdr_sdram_model.v
 //../../bench/models/512Kx8.v
 //../../bench/models/28f016s3/dp016s3.v
 //../../bench/models/28f016s3/bwsvff.v
