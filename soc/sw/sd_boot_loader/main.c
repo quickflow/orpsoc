@@ -325,7 +325,7 @@ void ddr_sdram_init()
 
   // try lmr ?
   // load mode reg req mc_cs_0 [CAS latency=2, Sequential Burst Type, Programmed Burst Length]
-  REG32(MC_CSR_BASE + 0x14) = 0x20; 
+  REG32(MC_CSR_BASE + 0x14) = 0x30; 
 }
 
 void ddr_sdram_sample_test()
