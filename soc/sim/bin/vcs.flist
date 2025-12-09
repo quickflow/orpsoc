@@ -17,6 +17,7 @@
 +incdir+../../rtl/gpio/rtl/verilog
 +incdir+../../rtl/spi/rtl/verilog
 +incdir+../../rtl/ethernet/rtl/verilog
++incdir+../../rtl/gemm/verilog
 +incdir+../../rtl/gfx/rtl/verilog
 +incdir+../../rtl/altera_pll
 +incdir+../../rtl/adv_debug_sys/Hardware/adv_dbg_if/rtl/verilog
@@ -186,7 +187,10 @@
 ../../rtl/adv_debug_sys/Hardware/adv_dbg_if/rtl/verilog/adbg_wb_biu.v
 ../../rtl/adv_debug_sys/Hardware/adv_dbg_if/rtl/verilog/adbg_wb_defines.v
 ../../rtl/adv_debug_sys/Hardware/adv_dbg_if/rtl/verilog/adbg_wb_module.v
- 
+
+../../rtl/gemm/verilog/gemm_dma_packed_pipe_dp.v
+../../rtl/gemm/verilog/dp_ram.v
+../../rtl/gemm/verilog/wishbone_mem.v
 ../../rtl/gfx/rtl/verilog/gfx_top.v
 
 ../../rtl/gfx/rtl/verilog/gfx_blender.v
