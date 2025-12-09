@@ -164,6 +164,10 @@
 ../../rtl/adv_debug_sys/Hardware/adv_dbg_if/rtl/verilog/adbg_wb_defines.v
 ../../rtl/adv_debug_sys/Hardware/adv_dbg_if/rtl/verilog/adbg_wb_module.v
  
+../../rtl/gemm/verilog/gemm_dma_packed_pipe_dp.v
+../../rtl/gemm/verilog/dp_ram.v
+../../rtl/gemm/verilog/wishbone_mem.v
+
 ../../rtl/gfx/rtl/verilog/gfx_top.v
 
 ../../rtl/gfx/rtl/verilog/gfx_blender.v

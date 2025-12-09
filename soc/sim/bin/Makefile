@@ -20,6 +20,7 @@ INC += -I${TOPDIR}/rtl/gpio/rtl/verilog
 INC += -I${TOPDIR}/rtl/spi/rtl/verilog
 INC += -I${TOPDIR}/rtl/ethernet/rtl/verilog
 INC += -I${TOPDIR}/rtl/gfx/rtl/verilog
+INC += -I${TOPDIR}/rtl/gemm/verilog
 INC += -I${TOPDIR}/rtl/altera_pll
 INC += -I${TOPDIR}/rtl/adv_debug_sys/Hardware/adv_dbg_if/rtl/verilog
 
