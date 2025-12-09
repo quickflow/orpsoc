@@ -73,7 +73,7 @@ module mt48lc16m16a2_model (
                         // Output data after CAS latency
                         output_enable <= 1;
                         data_out <= memory[read_bank][read_row][read_col];
-                        $display("[SDRAM] RD: data=%h from bank=%0d, row=%h, col=%h", memory[read_bank][read_row][read_col], read_bank, read_row, read_col);
+//                        $display("[SDRAM] RD: data=%h from bank=%0d, row=%h, col=%h", memory[read_bank][read_row][read_col], read_bank, read_row, read_col);
                         read_pending <= 0;
                     end
                 end
@@ -83,7 +83,7 @@ module mt48lc16m16a2_model (
             if (write_pending_reg) begin
                 if (bank_active[write_bank_reg]) begin
                     memory[write_bank_reg][write_row_reg][write_col_reg] <= write_data_reg;
-                    $display("[SDRAM] WR: bank=%0d, row=%h, col=%h, data=%h", write_bank_reg, write_row_reg, write_col_reg, write_data_reg);
+//                    $display("[SDRAM] WR: bank=%0d, row=%h, col=%h, data=%h", write_bank_reg, write_row_reg, write_col_reg, write_data_reg);
                 end else begin
 //                    $display("[SDRAM] ERROR: Write to inactive bank %0d", write_bank_reg);
                 end
