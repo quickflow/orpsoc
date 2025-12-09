@@ -1057,6 +1057,52 @@ gfx_top gfx_top
 );
 
 //
+// OrSoC Gemm
+//
+
+wire [31:0] wbm_gemm_dat_o;	
+wire [31:0] wbm_gemm_dat_i;	
+wire [31:0] wbm_gemm_adr_o;	
+wire [3:0]  wbm_gemm_sel_o;	
+wire        wbm_gemm_we_o;	
+wire        wbm_gemm_cyc_o;	
+wire        wbm_gemm_stb_o;	
+wire        wbm_gemm_ack_i;	
+wire        wbm_gemm_err_i;	
+
+wire [31:0] wbs_gemm_dat_i;	
+wire [31:0] wbs_gemm_dat_o;	
+wire [31:0] wbs_gemm_adr_i;	
+wire [3:0]  wbs_gemm_sel_i;	
+wire        wbs_gemm_we_i;	
+wire        wbs_gemm_cyc_i;	
+wire        wbs_gemm_stb_i;	
+wire        wbs_gemm_ack_o;	
+wire        wbs_gemm_err_o;	
+
+   gemm_dma_packed_pipe_dp #(.N(16)) dut
+     (
+      .wb_clk_i ( clk_cpu_25 ),
+      .wb_rst_i ( wb_rst_pad_i ),
+      .wbs_stb_i(wbs_gemm_stb_i),
+      .wbs_cyc_i(wbs_gemm_cyc_i),
+      .wbs_we_i (wbs_gemm_we_i),
+      .wbs_sel_i(wbs_gemm_sel_i),
+      .wbs_adr_i(wbs_gemm_adr_i),
+      .wbs_dat_i(wbs_gemm_dat_i),
+      .wbs_dat_o(wbs_gemm_dat_o),
+      .wbs_ack_o(wbs_gemm_ack_o),
+      .wbm_cyc_o(wbm_gemm_cyc_o),
+      .wbm_stb_o(wbm_gemm_stb_o),
+      .wbm_we_o (wbm_gemm_we_o),
+      .wbm_adr_o(wbm_gemm_adr_o),
+      .wbm_dat_o(wbm_gemm_dat_o),
+      .wbm_dat_i(wbm_gemm_dat_i),
+      .wbm_ack_i(wbm_gemm_ack_i)
+      );
+
+
+//
 // inter connect
 //
 wb_conmax_top #(
@@ -1144,23 +1190,17 @@ wb_conmax_top #(
    .m5_err_o ( wbm_gfx_r_err_i ),
    .m5_rty_o (),
    
-/*
-   // Master 6 Interface
-   m6_data_i, m6_data_o, m6_addr_i, m6_sel_i, m6_we_i, m6_cyc_i,
-   m6_stb_i, m6_ack_o, m6_err_o, m6_rty_o,
-   
-   // Master 7 Interface. For SD Loader
-   .m7_data_i	(sd_loader_dat_o),
-   .m7_data_o	(sd_loader_dat_i),
-   .m7_addr_i	(sd_loader_adr_o),
-   .m7_sel_i	(sd_loader_sel_o),
-   .m7_we_i	(sd_loader_we_o),
-   .m7_cyc_i	(sd_loader_cyc_o),
-   .m7_stb_i	(sd_loader_stb_o),
-   .m7_ack_o	(sd_loader_ack_i),
-   .m7_err_o	(),
-   .m7_rty_o	(),
-*/
+   // Master 6 Interface. For Gemm
+   .m6_data_i	(wbm_gemm_dat_o),
+   .m6_data_o	(wbm_gemm_dat_i),
+   .m6_addr_i	(wbm_gemm_adr_o),
+   .m6_sel_i	(wbm_gemm_sel_o),
+   .m6_we_i	(wbm_gemm_we_o),
+   .m6_cyc_i	(wbm_gemm_cyc_o),
+   .m6_stb_i	(wbm_gemm_stb_o),
+   .m6_ack_o	(wbm_gemm_ack_i),
+   .m6_err_o	(),
+   .m6_rty_o	(),
 
    // Slave 0 Interface. connect to memory controller
    .s0_data_i	(mem_if_wb_data_o),
@@ -1223,16 +1263,16 @@ wb_conmax_top #(
    .s4_err_i	(wbs_gpio_err_o),
    .s4_rty_i	(1'b0),
    
-   // Slave 5 Interface. spiMaster for SD Card
-   .s5_data_i	(32'h0000_0000),
-   .s5_data_o	(),
-   .s5_addr_o	(),
-   .s5_sel_o	(),
-   .s5_we_o	(),
-   .s5_cyc_o	(),
-   .s5_stb_o	(),
-   .s5_ack_i	(1'b0),
-   .s5_err_i	(1'b1),
+   // Slave 5 Interface. Gemm
+   .s5_data_i	(wbs_gemm_dat_o),
+   .s5_data_o	(wbs_gemm_dat_i),
+   .s5_addr_o	(wbs_gemm_adr_i),
+   .s5_sel_o	(wbs_gemm_sel_i),
+   .s5_we_o	(wbs_gemm_we_i),
+   .s5_cyc_o	(wbs_gemm_cyc_i),
+   .s5_stb_o	(wbs_gemm_stb_i),
+   .s5_ack_i	(wbs_gemm_ack_o),
+   .s5_err_i	(1'b0),
    .s5_rty_i	(1'b0),
    
    // Slave 6 Interface (GFX Slave)
