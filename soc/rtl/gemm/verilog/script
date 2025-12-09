@@ -1,0 +1,3 @@
+iverilog -g2012 -o gemm_dp_tb tb_gemm_packed_pipe_dp.v gemm_dma_packed_pipe_dp.v dp_ram.v wishbone_mem.v
+vvp gemm_dp_tb -lxt2
+gtkwave gemm_packed_pipe_dp.lxt2 &
