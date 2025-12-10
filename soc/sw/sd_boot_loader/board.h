@@ -26,6 +26,27 @@
 #define MC_CSR_LMR  (MC_CSR_BASE + 0x14)
 
 /******************************************************************************/
+/*                               GEMM                                         */
+/******************************************************************************/
+
+#define GEMM_BASE 0x50000000
+
+#define GEMM_CTRL_STAT 0x00
+#define GEMM_MODE      0x04
+#define GEMM_BASE_A    0x08
+#define GEMM_BASE_B    0x0c
+#define GEMM_BASE_C    0x10
+#define GEMM_ALPHA     0x14
+#define GEMM_QSCALE    0x18
+#define GEMM_QZERO     0x1c
+
+#define GEMM_MODE_DW16  0
+#define GEMM_MODE_ACT   1
+#define GEMM_MODE_QUANT 2
+#define GEMM_MODE_ACT_TYPE   3
+#define GEMM_MODE_SIGNED 4
+
+/******************************************************************************/
 /*                               G P I O                                      */
 /******************************************************************************/
 

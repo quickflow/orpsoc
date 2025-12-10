@@ -166,6 +166,17 @@ void spiMaster_init()
   };
 }
 
+void simple_gemm_test()
+{
+  REG32(GEMM_BASE + GEMM_BASE_A) = 0x11000;
+  REG32(GEMM_BASE + GEMM_BASE_B) = 0x12000;
+  REG32(GEMM_BASE + GEMM_BASE_C) = 0x13000;
+
+  GPIO_Write(0xaa000000 + REG32(GEMM_BASE + GEMM_BASE_A));
+  GPIO_Write(0xaa000000 + REG32(GEMM_BASE + GEMM_BASE_B));
+  GPIO_Write(0xaa000000 + REG32(GEMM_BASE + GEMM_BASE_C));
+}
+
 int spiMaster_test()
 {
   uint32 tip_count = 0;
@@ -270,7 +281,7 @@ int copy_sd2ddr(void)
 
   //  for(count=0; count<1500; count++) {
   for(count=0x100; count<0x4d00; count+=16) {
-    if ((count & 0xff) == 0)
+    if ((count & 0xfff) == 0)
       GPIO_Write(count);
 
     spiRead4words(&dat0, &dat1, &dat2, &dat3);
@@ -419,6 +430,7 @@ void main()
   //  ddr_sdram_sample_test();
 
   //  simple_gfx_test();
+  simple_gemm_test();
 
   GPIO_Write(0x61);
 
