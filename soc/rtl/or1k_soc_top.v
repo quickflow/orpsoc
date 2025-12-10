@@ -1080,7 +1080,7 @@ wire        wbs_gemm_stb_i;
 wire        wbs_gemm_ack_o;	
 wire        wbs_gemm_err_o;	
 
-   gemm_dma_packed_pipe_dp #(.N(16)) dut
+   gemm_dma_packed_pipe_dp #(.N(16)) gemm
      (
       .wb_clk_i ( clk_cpu_25 ),
       .wb_rst_i ( wb_rst_pad_i ),
