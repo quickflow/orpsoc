@@ -187,7 +187,7 @@ module gemm_dma_packed_pipe_dp #(parameter N = 16)
    // ------------------------
    // Wishbone control slave
    // ------------------------
-   always @(posedge wb_clk_i) begin
+   always @(posedge wb_clk_i or posedge wb_rst_i ) begin
       if (wb_rst_i) begin
          wbs_ack_o <= 1'b0;
          wbs_dat_o <= 32'd0;
@@ -245,7 +245,7 @@ module gemm_dma_packed_pipe_dp #(parameter N = 16)
    // ------------------------
    // DMA master handshake
    // ------------------------
-   always @(posedge wb_clk_i) begin
+   always @(posedge wb_clk_i or posedge wb_rst_i) begin
       if (wb_rst_i) begin
          wbm_cyc_o <= 1'b0;
          wbm_stb_o <= 1'b0;
@@ -326,7 +326,7 @@ module gemm_dma_packed_pipe_dp #(parameter N = 16)
    // Main FSM and pipelines
    // ------------------------
    integer idx;
-   always @(posedge wb_clk_i) begin
+   always @(posedge wb_clk_i or posedge wb_rst_i) begin
       if (wb_rst_i) begin
          state <= S_IDLE;
 	 
