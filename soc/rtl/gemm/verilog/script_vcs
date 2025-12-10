@@ -1,0 +1,2 @@
+vcs -full64 -sverilog tb_gemm_packed_pipe_dp.v gemm_dma_packed_pipe_dp.v dp_ram.v wishbone_mem.v
+./simv -l simv.log
