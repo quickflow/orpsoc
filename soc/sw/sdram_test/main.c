@@ -162,123 +162,345 @@ int spiMaster_init()
   return 0;
 }
 
-unsigned char data[512];
 
-int copy_sd2ddr()
+/******************************************************************************/
+/*                  Gemm test                                                 */
+/******************************************************************************/
+
+int val(int r, int c) {
+  return(r + 2*c - 3);
+}
+
+uint pack16(int x0, int x1) {
+  return(((x1 & 0xffff) << 16) | (x0 & 0xffff));
+}
+
+uint pack8(int x0, int x1, int x2, int x3) {
+  return(((x3 & 0xff) << 23) | ((x2 & 0xff) << 16) | ((x1 & 0xff) << 8) | (x0 & 0xff));
+}
+
+int MatA[16][8];
+int MatB[16][8];
+int MatC[16][8];
+
+// Load packed matrix into memory (SV keyword automatic avoided)
+void load_matrix_packed(int base, int dw16, int signed_in)
 {
-
-  int i, j;
-  uint8 data;
+  int r,c,pack;
+  uint word;
+  int x0_16, x1_16;
+  int x0_8, x1_8, x2_8, x3_8;
+  int N = 16;
   
-  uint32 blockCnt;
-  uint32 numBlocks = 12; // How mang blocks will be copied
-  
-  uint32 ddr_offset = 0x100;
-  uint32 sd_read_addr = 0x00;
-  
-  print("\n\r");
-  print("Copying SD image to DDR SDRAM...\n\r");
-  print("Blocks:");
-  print32bit((long unsigned int)numBlocks);
-  
-  GPIO_Write(0x77);
-  
-  for (blockCnt = 0; blockCnt < numBlocks; blockCnt++) {
-    /* for my spimaster */
-    REG32(SD_BASE_ADD + (SPI_TX_0 << 2)) = 0x03000000 | (sd_read_addr & 0x00ffffff); /* 0x3 for Read Array; rest is address */
-    
-    uint32 ctrl_csr_val = 
-      (1 << SPI_CTRL_GO) |
-      (1 << SPI_CTRL_RX_NEGEDGE) |
-      (1 << SPI_CTRL_TX_NEGEDGE) |
-      (0 << SPI_CTRL_LSB) |
-      (0 << SPI_CTRL_IE) |
-      (0 << SPI_CTRL_ASS);
-    
-    REG32(SD_BASE_ADD + (SPI_CTRL << 2)) = ctrl_csr_val | 32; /* 32 bit transfer of command = 0x03 (READ ARRAY) */
-    
-    uint32 tip_count = 0;
-    while(REG32(SD_BASE_ADD + (SPI_CTRL << 2)) & (1 << SPI_CTRL_GO)) { // wait while SPI in progress
-      GPIO_Write(0x9000 + tip_count);
-      tip_count++;
-      if (tip_count > 32)
-	break;
-    };
-    
-    GPIO_Write(0x78);
-    
-    for (i = 0; i < 512; i+=16) {
-      REG32(SD_BASE_ADD + (SPI_CTRL << 2)) = ctrl_csr_val | 128; /* 128 bits transfer (READ ARRAY) */
-
-      tip_count = 0;
-      while(REG32(SD_BASE_ADD + (SPI_CTRL << 2)) & (1 << SPI_CTRL_GO)) { // wait while SPI in progress
-	//	GPIO_Write(0x9000 + tip_count);
-	tip_count++;
-	if (tip_count > 32)
-	  break;
-      };
-  
-      // try reads
-      REG32(DRAM_BASE + ddr_offset) = REG32(SD_BASE_ADD + (SPI_RX_3 << 2));
-      REG32(DRAM_BASE + ddr_offset + 4) = REG32(SD_BASE_ADD + (SPI_RX_2 << 2));
-      REG32(DRAM_BASE + ddr_offset + 8) = REG32(SD_BASE_ADD + (SPI_RX_1 << 2));
-      REG32(DRAM_BASE + ddr_offset + 12) = REG32(SD_BASE_ADD + (SPI_RX_0 << 2));
-      ddr_offset += 16;
-      sd_read_addr += 16;
-      //				print32bit((long unsigned int)data);
+  pack = dw16 ? 2 : 4;
+  for (r=0; r<N; r++) {
+    for (c=0; c<N; c=c+pack) {
+      if (dw16) {
+	x0_16 = val(r,c);
+	x1_16 = val(r,c+1);
+	if (!signed_in) {
+	  x0_16 = x0_16 & 0x00007fff;
+	  x1_16 = x1_16 & 0x00007fff;
+	}
+	word = pack16(x0_16, x1_16);
+      } else {
+	x0_8 = val(r,c);
+	x1_8 = val(r,c+1);
+	x2_8 = val(r,c+2);
+	x3_8 = val(r,c+3);
+	if (!signed_in) {
+	  x0_8 = x0_8 & 0x7f;
+	  x1_8 = x1_8 & 0x7f;
+	  x2_8 = x2_8 & 0x7f;
+	  x3_8 = x3_8 & 0x7f;
+	}
+	word = pack8(x0_8,x1_8,x2_8,x3_8);
+      }
+      REG32(base + ((r*N + c) * pack)) = word;
     }
-    if ((blockCnt % 0x40) == 0) {
-      or1k_putc('.');
-      j++;
-    }
-    if (j == 20) {
-      j = 0;
-      print("\n\r");
-    }
-    
   }
-  
-  print("\r\nSD Copy Done!\n\r");
+}
+
+int passCount;
+int failCount;
+
+int relu(int x) {
+  if (x < 0)
+    return 0;
+  else
+    return x;
+}
+
+int leaky_relu_q17(int x, int alpha_q1_7) {
+
+  if (x >= 0)
+    return x;
+  else {
+    int m = x * alpha_q1_7;
+    return ( m >> 7);
+  }
+}
+
+int quantize_q1616(int x, int scale_q1616, int zero) {
+
+  int m = x * scale_q1616;
+  int s = (m + 32768) >> 16;
+  return ( s + zero );
 }
 
 
-/******************************************************************************/
-/*                        TEST EXTERNAL DDR SDRAM                             */
-/******************************************************************************/
-
-void ddr_sdram_sample_test()
+void gemm_check_results (int testNum, int base_c, int dw16,
+			 int act_en, int quant_en, int act_type,
+			 int scale_q1616, int zero, int alpha_q1_7)
 {
+  int r,c,t,pack,elem_in_word;
+  int word;
+  int acc, out, actv, qv;
+  int16 out16_0, out16_1;
+  int8  out8_0, out8_1, out8_2, out8_3;
+  int mism;
+  int N = 16;
 
-  // try writes
-  REG32(DRAM_BASE + 0x5000) = 0x11111111;
-  REG32(DRAM_BASE + 0x5004) = 0x22222222;
-  REG32(DRAM_BASE + 0x5008) = 0x33333333;
-  REG32(DRAM_BASE + 0x500c) = 0x44444444;
+  print("Gemm Test Check\r\n");
+	  
+  pack  = dw16 ? 2 : 4;
+  mism  = 0;
 
-  // try reads
-  REG32(SRAM_BASE + 0x8000) = REG32(DRAM_BASE + 0x5000);
-  REG32(SRAM_BASE + 0x8004) = REG32(DRAM_BASE + 0x5004);
-  REG32(SRAM_BASE + 0x8008) = REG32(DRAM_BASE + 0x5008);
-  REG32(SRAM_BASE + 0x800c) = REG32(DRAM_BASE + 0x500c);
+  for (r=0; r<N; r=r+1) {
+    for (c=0; c<N; c=c+pack) {
+//                    mem_read_word(base_c + ((r*N + c) / pack), word);
+      word = REG32(base_c + ((r*N + c)*4 ));
+      if (dw16) {
+	out16_0 = word & 0xffff;
+	out16_1 = (word >> 16)& 0xffff;
+      } else {
+	out8_0 = word & 0xff;
+	out8_1 = (word >> 8) & 0xff;
+	out8_2 = (word >> 16) & 0xff;
+	out8_3 = (word >> 24) & 0xff;
+      }
+      for (elem_in_word=0; elem_in_word<pack; elem_in_word=elem_in_word+1) {
+	int col;
+	col = c + elem_in_word;
+	acc = 0;
 
-  if (REG32(SRAM_BASE + 0x8000) == 0x11111111)
-    GPIO_Write(0x11);
-  else
-    GPIO_Write(FAIL_CODE);
-  if (REG32(SRAM_BASE + 0x8004) == 0x22222222)
-    GPIO_Write(0x12);
-  else
-    GPIO_Write(FAIL_CODE);
-  if (REG32(SRAM_BASE + 0x8008) == 0x33333333)
-    GPIO_Write(0x13);
-  else
-    GPIO_Write(FAIL_CODE);
-  if (REG32(SRAM_BASE + 0x800c) == 0x44444444)
-    GPIO_Write(0x14);
-  else
-    GPIO_Write(FAIL_CODE);
+	for (t=0; t<N; t=t+1) {
+	  acc = acc + (val(r,t) * val(t,col));
+	}
+		       
+	actv = acc;
+	if (act_en) {
+	  if (!act_type)
+	    actv = relu(actv);
+	  else
+	    actv = leaky_relu_q17(actv, alpha_q1_7);
+	}
+	qv = actv;
+	if (quant_en)
+	  qv = quantize_q1616(qv, scale_q1616, zero);
+	if (dw16) {
+	  if (qv > 32767)
+	    out = 32767;
+	  else if (qv < -32768)
+	    out = -32768;
+	  else
+	    out = qv;
+	  if (elem_in_word==0) {
+	    if (out16_0 != (out & 0xffff)) {
+	      mism = mism + 1;
+	    }
+	  } else {
+	    if (out16_1 != (out & 0xffff)) {
+	      mism = mism + 1;
+	    }
+	  }
+	} else {
+	  if (qv > 127)
+	    out = 127;
+	  else if (qv < -128)
+	    out = -128;
+	  else
+	    out = qv;
 
-  print ("DDR SDRAM sample test done.\n\r");
+	  switch(elem_in_word) {
+	  case 0: if (out8_0 != out) {
+	      mism = mism + 1;
+	    }
+	  case 1: if (out8_1 != out) {
+	      mism = mism + 1;
+	    }
+	  case 2: if (out8_2 != out) {
+	      mism = mism + 1;
+	    }
+	  case 3: if (out8_3 != out) {
+	      mism = mism + 1;
+	    }
+	  default:
+	  }
+	}
+      }
+    }
+    if (mism==0) {
+      passCount++;
+    } else {
+      failCount++;
+    }
+  }
+}
+
+
+void gemm_test()
+{
+  int dw16 = 1;
+  int signed_in = 1;
+
+  print("Gemm Test Start\r\n");
+
+  passCount = 0;
+  failCount = 0;
+
+//  int pMAT = (int) &MatA[0][0];
+  GPIO_Write(0x5555aaaa);
+
+  load_matrix_packed((int) &MatA[0][0], dw16, signed_in);
+
+  int ii, jj;
+  for(ii=0; ii<16; ii++) {
+    for(jj=0; jj<8; jj++) {
+      //      GPIO_Write(MatA[ii][jj]);
+    }
+  }
+
+  GPIO_Write(0x5555bbbb);
+
+  load_matrix_packed((int) &MatB[0][0], dw16, signed_in);
+
+  for(ii=0; ii<16; ii++) {
+    for(jj=0; jj<8; jj++) {
+      //      GPIO_Write(MatB[ii][jj]);
+    }
+  }
+
+  GPIO_Write(0x5555cccc);
+
+  REG32(GEMM_BASE + GEMM_BASE_A) = (int) &MatA[0][0];
+  REG32(GEMM_BASE + GEMM_BASE_B) = (int) &MatB[0][0];
+  REG32(GEMM_BASE + GEMM_BASE_C) = (int) &MatC[0][0];
+
+  int act_en, quant_en, mode_16, act_type = 0, mode_signed = 0, reg_mode_val;
+  int testNum;
+  
+/******************************************************************************/
+  // Test 1: 16-bit, packed, no activation/quant
+  testNum = 1;
+  act_en = 0;
+  quant_en = 0;
+  mode_16 = 1;
+  act_type = 0;
+  mode_signed = 0;
+
+  reg_mode_val =
+    (mode_16 << GEMM_MODE_DW16) |
+    (act_en << GEMM_MODE_ACT) |
+    (quant_en << GEMM_MODE_QUANT) |
+    (act_type << GEMM_MODE_ACT_TYPE) |
+    (mode_signed << GEMM_MODE_SIGNED);
+
+  REG32(GEMM_BASE + GEMM_MODE) = reg_mode_val;
+  
+  REG32(GEMM_BASE + GEMM_CTRL_STAT) = 1; // start gemm
+
+  while(REG32(GEMM_BASE + GEMM_CTRL_STAT) & 0x8000) {} // wait for done
+
+  gemm_check_results (testNum, (int) &MatC[0][0], mode_16, act_en, quant_en, act_type, 65536, 0, 0);
+
+  GPIO_Write(0xc0000000 | (testNum << 24) | passCount);
+  GPIO_Write(0xf0000000 | (testNum << 24) | failCount);
+
+/******************************************************************************/
+  // Test 2: 16-bit, ReLU activation
+  testNum = 2;
+  act_en = 1;
+  quant_en = 0;
+  mode_16 = 1;
+  act_type = 1;
+  mode_signed = 0;
+  
+  reg_mode_val =
+    (mode_16 << GEMM_MODE_DW16) |
+    (act_en << GEMM_MODE_ACT) |
+    (quant_en << GEMM_MODE_QUANT) |
+    (act_type << GEMM_MODE_ACT_TYPE) |
+    (mode_signed << GEMM_MODE_SIGNED);
+
+  REG32(GEMM_BASE + GEMM_MODE) = reg_mode_val;
+  
+  REG32(GEMM_BASE + GEMM_CTRL_STAT) = 1; // start gemm
+
+  while(REG32(GEMM_BASE + GEMM_CTRL_STAT) & 0x8000) {} // wait for done
+
+  gemm_check_results (testNum, (int) &MatC[0][0], mode_16, act_en, quant_en, act_type, 65536, 0, 0);
+
+  GPIO_Write(0xc0000000 | (testNum << 24) | passCount);
+  GPIO_Write(0xf0000000 | (testNum << 24) | failCount);
+
+/******************************************************************************/
+  // Test 3: 8-bit, ReLU + quant (scale 0.125)
+  testNum = 3;
+  act_en = 0;
+  quant_en = 0; //1;
+  mode_16 = 0;
+  act_type = 0; //1;
+  mode_signed = 0;
+
+  reg_mode_val =
+    (mode_16 << GEMM_MODE_DW16) |
+    (act_en << GEMM_MODE_ACT) |
+    (quant_en << GEMM_MODE_QUANT) |
+    (act_type << GEMM_MODE_ACT_TYPE) |
+    (mode_signed << GEMM_MODE_SIGNED);
+
+  REG32(GEMM_BASE + GEMM_MODE) = reg_mode_val;
+  
+  REG32(GEMM_BASE + GEMM_CTRL_STAT) = 1; // start gemm
+
+  while(REG32(GEMM_BASE + GEMM_CTRL_STAT) & 0x8000) {} // wait for done
+
+  gemm_check_results (testNum, (int) &MatC[0][0], mode_16, act_en, quant_en, act_type, 65536, 0, 0);
+
+  GPIO_Write(0xc0000000 | (testNum << 24) | passCount);
+  GPIO_Write(0xf0000000 | (testNum << 24) | failCount);
+
+/******************************************************************************/
+  // Test 4: 8-bit, LeakyReLU alpha=0.125 + quant 0.5
+  testNum = 4;
+  act_en = 1;
+  quant_en = 1;
+  mode_16 = 0;
+  act_type = 1;
+  mode_signed = 0;
+
+  reg_mode_val =
+    (mode_16 << GEMM_MODE_DW16) |
+    (act_en << GEMM_MODE_ACT) |
+    (quant_en << GEMM_MODE_QUANT) |
+    (act_type << GEMM_MODE_ACT_TYPE) |
+    (mode_signed << GEMM_MODE_SIGNED);
+
+  REG32(GEMM_BASE + GEMM_MODE) = reg_mode_val;
+  
+  REG32(GEMM_BASE + GEMM_CTRL_STAT) = 1; // start gemm
+
+  while(REG32(GEMM_BASE + GEMM_CTRL_STAT) & 0x8000) {} // wait for done
+
+  gemm_check_results (testNum, (int) &MatC[0][0], mode_16, act_en, quant_en, act_type, 65536, 0, 0);
+
+  GPIO_Write(0xc0000000 | (testNum << 24) | passCount);
+  GPIO_Write(0xf0000000 | (testNum << 24) | failCount);
+
+/******************************************************************************/
+  GPIO_Write(0x5555dddd);
+/******************************************************************************/
 }
 
 /*$$EXTERNAL EXEPTIONS*/
@@ -325,10 +547,12 @@ void main()
 
   GPIO_Write(0x4444);
 
+  gemm_test();
+
   for(i=0; i<1024; i++) {
     or1k_putc('.');
     do_sleep();
-    GPIO_Write(i);
+    //    GPIO_Write(i);
   }
   
   print("\n\r");
