@@ -237,7 +237,7 @@ void load_input_matrices(int dw16, int signed_in)
   int ii, jj;
   for(ii=0; ii<16; ii++) {
     for(jj=0; jj<8; jj++) {
-      GPIO_Write(MatA[ii][jj]);
+      //      GPIO_Write(MatA[ii][jj]);
     }
   }
 
@@ -247,7 +247,7 @@ void load_input_matrices(int dw16, int signed_in)
 
   for(ii=0; ii<16; ii++) {
     for(jj=0; jj<8; jj++) {
-      GPIO_Write(MatB[ii][jj]);
+      //      GPIO_Write(MatB[ii][jj]);
     }
   }
 
@@ -306,7 +306,7 @@ void gemm_check_results (int testNum, int base_c, int dw16,
 	word = REG32(base_c + (r*N + c)*2);
 	out16_0 = word & 0xffff;
 	out16_1 = (word >> 16)& 0xffff;
-#if 1
+#if 0
 	GPIO_Write(word);
 	GPIO_Write(0x88000000 | (out16_0 & 0xffff));
 	GPIO_Write(0x88000000 | (out16_1 & 0xffff));
@@ -317,7 +317,7 @@ void gemm_check_results (int testNum, int base_c, int dw16,
 	out8_1 = (word >> 8) & 0xff;
 	out8_2 = (word >> 16) & 0xff;
 	out8_3 = (word >> 24) & 0xff;
-#if 1
+#if 0
 	GPIO_Write(word);
 	GPIO_Write(0x88000000 | (out8_0 & 0xff));
 	GPIO_Write(0x88000000 | (out8_1 & 0xff));
@@ -388,7 +388,7 @@ void gemm_check_results (int testNum, int base_c, int dw16,
 	    }
 	  default:
 	  }
-	  GPIO_Write(0x8b000000 | (out & 0xffff));
+	  //	  GPIO_Write(0x8b000000 | (out & 0xffff));
 	}
       }
     }
