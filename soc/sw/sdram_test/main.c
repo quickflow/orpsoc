@@ -176,7 +176,7 @@ uint pack16(int x0, int x1) {
 }
 
 uint pack8(int x0, int x1, int x2, int x3) {
-  return(((x3 & 0xff) << 23) | ((x2 & 0xff) << 16) | ((x1 & 0xff) << 8) | (x0 & 0xff));
+  return(((x3 & 0xff) << 24) | ((x2 & 0xff) << 16) | ((x1 & 0xff) << 8) | (x0 & 0xff));
 }
 
 int MatA[16][8];
@@ -186,15 +186,15 @@ int MatC[16][8];
 // Load packed matrix into memory (SV keyword automatic avoided)
 void load_matrix_packed(int base, int dw16, int signed_in)
 {
-  int r,c,pack;
+  int r,c;
   uint word;
   int x0_16, x1_16;
   int x0_8, x1_8, x2_8, x3_8;
   int N = 16;
   
-  pack = dw16 ? 2 : 4;
+  int pack = dw16 ? 2 : 4;
   for (r=0; r<N; r++) {
-    for (c=0; c<N; c=c+pack) {
+    for (c=0; c<N; c+=pack) {
       if (dw16) {
 	x0_16 = val(r,c);
 	x1_16 = val(r,c+1);
@@ -216,9 +216,42 @@ void load_matrix_packed(int base, int dw16, int signed_in)
 	}
 	word = pack8(x0_8,x1_8,x2_8,x3_8);
       }
-      REG32(base + ((r*N + c) * pack)) = word;
+      if (dw16) {
+	REG32(base + (r*N + c)*2) = word;
+	//	GPIO_Write(0x99999999);
+	//	GPIO_Write(word);
+      }
+      else {
+	REG32(base + (r*N + c)*1) = word;
+      }
     }
   }
+}
+
+void load_input_matrices(int dw16, int signed_in)
+{
+  GPIO_Write(0x5555bbb1);
+
+  load_matrix_packed((int) &MatA[0][0], dw16, signed_in);
+
+  int ii, jj;
+  for(ii=0; ii<16; ii++) {
+    for(jj=0; jj<8; jj++) {
+      GPIO_Write(MatA[ii][jj]);
+    }
+  }
+
+  GPIO_Write(0x5555bbb2);
+
+  load_matrix_packed((int) &MatB[0][0], dw16, signed_in);
+
+  for(ii=0; ii<16; ii++) {
+    for(jj=0; jj<8; jj++) {
+      GPIO_Write(MatB[ii][jj]);
+    }
+  }
+
+  GPIO_Write(0x5555cccc);
 }
 
 int passCount;
@@ -269,15 +302,28 @@ void gemm_check_results (int testNum, int base_c, int dw16,
   for (r=0; r<N; r=r+1) {
     for (c=0; c<N; c=c+pack) {
 //                    mem_read_word(base_c + ((r*N + c) / pack), word);
-      word = REG32(base_c + ((r*N + c)*4 ));
       if (dw16) {
+	word = REG32(base_c + (r*N + c)*2);
 	out16_0 = word & 0xffff;
 	out16_1 = (word >> 16)& 0xffff;
+#if 1
+	GPIO_Write(word);
+	GPIO_Write(0x88000000 | (out16_0 & 0xffff));
+	GPIO_Write(0x88000000 | (out16_1 & 0xffff));
+#endif
       } else {
+	word = REG32(base_c + (r*N + c)*1);
 	out8_0 = word & 0xff;
 	out8_1 = (word >> 8) & 0xff;
 	out8_2 = (word >> 16) & 0xff;
 	out8_3 = (word >> 24) & 0xff;
+#if 1
+	GPIO_Write(word);
+	GPIO_Write(0x88000000 | (out8_0 & 0xff));
+	GPIO_Write(0x88000000 | (out8_1 & 0xff));
+	GPIO_Write(0x88000000 | (out8_2 & 0xff));
+	GPIO_Write(0x88000000 | (out8_3 & 0xff));
+#endif
       }
       for (elem_in_word=0; elem_in_word<pack; elem_in_word=elem_in_word+1) {
 	int col;
@@ -286,6 +332,11 @@ void gemm_check_results (int testNum, int base_c, int dw16,
 
 	for (t=0; t<N; t=t+1) {
 	  acc = acc + (val(r,t) * val(t,col));
+#if 0
+	  GPIO_Write(0x8a000000 | (val(r,t) & 0xffff));
+	  GPIO_Write(0x8a000000 | (val(t,col) & 0xffff));
+	  GPIO_Write(0x8a000000 | (acc & 0xffffff));
+#endif
 	}
 		       
 	actv = acc;
@@ -337,6 +388,7 @@ void gemm_check_results (int testNum, int base_c, int dw16,
 	    }
 	  default:
 	  }
+	  GPIO_Write(0x8b000000 | (out & 0xffff));
 	}
       }
     }
@@ -351,7 +403,7 @@ void gemm_check_results (int testNum, int base_c, int dw16,
 
 void gemm_test()
 {
-  int dw16 = 1;
+  int dw16;
   int signed_in = 1;
 
   print("Gemm Test Start\r\n");
@@ -362,26 +414,6 @@ void gemm_test()
 //  int pMAT = (int) &MatA[0][0];
   GPIO_Write(0x5555aaaa);
 
-  load_matrix_packed((int) &MatA[0][0], dw16, signed_in);
-
-  int ii, jj;
-  for(ii=0; ii<16; ii++) {
-    for(jj=0; jj<8; jj++) {
-      //      GPIO_Write(MatA[ii][jj]);
-    }
-  }
-
-  GPIO_Write(0x5555bbbb);
-
-  load_matrix_packed((int) &MatB[0][0], dw16, signed_in);
-
-  for(ii=0; ii<16; ii++) {
-    for(jj=0; jj<8; jj++) {
-      //      GPIO_Write(MatB[ii][jj]);
-    }
-  }
-
-  GPIO_Write(0x5555cccc);
 
   REG32(GEMM_BASE + GEMM_BASE_A) = (int) &MatA[0][0];
   REG32(GEMM_BASE + GEMM_BASE_B) = (int) &MatB[0][0];
@@ -389,6 +421,38 @@ void gemm_test()
 
   int act_en, quant_en, mode_16, act_type = 0, mode_signed = 0, reg_mode_val;
   int testNum;
+  
+#if 1
+  /******************************************************************************/
+  // Test 3: 8-bit, ReLU + quant (scale 0.125)
+  testNum = 3;
+
+  act_en = 0;
+  quant_en = 0; //1;
+  mode_16 = 0;
+  act_type = 0; //1;
+  mode_signed = 0;
+
+  reg_mode_val =
+    (mode_16 << GEMM_MODE_DW16) |
+    (act_en << GEMM_MODE_ACT) |
+    (quant_en << GEMM_MODE_QUANT) |
+    (act_type << GEMM_MODE_ACT_TYPE) |
+    (mode_signed << GEMM_MODE_SIGNED);
+
+  load_input_matrices(mode_16, signed_in);
+
+  REG32(GEMM_BASE + GEMM_MODE) = reg_mode_val;
+  
+  REG32(GEMM_BASE + GEMM_CTRL_STAT) = 1; // start gemm
+
+  while(REG32(GEMM_BASE + GEMM_CTRL_STAT) & 0x8000) {} // wait for done
+
+  gemm_check_results (testNum, (int) &MatC[0][0], mode_16, act_en, quant_en, act_type, 65536, 0, 0);
+
+  GPIO_Write(0xc0000000 | (testNum << 24) | passCount);
+  GPIO_Write(0xf0000000 | (testNum << 24) | failCount);
+#endif
   
 /******************************************************************************/
   // Test 1: 16-bit, packed, no activation/quant
@@ -405,6 +469,8 @@ void gemm_test()
     (quant_en << GEMM_MODE_QUANT) |
     (act_type << GEMM_MODE_ACT_TYPE) |
     (mode_signed << GEMM_MODE_SIGNED);
+
+  load_input_matrices(mode_16, signed_in);
 
   REG32(GEMM_BASE + GEMM_MODE) = reg_mode_val;
   
@@ -433,6 +499,8 @@ void gemm_test()
     (act_type << GEMM_MODE_ACT_TYPE) |
     (mode_signed << GEMM_MODE_SIGNED);
 
+  load_input_matrices(mode_16, signed_in);
+
   REG32(GEMM_BASE + GEMM_MODE) = reg_mode_val;
   
   REG32(GEMM_BASE + GEMM_CTRL_STAT) = 1; // start gemm
@@ -460,6 +528,8 @@ void gemm_test()
     (act_type << GEMM_MODE_ACT_TYPE) |
     (mode_signed << GEMM_MODE_SIGNED);
 
+  load_input_matrices(mode_16, signed_in);
+
   REG32(GEMM_BASE + GEMM_MODE) = reg_mode_val;
   
   REG32(GEMM_BASE + GEMM_CTRL_STAT) = 1; // start gemm
@@ -486,6 +556,8 @@ void gemm_test()
     (quant_en << GEMM_MODE_QUANT) |
     (act_type << GEMM_MODE_ACT_TYPE) |
     (mode_signed << GEMM_MODE_SIGNED);
+
+  load_input_matrices(mode_16, signed_in);
 
   REG32(GEMM_BASE + GEMM_MODE) = reg_mode_val;
   
