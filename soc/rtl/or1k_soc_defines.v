@@ -1,7 +1,8 @@
 //
 // Interrupts
 //
-`define APP_INT_RES1	1:0
+`define APP_INT_RES1	0
+`define APP_INT_GFX	1
 `define APP_INT_UART	2
 `define APP_INT_GPIO	3
 `define APP_INT_ETH	4

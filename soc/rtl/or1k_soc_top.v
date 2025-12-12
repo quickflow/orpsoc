@@ -1019,7 +1019,7 @@ gfx_top gfx_top
   (
    .wb_clk_i ( clk_cpu_25 ),
    .wb_rst_i ( wb_rst_pad_i ),
-   .wb_inta_o ( pic_ints[`APP_INT_UART] ),
+   .wb_inta_o ( pic_ints[`APP_INT_GFX] ),
    // Wishbone master signals (interfaces with video memory, write)
    .wbm_write_cyc_o ( wbm_gfx_w_cyc_o ), 
    .wbm_write_stb_o ( wbm_gfx_w_stb_o ),
