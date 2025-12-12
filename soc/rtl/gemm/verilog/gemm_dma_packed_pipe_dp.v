@@ -414,7 +414,7 @@ module gemm_dma_packed_pipe_dp #(parameter N = 16)
 	   S_LOAD_A: begin
 	      if (!dma_req && !wbm_stb_o) begin
 		 dma_we   <= 1'b0;
-		 dma_addr <= reg_base_a + (load_idx_word * (mode_dw16 ? 2 : 4));
+		 dma_addr <= reg_base_a + (load_idx_word * (mode_dw16 ? 2 : 1));
 		 dma_req  <= 1'b1;
 	      end
 	      if (wbm_stb_o && dma_ack) begin
@@ -484,7 +484,7 @@ module gemm_dma_packed_pipe_dp #(parameter N = 16)
 	   S_LOAD_B: begin
 	      if (!dma_req && !wbm_stb_o) begin
 		 dma_we   <= 1'b0;
-		 dma_addr <= reg_base_b + (load_idx_word * (mode_dw16 ? 2 : 4));
+		 dma_addr <= reg_base_b + (load_idx_word * (mode_dw16 ? 2 : 1));
 		 dma_req  <= 1'b1;
 	      end
 	      if (wbm_stb_o && dma_ack) begin
@@ -628,7 +628,7 @@ module gemm_dma_packed_pipe_dp #(parameter N = 16)
               // read four or two consecutive elements over subsequent cycles into w0_x*
               // cycle 0
               w0_x0      <= acc_q_b;
-              acc_addr_b <= w_idx_word + 1;
+              acc_addr_b <= acc_addr_b + 1;
 	      if (mode_dw16)
 		state <= S_W0_READ0;
 	      else
@@ -638,7 +638,7 @@ module gemm_dma_packed_pipe_dp #(parameter N = 16)
            // ---------------- W0: read next half word accumulators in packed groups (port B) ----------------
 	   S_W0_READ0: begin
              // cycle 1/2/3 handled via valid propagation across states; keep simple single-cycle per group
-              acc_addr_b <= w_idx_word + 1;
+//              acc_addr_b <= w_idx_word + 1;
               w0_x1      <= acc_q_b;
 	      state <= S_W1_ACT;
            end
@@ -646,7 +646,7 @@ module gemm_dma_packed_pipe_dp #(parameter N = 16)
            // ---------------- W0: read next byte accumulators in packed groups (port B) ----------------
 	   S_W0_READ1:
              begin
-                acc_addr_b <= w_idx_word + 1;
+                acc_addr_b <= acc_addr_b + 1;
                 w0_x1      <= acc_q_b;
 		state <= S_W0_READ2;
              end
@@ -654,7 +654,7 @@ module gemm_dma_packed_pipe_dp #(parameter N = 16)
            // ---------------- W0: read next byte accumulators in packed groups (port B) ----------------
 	   S_W0_READ2:
              begin
-                acc_addr_b <= w_idx_word + 2;
+                acc_addr_b <= acc_addr_b + 1;
                 w0_x2      <= acc_q_b;
 		state <= S_W0_READ3;
              end
@@ -662,7 +662,7 @@ module gemm_dma_packed_pipe_dp #(parameter N = 16)
            // ---------------- W0: read next byte accumulators in packed groups (port B) ----------------
 	   S_W0_READ3:
              begin
-                acc_addr_b <= w_idx_word + 1;
+                acc_addr_b <= acc_addr_b + 1;
                 w0_x3      <= acc_q_b;
 		state <= S_W1_ACT;
              end
@@ -713,6 +713,7 @@ module gemm_dma_packed_pipe_dp #(parameter N = 16)
 		 
               end else if (wbm_stb_o && dma_ack) begin
 		 w_idx_word <= w_idx_word + 1;
+		 acc_addr_b <= acc_addr_b + 1;
 		 if (w_idx_word == WORDS_TOTAL)
 		   state <= S_DONE;
 		 else

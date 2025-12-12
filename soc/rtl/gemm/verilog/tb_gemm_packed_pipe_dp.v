@@ -151,10 +151,17 @@ module tb_gemm_packed_pipe_dp;
     end
     endtask
 
+   integer mem_writes;
+   initial begin
+      mem_writes = 0;
+   end
+
     // Direct mem poke/read on shared memory
     task mem_write_word(input [31:0] adr, input [31:0] data);
     begin
-       $display("%m:: adr[%h] data[%h]", adr, data);
+       $display("%m:: (%d) adr[%h] data[%h]", mem_writes, adr, data);
+       mem_writes = mem_writes + 1;
+       
         @(negedge clk);
         force mem.wbs_adr_i = adr;
         force mem.wbs_dat_i = data;
@@ -186,9 +193,9 @@ module tb_gemm_packed_pipe_dp;
     endtask
 
     // Base addresses (words)
-    localparam BASE_A = 32'd1024;
-    localparam BASE_B = 32'd4096;
-    localparam BASE_C = 32'd8192;
+   localparam BASE_A = 32'h1000;
+   localparam BASE_B = 32'h2000;
+   localparam BASE_C = 32'h3000;
 
     // Pack helpers
     function [31:0] pack16(input signed [15:0] x0, input signed [15:0] x1);
@@ -233,7 +240,7 @@ module tb_gemm_packed_pipe_dp;
                         end
                         word = pack8(x0_8,x1_8,x2_8,x3_8);
                     end
-                   mem_write_word(base + ((r*N + c) * pack), word);
+                   mem_write_word(base + (r*N + c)*4/pack, word);
                 end
             end
         end
@@ -283,8 +290,9 @@ module tb_gemm_packed_pipe_dp;
             for (r=0; r<N; r=r+1) begin
                 for (c=0; c<N; c=c+pack) begin
 //                    mem_read_word(base_c + ((r*N + c) / pack), word);
-                    mem_read_word(base_c + ((r*N + c)*4 ), word);
-		   $display("%m:: word read[%d]= %08h", base_c + ((r*N + c)*4), word);
+//                   mem_write_word(base + (r*N + c)*4/pack, word);
+                    mem_read_word(base_c + (r*N + c)*4/pack, word);
+		   $display("%m:: word read[%08h]= %08h", base_c + (r*N + c)*4/pack, word);
                     if (dw16) begin
                         out16_0 = word[15:0];
                         out16_1 = word[31:16];
@@ -293,6 +301,11 @@ module tb_gemm_packed_pipe_dp;
                         out8_1 = word[15:8];
                         out8_2 = word[23:16];
                         out8_3 = word[31:24];
+		       $display("[CPUboard_tb]GPIO val = %08h", word);
+		       $display("[CPUboard_tb]GPIO val = %08h", 32'h88000000 | out8_0);
+		       $display("[CPUboard_tb]GPIO val = %08h", 32'h88000000 | out8_1);
+		       $display("[CPUboard_tb]GPIO val = %08h", 32'h88000000 | out8_2);
+		       $display("[CPUboard_tb]GPIO val = %08h", 32'h88000000 | out8_3);
                     end
                     for (elem_in_word=0; elem_in_word<pack; elem_in_word=elem_in_word+1) begin
                         integer col;
@@ -302,6 +315,12 @@ module tb_gemm_packed_pipe_dp;
                         for (t=0; t<N; t=t+1) begin
 			   acc = acc + (val(r,t) * val(t,col));
 			   $display("%02h < %02h %02h", acc, val(r,t), val(t,col));
+			   if (dw16) begin
+//			     $display("[CPUboard_tb]GPIO val = %08h", 32'h8a000000 | val(r,t));
+//			     $display("[CPUboard_tb]GPIO val = %08h", 32'h8a000000 | val(t,col));
+//			     $display("[CPUboard_tb]GPIO val = %08h", 32'h8a000000 | (acc & 32'h00ffffff));
+			   end
+			   
 			end
 		       
                         actv = acc;
@@ -315,13 +334,11 @@ module tb_gemm_packed_pipe_dp;
                             if (elem_in_word==0) begin
                                 if (out16_0 !== out[15:0]) begin
                                     $display("Mismatch16.0 @ (%0d,%0d): got %0h exp %0h", r, col, out16_0, out);
-				   $display("Mismatch8 (cont'd) actv(%0h) qv(%0h)", actv, qv);
                                     mism = mism + 1;
                                 end
                             end else begin
                                 if (out16_1 !== out[15:0]) begin
                                     $display("Mismatch16.1 @ (%0d,%0d): got %0h exp %0h", r, col, out16_1, out);
-				   $display("Mismatch8 (cont'd) actv(%0h) qv(%0h)", actv, qv);
                                     mism = mism + 1;
                                 end
                             end
@@ -330,22 +347,18 @@ module tb_gemm_packed_pipe_dp;
                             case (elem_in_word)
                                 0: if ($signed({{24{out8_0[7]}}, out8_0}) !== out) begin
                                        $display("Mismatch8 @ (%0d,%0d): got %0h exp %0h", r, col, $signed({{24{out8_0[7]}}, out8_0}), out);
-				   $display("Mismatch8 (cont'd) actv(%0h) qv(%0h)", actv, qv);
                                        mism = mism + 1;
                                    end
                                 1: if ($signed({{24{out8_1[7]}}, out8_1}) !== out) begin
                                        $display("Mismatch8 @ (%0d,%0d): got %0h exp %0h", r, col, $signed({{24{out8_1[7]}}, out8_1}), out);
-				   $display("Mismatch8 (cont'd) actv(%0h) qv(%0h)", actv, qv);
                                        mism = mism + 1;
                                    end
                                 2: if ($signed({{24{out8_2[7]}}, out8_2}) !== out) begin
                                        $display("Mismatch8 @ (%0d,%0d): got %0h exp %0h", r, col, $signed({{24{out8_2[7]}}, out8_2}), out);
-				   $display("Mismatch8 (cont'd) actv(%0h) qv(%0h)", actv, qv);
                                        mism = mism + 1;
                                    end
                                 3: if ($signed({{24{out8_3[7]}}, out8_3}) !== out) begin
                                        $display("Mismatch8 @ (%0d,%0d): got %0h exp %0h", r, col, $signed({{24{out8_3[7]}}, out8_3}), out);
-				   $display("Mismatch8 (cont'd) actv(%0h) qv(%0h)", actv, qv);
                                        mism = mism + 1;
                                    end
                             endcase
@@ -395,7 +408,10 @@ module tb_gemm_packed_pipe_dp;
 		      (act_type << `MODE_ACT_TYPE) |
 		      (mode_signed << `MODE_SIGNED);
 
+       $display("%m:: load_matrixA");
         load_matrix_packed(BASE_A, 1, 1);
+
+       $display("%m:: load_matrixB");
         load_matrix_packed(BASE_B, 1, 1);
         wb_write(`REG_MODE, reg_mode_val); // dw16=1, act=0, quant=0, relu=0, signed=1
         wb_write(`REG_CTRL_STAT, 32'b1);
