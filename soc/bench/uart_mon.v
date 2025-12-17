@@ -3,7 +3,8 @@ module uart_mon
   (
    input wire	    clk, // System clock
    input wire	    reset, // Reset signal
-   input wire	    rx // UART receive line
+   input wire	    rx, // UART receive line
+   input [7:0]      monID
    );
    
    reg [7:0]	    data;   // Received ASCII data
@@ -42,8 +43,14 @@ module uart_mon
 	 file_opened <= 0;
       end else begin // if (reset)
 	 if (!file_opened) begin
-	    fd = $fopen("uart.txt", "w");
-	    $display("%m:: executed uart.txt fopen");
+	    if (monID == 0) begin
+	       fd = $fopen("uart0.txt", "w");
+	       $display("%m:: executed uart0.txt fopen");
+	    end
+	    else if (monID == 1) begin
+	       fd = $fopen("uart1.txt", "w");
+	       $display("%m:: executed uart1.txt fopen");
+	    end
 	    file_opened <= 1;
 	 end
 	 
