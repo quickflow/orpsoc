@@ -177,6 +177,22 @@ void simple_gemm_test()
   GPIO_Write(0xaa000000 + REG32(GEMM_BASE + GEMM_BASE_C));
 }
 
+void simple_d2d_test()
+{
+  uint32 count;
+  for(count=0; count<256; count+=4) {
+    REG32(0x1100 + count) = count;
+  }
+
+  REG32(D2D_BASE + D2D_TX_SRC) = 0x11000;
+  REG32(D2D_BASE + D2D_TX_LEN) = 0x100;
+  REG32(D2D_BASE + D2D_TX_CSR) = (1 << D2D_CSR_START);
+
+  GPIO_Write(0xa2000000 + REG32(GEMM_BASE + GEMM_BASE_A));
+  GPIO_Write(0xa2000000 + REG32(GEMM_BASE + GEMM_BASE_B));
+  GPIO_Write(0xa2000000 + REG32(GEMM_BASE + GEMM_BASE_C));
+}
+
 int spiMaster_test()
 {
   uint32 tip_count = 0;
@@ -431,6 +447,7 @@ void main()
 
   //  simple_gfx_test();
   simple_gemm_test();
+  simple_d2d_test();
 
   GPIO_Write(0x61);
 
