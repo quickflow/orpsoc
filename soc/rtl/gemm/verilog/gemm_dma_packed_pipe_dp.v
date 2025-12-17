@@ -253,7 +253,7 @@ module gemm_dma_packed_pipe_dp #(parameter N = 16)
          wbm_adr_o <= 32'd0;
          wbm_dat_o <= 32'd0;
          dma_rdata <= 32'd0;
-         dma_req   <= 1'b0;
+//         dma_req   <= 1'b0;
       end
       else begin
          if (dma_req && !wbm_stb_o) begin
@@ -267,7 +267,7 @@ module gemm_dma_packed_pipe_dp #(parameter N = 16)
             wbm_stb_o <= 1'b0;
             wbm_cyc_o <= 1'b0;
             dma_rdata <= wbm_dat_i;
-            dma_req   <= 1'b0;
+//            dma_req   <= 1'b0;
          end
       end // else: !if(wb_rst_i)
    end // always @ (posedge wb_clk_i)
@@ -364,6 +364,8 @@ module gemm_dma_packed_pipe_dp #(parameter N = 16)
          acc_din_a   <= 32'sd0;
          acc_din_b   <= 32'sd0;
 	 
+         dma_req   <= 1'b0;
+
          // clear accumulators
          for (idx=0; idx<N_SQ; idx=idx+1) begin
             acc_addr_a <= idx[ADDR_WIDTH-1:0];
@@ -417,7 +419,8 @@ module gemm_dma_packed_pipe_dp #(parameter N = 16)
 		 dma_addr <= reg_base_a + (load_idx_word * (mode_dw16 ? 2 : 1));
 		 dma_req  <= 1'b1;
 	      end
-	      if (wbm_stb_o && dma_ack) begin
+	      else if (dma_req && wbm_stb_o && dma_ack) begin
+		 dma_req <= 0;
 		 // unpack immediately
 		 if (mode_dw16) begin
 		    load_a_addr <= load_idx_word;
@@ -487,7 +490,8 @@ module gemm_dma_packed_pipe_dp #(parameter N = 16)
 		 dma_addr <= reg_base_b + (load_idx_word * (mode_dw16 ? 2 : 1));
 		 dma_req  <= 1'b1;
 	      end
-	      if (wbm_stb_o && dma_ack) begin
+	      else if (dma_req && wbm_stb_o && dma_ack) begin
+		 dma_req <= 0;
 		 // unpack immediately
 		 if (mode_dw16) begin
 		    load_b_addr <= load_idx_word;
@@ -711,7 +715,8 @@ module gemm_dma_packed_pipe_dp #(parameter N = 16)
                  dma_addr  <= reg_base_c + w_idx_word*4;
                  dma_req   <= 1'b1;
 		 
-              end else if (wbm_stb_o && dma_ack) begin
+              end else if (dma_req && wbm_stb_o && dma_ack) begin
+		 dma_req <= 0;
 		 w_idx_word <= w_idx_word + 1;
 		 acc_addr_b <= acc_addr_b + 1;
 		 if (w_idx_word == WORDS_TOTAL)
