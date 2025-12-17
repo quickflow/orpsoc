@@ -187,10 +187,10 @@ always @(posedge wb_rst_i or posedge wb_clk_i)
                 	mem[adr+1] <=  wb_dat_i[23:16];
                 if (wb_sel_i[3])
                 	mem[adr+0] <=  wb_dat_i[31:24];
-	   $display("%m:: SRAM Wr [%h] << %h", adr, {wb_sel_i[3] ? wb_dat_i[31:24] : 8'bz,
-						     wb_sel_i[2] ? wb_dat_i[23:16] : 8'bz,
-						     wb_sel_i[1] ? wb_dat_i[15:8] : 8'bz,
-						     wb_sel_i[0] ? wb_dat_i[7:0] : 8'bz});
+//	   $display("%m:: SRAM Wr [%h] << %h", adr, {wb_sel_i[3] ? wb_dat_i[31:24] : 8'bz,
+//						     wb_sel_i[2] ? wb_dat_i[23:16] : 8'bz,
+//						     wb_sel_i[1] ? wb_dat_i[15:8] : 8'bz,
+//						     wb_sel_i[0] ? wb_dat_i[7:0] : 8'bz});
 	   
         end
 
@@ -232,6 +232,7 @@ always @(posedge wb_clk_i or posedge wb_rst_i)
 assign wb_err_o = wb_err;
 `endif
 
+/*
 //
 // SRAM i/f monitor
 //
@@ -261,7 +262,8 @@ always @(posedge wb_clk_i)
                 end else if (wb_ack_o)
                         $fdisplay(fsram, "%t [%h] -> read %h", $time, wb_adr_i, wb_dat_o);
 // synopsys translate_on
-
+*/
+   
 endmodule
 
 `else
