@@ -73,7 +73,7 @@ module mt48lc16m16a2_model (
                         // Output data after CAS latency
                         output_enable <= 1;
                         data_out <= memory[read_bank][read_row][read_col];
-//                        $display("[SDRAM] RD: data=%h from bank=%0d, row=%h, col=%h", memory[read_bank][read_row][read_col], read_bank, read_row, read_col);
+//                        $display("[%m] RD: data=%h from bank=%0d, row=%h, col=%h", memory[read_bank][read_row][read_col], read_bank, read_row, read_col);
                         read_pending <= 0;
                     end
                 end
@@ -83,9 +83,9 @@ module mt48lc16m16a2_model (
             if (write_pending_reg) begin
                 if (bank_active[write_bank_reg]) begin
                     memory[write_bank_reg][write_row_reg][write_col_reg] <= write_data_reg;
-//                    $display("[SDRAM] WR: bank=%0d, row=%h, col=%h, data=%h", write_bank_reg, write_row_reg, write_col_reg, write_data_reg);
+//                    $display("[%m] WR: bank=%0d, row=%h, col=%h, data=%h", write_bank_reg, write_row_reg, write_col_reg, write_data_reg);
                 end else begin
-//                    $display("[SDRAM] ERROR: Write to inactive bank %0d", write_bank_reg);
+//                    $display("[%m] ERROR: Write to inactive bank %0d", write_bank_reg);
                 end
                 write_pending_reg <= 0;
             end
@@ -98,10 +98,10 @@ module mt48lc16m16a2_model (
                     write_row_reg <= active_row[BA];
                     write_col_reg <= A[8:0];
                     write_pending_reg <= 1;
-//                    $display("[SDRAM] CAPTURED WRITE: bank=%0d, row=%h, col=%h, data=%h", 
+//                    $display("[%m] CAPTURED WRITE: bank=%0d, row=%h, col=%h, data=%h", 
 //                             BA, active_row[BA], A[8:0], DQ);
                 end else begin
-//                    $display("[SDRAM] ERROR: Write to inactive bank %0d", BA);
+//                    $display("[%m] ERROR: Write to inactive bank %0d", BA);
                 end
             end
             
@@ -115,34 +115,34 @@ module mt48lc16m16a2_model (
                         read_bank <= BA;
                         read_row <= active_row[BA];
                         read_col <= A[8:0];
-//                        $display("[SDRAM] RD: bank=%0d, row=%h, col=%h", BA, active_row[BA], A[8:0]);
+//                        $display("[%m] RD: bank=%0d, row=%h, col=%h", BA, active_row[BA], A[8:0]);
                     end else begin
-//                        $display("[SDRAM] ERROR: Read to inactive bank %0d", BA);
+//                        $display("[%m] ERROR: Read to inactive bank %0d", BA);
                     end
                 end
                 // ACTIVATE command
                 else if (RAS_N == 1'b0 && CAS_N == 1'b1 && WE_N == 1'b1) begin
                     bank_active[BA] <= 1;
                     active_row[BA] <= A;
-//                    $display("[SDRAM] ACTIVATE: bank=%0d, row=%h", BA, A);
+//                    $display("[%m] ACTIVATE: bank=%0d, row=%h", BA, A);
                 end
                 // PRECHARGE command
                 else if (RAS_N == 1'b0 && CAS_N == 1'b1 && WE_N == 1'b0) begin
                     if (A[10]) begin
                         // Precharge all banks
                         bank_active <= 0;
-//                        $display("[SDRAM] PRECHARGE ALL BANKS");
+//                        $display("[%m] PRECHARGE ALL BANKS");
                     end else begin
                         // Precharge specific bank
                         bank_active[BA] <= 0;
-//                        $display("[SDRAM] PRECHARGE bank=%0d", BA);
+//                        $display("[%m] PRECHARGE bank=%0d", BA);
                     end
                     read_pending <= 0; // Cancel any pending read
                 end
                 // MODE REGISTER SET
                 else if (RAS_N == 1'b0 && CAS_N == 1'b0 && WE_N == 1'b0) begin
                     mode_register <= A;
-                    $display("[SDRAM] MODE REGISTER SET: %h", A);
+                    $display("[%m] MODE REGISTER SET: %h", A);
                 end
             end
         end
