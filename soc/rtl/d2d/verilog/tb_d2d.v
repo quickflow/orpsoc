@@ -1,10 +1,10 @@
-// tb_ucie_dma.v
+// tb_d2d_dma.v
 `timescale 1ns/1ps
 
-module tb_ucie_dma;
+module tb_d2d_dma;
     localparam WB_DATA_WIDTH = 32;
-    localparam WB_ADDR_WIDTH = 16;
-    localparam UCIe_WIDTH    = 64;
+    localparam WB_ADDR_WIDTH = 32;
+    localparam D2d_WIDTH    = 64;
     localparam DEPTH_WORDS   = 1024;
 
    localparam  NUM_TX_DATA_WORDS = 32;
@@ -12,17 +12,17 @@ module tb_ucie_dma;
    
     // Clocks
     reg wb_clk, wb_rst_n;
-    reg ucie_clk, ucie_rst_n;
+    reg d2d_clk, d2d_rst_n;
 
     initial begin
         wb_clk=0; forever #5 wb_clk=~wb_clk;     // 100 MHz
     end
     initial begin
-        ucie_clk=0; forever #7 ucie_clk=~ucie_clk; // ~71 MHz
+        d2d_clk=0; forever #7 d2d_clk=~d2d_clk; // ~71 MHz
     end
     initial begin
-        wb_rst_n=0; ucie_rst_n=0;
-        #50 wb_rst_n=1; ucie_rst_n=1;
+        wb_rst_n=0; d2d_rst_n=0;
+        #50 wb_rst_n=1; d2d_rst_n=1;
     end
 
     // DUT ports
@@ -38,23 +38,23 @@ module tb_ucie_dma;
     reg                      s_we_i, s_stb_i, s_cyc_i;
     wire                     s_ack_o;
 
-    wire [UCIe_WIDTH-1:0]    ucie_tx_data;
-    wire                     ucie_tx_valid;
-    reg                      ucie_tx_ready;
-    reg  [UCIe_WIDTH-1:0]    ucie_rx_data;
-    reg                      ucie_rx_valid;
-    wire                     ucie_rx_ready;
+    wire [D2d_WIDTH-1:0]    d2d_tx_data;
+    wire                     d2d_tx_valid;
+    reg                      d2d_tx_ready;
+    reg  [D2d_WIDTH-1:0]    d2d_rx_data;
+    reg                      d2d_rx_valid;
+    wire                     d2d_rx_ready;
 
     // DUT instantiation
-    ucie_wishbone_dma_top dut (
+   d2d_wishbone_dma_top dut (
         .wb_clk(wb_clk), .wb_rst_n(wb_rst_n),
         .m_adr_o(m_adr_o), .m_dat_o(m_dat_o), .m_dat_i(m_dat_i),
         .m_we_o(m_we_o), .m_stb_o(m_stb_o), .m_cyc_o(m_cyc_o), .m_ack_i(m_ack_i),
         .s_adr_i(s_adr_i), .s_dat_i(s_dat_i), .s_dat_o(s_dat_o),
         .s_we_i(s_we_i), .s_stb_i(s_stb_i), .s_cyc_i(s_cyc_i), .s_ack_o(s_ack_o),
-        .ucie_clk(ucie_clk), .ucie_rst_n(ucie_rst_n),
-        .ucie_tx_data(ucie_tx_data), .ucie_tx_valid(ucie_tx_valid), .ucie_tx_ready(ucie_tx_ready),
-        .ucie_rx_data(ucie_rx_data), .ucie_rx_valid(ucie_rx_valid), .ucie_rx_ready(ucie_rx_ready)
+        .d2d_clk(d2d_clk), .d2d_rst_n(d2d_rst_n),
+        .d2d_tx_data(d2d_tx_data), .d2d_tx_valid(d2d_tx_valid), .d2d_tx_ready(d2d_tx_ready),
+        .d2d_rx_data(d2d_rx_data), .d2d_rx_valid(d2d_rx_valid), .d2d_rx_ready(d2d_rx_ready)
     );
 
     // Memory instance
@@ -67,20 +67,20 @@ module tb_ucie_dma;
    reg [63:0]		     rx_data_val;
    
     // Random backpressure/stalls
-    always @(posedge ucie_clk or negedge ucie_rst_n) begin
-        if (!ucie_rst_n) begin
-            ucie_tx_ready <= 1'b1;
-            ucie_rx_valid <= 1'b0;
-            ucie_rx_data  <= 0;
+    always @(posedge d2d_clk or negedge d2d_rst_n) begin
+        if (!d2d_rst_n) begin
+            d2d_tx_ready <= 1'b1;
+            d2d_rx_valid <= 1'b0;
+            d2d_rx_data  <= 0;
 	   rx_data_val <= 64'h0102030405060708;
         end else begin
-            ucie_tx_ready <= ($random % 4 != 0); // randomly deassert
+            d2d_tx_ready <= ($random % 4 != 0); // randomly deassert
             if ($random % 5 == 0) begin
-                ucie_rx_valid <= 1'b1;
-               ucie_rx_data  <= rx_data_val;
+                d2d_rx_valid <= 1'b1;
+               d2d_rx_data  <= rx_data_val;
 	       rx_data_val <= rx_data_val + 64'h0101010101010101;
             end else begin
-                ucie_rx_valid <= 1'b0;
+                d2d_rx_valid <= 1'b0;
             end
         end
     end
@@ -115,8 +115,8 @@ module tb_ucie_dma;
         s_adr_i=0; s_dat_i=0; s_we_i=0; s_stb_i=0; s_cyc_i=0;
 
         // Dumpvars
-        $dumpfile("ucie_dma.vcd");
-        $dumpvars(0, tb_ucie_dma);
+        $dumpfile("d2d_dma.vcd");
+        $dumpvars(0, tb_d2d_dma);
 
         @(posedge wb_rst_n);
         @(posedge wb_clk);
@@ -184,4 +184,4 @@ module tb_ucie_dma;
         #200;
         $finish;
     end
-endmodule // tb_ucie_dma
+endmodule // tb_d2d_dma

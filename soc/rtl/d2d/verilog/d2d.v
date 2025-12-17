@@ -1,47 +1,49 @@
-// ucie_wishbone_dma_top.v
+// d2d_wishbone_dma_top.v
 `timescale 1ns/1ps
 
-module ucie_wishbone_dma_top #(
-    parameter DATA_WIDTH = 64,           // UCIe widths are commonly 64/128/256
+module d2d_wishbone_dma_top #(
+    parameter DATA_WIDTH = 64,           // D2d widths are commonly 64/128/256
     parameter WB_DATA_WIDTH = 32,        // Wishbone data width
-    parameter WB_ADDR_WIDTH = 16,
+    parameter WB_ADDR_WIDTH = 32,
     parameter FIFO_DEPTH = 32
 )(
     // Wishbone SoC clock/reset
-    input                      wb_clk,
-    input                      wb_rst_n,
+    input		       wb_clk,
+    input		       wb_rst_n,
 
     // Wishbone master (DMA -> system memory)
     output [WB_ADDR_WIDTH-1:0] m_adr_o,
     output [WB_DATA_WIDTH-1:0] m_dat_o,
-    input  [WB_DATA_WIDTH-1:0] m_dat_i,
-    output                     m_we_o,
-    output                     m_stb_o,
-    output                     m_cyc_o,
-    input                      m_ack_i,
+    input [WB_DATA_WIDTH-1:0]  m_dat_i,
+    output		       m_we_o,
+    output		       m_stb_o,
+    output		       m_cyc_o,
+    input		       m_ack_i,
 
     // Wishbone slave (DMA config)
-    input  [WB_ADDR_WIDTH-1:0] s_adr_i,
-    input  [WB_DATA_WIDTH-1:0] s_dat_i,
+    input [WB_ADDR_WIDTH-1:0]  s_adr_i,
+    input [WB_DATA_WIDTH-1:0]  s_dat_i,
     output [WB_DATA_WIDTH-1:0] s_dat_o,
-    input                      s_we_i,
-    input                      s_stb_i,
-    input                      s_cyc_i,
-    output                     s_ack_o,
+    input		       s_we_i,
+    input		       s_stb_i,
+    input		       s_cyc_i,
+    output		       s_ack_o,
 
-    // UCIe die-to-die link clock/reset (independent domain)
-    input                      ucie_clk,
-    input                      ucie_rst_n,
+    // D2d die-to-die link clock/reset (independent domain)
+    input		       d2d_clk,
+    input		       d2d_rst_n,
 
-    // UCIe streaming TX (to remote)
-    output [DATA_WIDTH-1:0]    ucie_tx_data,
-    output                     ucie_tx_valid,
-    input                      ucie_tx_ready,
+    // D2d streaming TX (to remote)
+    output [DATA_WIDTH-1:0]    d2d_tx_data,
+    output		       d2d_tx_valid,
+    input		       d2d_tx_ready,
 
-    // UCIe streaming RX (from remote)
-    input  [DATA_WIDTH-1:0]    ucie_rx_data,
-    input                      ucie_rx_valid,
-    output                     ucie_rx_ready
+    // D2d streaming RX (from remote)
+    input [DATA_WIDTH-1:0]     d2d_rx_data,
+    input		       d2d_rx_valid,
+    output		       d2d_rx_ready,
+
+    input [7:0]		       cpuID
 );
     // Internal wires: DMA streaming ports are on wb_clk
     wire [WB_DATA_WIDTH-1:0]   dma_tx_data_wb;
@@ -52,14 +54,14 @@ module ucie_wishbone_dma_top #(
     wire                       dma_rx_valid_wb;
     wire                       dma_rx_ready_wb;
 
-    // Width adapter between WB (32-bit default) and UCIe (64-bit default)
+    // Width adapter between WB (32-bit default) and D2d (64-bit default)
     wire [DATA_WIDTH-1:0]      pack_tx_data_link;
     wire                       pack_tx_valid_link;
     wire                       pack_tx_ready_link;
 
-    wire [DATA_WIDTH-1:0]      ucie_rx_data_link;
-    wire                       ucie_rx_valid_link;
-    wire                       ucie_rx_ready_link;
+    wire [DATA_WIDTH-1:0]      d2d_rx_data_link;
+    wire                       d2d_rx_valid_link;
+    wire                       d2d_rx_ready_link;
 
     // ---------------------------
     // DMA engine (Wishbone domain)
@@ -93,11 +95,13 @@ module ucie_wishbone_dma_top #(
 
         .rx_data(dma_rx_data_wb),
         .rx_valid(dma_rx_valid_wb),
-        .rx_ready(dma_rx_ready_wb)
+        .rx_ready(dma_rx_ready_wb),
+
+	   .cpuID (cpuID)
     );
 
     // ----------------------------------------
-    // Pack/Unpack between WB width and UCIe width
+    // Pack/Unpack between WB width and D2d width
     //  - TX packs two 32-bit beats into one 64-bit word
     //  - RX unpacks one 64-bit word into two 32-bit beats
     // ----------------------------------------
@@ -121,49 +125,49 @@ module ucie_wishbone_dma_top #(
     ) unpack_rx (
         .clk(wb_clk),
         .rst_n(wb_rst_n),
-        .in_data(ucie_rx_data_link),
-        .in_valid(ucie_rx_valid_link),
-        .in_ready(ucie_rx_ready_link),
+        .in_data(d2d_rx_data_link),
+        .in_valid(d2d_rx_valid_link),
+        .in_ready(d2d_rx_ready_link),
         .out_data(dma_rx_data_wb),
         .out_valid(dma_rx_valid_wb),
         .out_ready(dma_rx_ready_wb)
     );
 
     // ----------------------------------------
-    // Asynchronous bridge (wb_clk <-> ucie_clk)
+    // Asynchronous bridge (wb_clk <-> d2d_clk)
     // ----------------------------------------
     async_stream_bridge #(
         .DATA_WIDTH(DATA_WIDTH),
         .FIFO_DEPTH(FIFO_DEPTH)
     ) bridge (
-        // TX: WB -> UCIe
+        // TX: WB -> D2d
         .tx_wb_clk(wb_clk),
         .tx_wb_rst_n(wb_rst_n),
         .tx_wb_data(pack_tx_data_link),
         .tx_wb_valid(pack_tx_valid_link),
         .tx_wb_ready(pack_tx_ready_link),
 
-        .tx_link_clk(ucie_clk),
-        .tx_link_rst_n(ucie_rst_n),
-        .tx_link_data(ucie_tx_data),
-        .tx_link_valid(ucie_tx_valid),
-        .tx_link_ready(ucie_tx_ready),
+        .tx_link_clk(d2d_clk),
+        .tx_link_rst_n(d2d_rst_n),
+        .tx_link_data(d2d_tx_data),
+        .tx_link_valid(d2d_tx_valid),
+        .tx_link_ready(d2d_tx_ready),
 
-        // RX: UCIe -> WB
-        .rx_link_clk(ucie_clk),
-        .rx_link_rst_n(ucie_rst_n),
-        .rx_link_data(ucie_rx_data),
-        .rx_link_valid(ucie_rx_valid),
-        .rx_link_ready(ucie_rx_ready),
+        // RX: D2d -> WB
+        .rx_link_clk(d2d_clk),
+        .rx_link_rst_n(d2d_rst_n),
+        .rx_link_data(d2d_rx_data),
+        .rx_link_valid(d2d_rx_valid),
+        .rx_link_ready(d2d_rx_ready),
 
         .rx_wb_clk(wb_clk),
         .rx_wb_rst_n(wb_rst_n),
-        .rx_wb_data(ucie_rx_data_link),
-        .rx_wb_valid(ucie_rx_valid_link),
-        .rx_wb_ready(ucie_rx_ready_link)
+        .rx_wb_data(d2d_rx_data_link),
+        .rx_wb_valid(d2d_rx_valid_link),
+        .rx_wb_ready(d2d_rx_ready_link)
     );
 
-endmodule // ucie_wishbone_dma_top
+endmodule // d2d_wishbone_dma_top
 
 // wb_dma_d2d.v
 `timescale 1ns/1ps
@@ -172,35 +176,37 @@ module wb_dma_d2d #(
     parameter DATA_WIDTH = 32,
     parameter ADDR_WIDTH = 16
 )(
-    input                   wb_clk,
-    input                   wb_rst_n,
+    input		    wb_clk,
+    input		    wb_rst_n,
 
     // Wishbone master (to memory)
     output [ADDR_WIDTH-1:0] m_adr_o,
     output [DATA_WIDTH-1:0] m_dat_o,
-    input  [DATA_WIDTH-1:0] m_dat_i,
-    output                  m_we_o,
-    output                  m_stb_o,
-    output                  m_cyc_o,
-    input                   m_ack_i,
+    input [DATA_WIDTH-1:0]  m_dat_i,
+    output		    m_we_o,
+    output		    m_stb_o,
+    output		    m_cyc_o,
+    input		    m_ack_i,
 
     // Wishbone slave (config)
-    input  [ADDR_WIDTH-1:0] s_adr_i,
-    input  [DATA_WIDTH-1:0] s_dat_i,
+    input [ADDR_WIDTH-1:0]  s_adr_i,
+    input [DATA_WIDTH-1:0]  s_dat_i,
     output [DATA_WIDTH-1:0] s_dat_o,
-    input                   s_we_i,
-    input                   s_stb_i,
-    input                   s_cyc_i,
-    output                  s_ack_o,
+    input		    s_we_i,
+    input		    s_stb_i,
+    input		    s_cyc_i,
+    output		    s_ack_o,
 
     // Streaming (wb_clk domain)
     output [DATA_WIDTH-1:0] tx_data,
-    output                  tx_valid,
-    input                   tx_ready,
+    output		    tx_valid,
+    input		    tx_ready,
 
-    input  [DATA_WIDTH-1:0] rx_data,
-    input                   rx_valid,
-    output                  rx_ready
+    input [DATA_WIDTH-1:0]  rx_data,
+    input		    rx_valid,
+    output		    rx_ready,
+
+    input [7:0]		    cpuID
 );
     // Registers
     reg [ADDR_WIDTH-1:0] tx_src, rx_dst;
@@ -216,6 +222,7 @@ module wb_dma_d2d #(
         (s_adr_i[5:0] == 6'h0C) ? {{(DATA_WIDTH-ADDR_WIDTH){1'b0}}, rx_dst} :
         (s_adr_i[5:0] == 6'h10) ? rx_len :
         (s_adr_i[5:0] == 6'h14) ? {{(DATA_WIDTH-3){1'b0}}, rx_ctrl} :
+        (s_adr_i[5:0] == 6'h20) ? {{(DATA_WIDTH-8){1'b0}}, cpuID} :
         {DATA_WIDTH{1'b0}};
 
     always @(posedge wb_clk or negedge wb_rst_n) begin
@@ -353,7 +360,7 @@ module async_stream_bridge #(
     parameter DATA_WIDTH = 64,
     parameter FIFO_DEPTH = 32
 )(
-    // TX path: WB -> UCIe
+    // TX path: WB -> D2d
     input                   tx_wb_clk,
     input                   tx_wb_rst_n,
     input  [DATA_WIDTH-1:0] tx_wb_data,
@@ -366,7 +373,7 @@ module async_stream_bridge #(
     output                  tx_link_valid,
     input                   tx_link_ready,
 
-    // RX path: UCIe -> WB
+    // RX path: D2d -> WB
     input                   rx_link_clk,
     input                   rx_link_rst_n,
     input  [DATA_WIDTH-1:0] rx_link_data,
