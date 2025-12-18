@@ -1,0 +1,10 @@
+
+###==== BEGIN Header
+
+###==== BEGIN Clocks - (Populated from tab in SCOPE, do not edit)
+
+create_clock  -name {wb_clk_pad_i} {p:wb_clk_pad_i} -period {200} 
+
+###==== END Clocks - (Populated from tab in SCOPE, do not edit)
+#set_rtl_ff_names {#}
+

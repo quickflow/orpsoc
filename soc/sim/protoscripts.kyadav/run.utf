@@ -1,0 +1,3 @@
+vcs_exec_command {vcs_dut.csh}
+memory_preferences -scan_path ./sim/runtime
+synthesis -simon_option_file {simon_options.txt}

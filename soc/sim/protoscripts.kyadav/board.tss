@@ -1,0 +1,40 @@
+board_system_create -haps -name Test_board
+board_system_create -add HAPS100_4F -name mb1
+
+
+board_system_configure -top_io  { mb1.A9 mb1.A5 mb1.A4  mb1.A1 mb1.A2 mb1.A3 mb1.A10 mb1.A11 mb1.A12 mb1.A13 mb1.A14 mb1.A15 mb1.A16 mb1.B9 mb1.B5 mb1.B4  mb1.B1 mb1.B2 mb1.B3 mb1.B10}
+board_system_configure -voltage { mb1.A9 mb1.A5 mb1.A4 mb1.A1 mb1.A2 mb1.A3 mb1.A10 mb1.A11 mb1.A12 mb1.A13 mb1.A14 mb1.A15 mb1.A16 mb1.B9 mb1.B5 mb1.B4  mb1.B1 mb1.B2 mb1.B3 mb1.B10} 1.8
+
+#board_system_configure -top_io { mb1.A9 mb1.A5}
+#board_system_configure -top_io { mb1.A9 mb1.B5 mb1.C5 mb1.D5  }
+
+#board_system_configure -voltage mb1.A9 1.8
+#board_system_configure -voltage mb1.A5 1.8
+#board_system_configure -voltage mb1.C5 1.8
+#board_system_configure -voltage mb1.D5 1.8
+#
+#board_system_configure -voltage mb1.A6 1.5
+#board_system_configure -voltage mb1.A7 1.5
+#board_system_configure -voltage mb1.A8 1.5
+#
+#board_system_configure -voltage mb1.B6 1.5
+#board_system_configure -voltage mb1.B7 1.5
+#board_system_configure -voltage mb1.B8 1.5
+
+#board_system_create -interconnect -manual HTII_ADAPTER2_HT3 -name ht2_adpt_ht3 -connector {0 mb1.A6 mb1.A7 mb1.A8}
+
+#board_system_create -interconnect -auto -width 100 -devices {mb1.uA  mb1.uB}
+#board_system_create -interconnect -auto -width 200 -devices {mb1.uA  mb1.uB}
+
+
+
+board_system_configure -pll mb1.PLL1.CLK1 -frequency 10000 -name dclk1
+board_system_configure -clock {mb1.uA.CLK1} dclk1
+board_system_configure -clock {mb1.uB.CLK1} dclk1
+
+# board_system_configure -pll mb1.PLL1.CLK2 -frequency 20000 -name d_clk2
+# board_system_configure -clock {mb1.F0.CLK2} d_clk2
+# board_system_configure -pll mb1.PLL1.CLK3 -frequency 15000 -name d_clk3
+# board_system_configure -clock {mb1.F0.CLK3} d_clk3
+# board_system_configure -pll mb1.PLL2.CLK1 -frequency 1000 -name d_clk4
+# board_system_configure -clock {mb1.F0.CLK4} d_clk4
