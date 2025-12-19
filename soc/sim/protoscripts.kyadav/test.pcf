@@ -1,23 +1,29 @@
-bin_attribute {mb1.uC mb1.uD} -locked
 
+#bin_attribute {mb1.uC mb1.uD} -locked
 
 #bin_utilization -min -bin {mb1.uA} -resource {LUT 200000}
+
 #bin_utilization -min -bin {mb1.uB} -resource {LUT 200000}
 
+bin_utilization -bin mb1.uA -resource_ratio {LUT 0.65}
+bin_utilization -bin mb1.uB -resource_ratio {LUT 0.65}
+bin_utilization -bin mb1.uC -resource_ratio {LUT 0.65}
+bin_utilization -bin mb1.uD -resource_ratio {LUT 0.65}
+ 
 #bin_utilization  -bin {mb1.uA} -resource {LUT 250000}
 #bin_utilization  -bin {mb1.uB} -resource {LUT 220000}
+#bin_utilization  -bin {mb1.uC} -resource {LUT 220000}
+#bin_utilization  -bin {mb1.uD} -resource {LUT 220000}
 
-bin_utilization  -bin {mb1.uA} -resource_ratio {ALL .055}
-bin_utilization  -bin {mb1.uB} -resource_ratio {ALL .055}
+#assign_cell {i:cpu} {mb1.uA}
 
-
-assign_cell {i:eth_top} {mb1.uA}
 #assign_cell {i:mem_if} {mb1.uB}
 
 assign_global_net {wb_clk_pad_i} {dclk1}
+
 net_attribute {wb_clk_pad_i} -function GCLK
 
-
-
 assign_virtual_port -port {rst_n_pad_i} -type USR_LOCAL_RESET -bin {mb1.uA}
-reset_synchronize -net {rst_n_pad_i} -clock {wb_clk_pad_i} -init 0 -extra_pipeline_stages 0 
+
+reset_synchronize -net {rst_n_pad_i} -clock {wb_clk_pad_i} -init 0 -extra_pipeline_stages 0
+
