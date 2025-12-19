@@ -37,6 +37,7 @@
 #define D2D_RX_SRC 0x0C
 #define D2D_RX_LEN 0x10
 #define D2D_RX_CSR 0x14
+#define D2D_CPU_ID 0x20
 
 #define D2D_CSR_START 0
 #define D2D_CSR_BUSY  1
