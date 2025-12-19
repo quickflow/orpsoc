@@ -1797,11 +1797,9 @@ always @(state or cs_a or cs_le or cs_le_r or
 		if(tmr_done)	next_state = REFR;
 	      end
 
-// synopsys translate_off
-	   default:
-		$display("MC_TIMING SM: Entered non existing state ... (%t)",$time);
-// synopsys translate_on
-
+	  default:
+	    ;
+	  
 	endcase
    end
 
