@@ -1,1 +1,82 @@
+proc Start_callback {module sampleNumber ClockCycle isLastNotify} {
+global wave_enable
+global fwc_fid_design
+
+set wave_enable 1
+puts "Start__notifier_done = $isLastNotify"
+puts "Start__notifier_cycle = $ClockCycle"
+run
+}
+
+proc End_callback {module sampleNumber ClockCycle isLastNotify} {
+global wave_enable
+global fwc_fid_design
+
+set wave_enable 0
+puts "End__notifier_done = $isLastNotify"
+puts "End__notifier_cycle = $ClockCycle"
+}
+
+proc do_finish {} {
+ global zfinished
+ puts "#### Finish called ####"
+ set zfinished 1
+ ccall -flush
+ quit
+}
+### dollar_finish for $finish, must put before start_zebu
+dollar_finish -enable do_finish
+
+puts "#######################################"
+puts "Configuring ZRCI"
+puts "#######################################"
+config action_log action.log
+config default_clock both tickClk
+config zebu_work ./zcui.work/zebu.work
+#source lib.ucli
+#zemi3 -enable
+#zemi3 -config [config zebu_work]/xtor_dpi.lst
+#zemi3 -xtor dpi_xtor -lib zcui.work/zebu.work/dpi_xtor.so
+
+puts "#######################################"
+puts "Setting up Database"
+puts "#######################################"
+
+set db_name ./ZRCI
+set cnt 1
+while { [file exists ${db_name}_${cnt}] } {incr cnt}
+set db_name ${db_name}_${cnt}
+puts "Setting zRci database name to $db_name"
+
+start_zebu $db_name
+
+ccall -load zcui.work/zebu.work/grp0_ccall.so
+puts "test begin time [exec date]"
+set begin_run_time [clock clicks -milliseconds]
+ccall -enable_synchronization
+ccall -enable
+
+set qiwc_fid [dump -file "qiwc_dump"  -type qiwc]
+dump -fid $qiwc_fid -add_value_set {qiwc} 
+dump -enable -fid $qiwc_fid
+run
+#dump -disable 
+
+#memory -store HYBRID_fixture.Hybrid_Instance.J24.U5.ngmcu_core.rom32kx32_1.ROM32Kx32.mem -radix hexa -file out_ROM32Kx32_mem_before.hex -start 0
+#memory -load  HYBRID_fixture.Hybrid_Instance.J24.U5.ngmcu_core.rom32kx32_1.ROM32Kx32.mem -file /global/gtsna_northeast5/mattu/customers/MDT/DPI/runtime/backup_RTL.hex  -radix hex
+#memory -write HYBRID_fixture.Hybrid_Instance.J24.U5.ngmcu_core.rom32kx32_1.ROM32Kx32.mem -radix hexa 1 40020194
+#memory -write HYBRID_fixture.Hybrid_Instance.J24.U5.ngmcu_core.rom32kx32_1.ROM32Kx32.mem -radix hexa 0 50020194
+#puts "reading memory address 1"
+#puts "URAM data at address 1 is [memory -read HYBRID_fixture.Hybrid_Instance.J24.U5.ngmcu_core.rom32kx32_1.ROM32Kx32.mem  -radix hexa 1]"
+#puts "URAM data at address 0 is [memory -read HYBRID_fixture.Hybrid_Instance.J24.U5.ngmcu_core.rom32kx32_1.ROM32Kx32.mem  -radix hexa 0]"
+#force HYBRID_fixture.DUTResetReq 0 -radix bin -freeze
+
+
+#stop -config stop_on_notify on
+#stop -cel trigger.cel
+#run 700ms
+#force HYBRID_fixture.DUTResetReq 0 -radix bin -freeze
+#
+#stop -config stop_on_notify on
+#stop -cel trigger.cel  -action Start_callback -repeat 20
 

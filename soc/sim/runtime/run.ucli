@@ -58,7 +58,7 @@ ccall -enable
 
 set qiwc_fid [dump -file "qiwc_dump"  -type qiwc]
 dump -fid $qiwc_fid -add_value_set {qiwc} 
-dump -enable -fid $qiwc_fid
+#dump -enable -fid $qiwc_fid
 run
 #dump -disable 
 
