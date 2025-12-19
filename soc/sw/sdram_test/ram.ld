@@ -4,8 +4,7 @@ MEMORY
 {
     ld_info     : ORIGIN = 0x00000000, LENGTH = 0x000000F0 
     vectors     : ORIGIN = 0x00000100, LENGTH = 0x00000D00 - 0x100
-    flash       : ORIGIN = 0x00000D00, LENGTH = 0x00002000 - 0x0A00
-    ram         : ORIGIN = 0x00003000, LENGTH = 0x00001000
+    ram         : ORIGIN = 0x00000D00, LENGTH = 0x00003000 - 0x0A00
 }
  
 /*
@@ -26,15 +25,15 @@ SECTIONS
 
     .vectors :   { *(.vectors) }    > vectors
 
-    .text :     { *(.text)  }       > flash
+    .text :     { *(.text)  }       > ram
 
     . = ALIGN (0x20);
     __end = .;
    
 
-    .rodata :   { *(.rodata)}       > flash 
-    .rodata.str1.1 :   { *(.rodata.str1.1)}       > flash 
-    .rodata.cst4 :   { *(.rodata.cst4)}       > flash
+    .rodata :   { *(.rodata)}       > ram
+    .rodata.str1.1 :   { *(.rodata.str1.1)}       > ram
+    .rodata.cst4 :   { *(.rodata.cst4)}       > ram
     .data :     { *(.data)  }       > ram
     .bss :      { *(.bss)   }       > ram
 

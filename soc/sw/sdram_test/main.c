@@ -82,13 +82,6 @@ void do_sleep()
 		;
 }
 
-void do_sleep2()
-{
-	uint32 i;
-	for (i = 0; i < 1000; i++)
-		;
-}
-
 /******************************************************************************/
 /*                           G P I O   W  R I T E                             */
 /******************************************************************************/
@@ -105,6 +98,7 @@ void GPIO_Write(uint32 GPIO_data)
 /*                           F O R   s p i M A S T E R                        */
 /******************************************************************************/
 
+#if 1
 //Initialize
 int spiMaster_init()
 {
@@ -161,6 +155,7 @@ int spiMaster_init()
 
   return 0;
 }
+#endif
 
 
 /******************************************************************************/
@@ -294,7 +289,7 @@ void gemm_check_results (int testNum, int base_c, int dw16,
   int mism;
   int N = 16;
 
-  print("Gemm Test Check\r\n");
+  print("Gemm Check\r\n");
 	  
   pack  = dw16 ? 2 : 4;
   mism  = 0;
@@ -394,10 +389,8 @@ void gemm_check_results (int testNum, int base_c, int dw16,
     }
     if (mism==0) {
       passCount++;
-      print("\t\tGemm Test PASS\r\n");
     } else {
       failCount++;
-      print("\t\tGemm Test FAIL\r\n");
     }
   }
 }
@@ -408,10 +401,7 @@ void gemm_test()
   int dw16;
   int signed_in = 1;
 
-  print("Gemm Test Start\r\n");
-
-  passCount = 0;
-  failCount = 0;
+  print("Gemm Tests\r\n");
 
 //  int pMAT = (int) &MatA[0][0];
   GPIO_Write(0x5555aaaa);
@@ -424,9 +414,12 @@ void gemm_test()
   int act_en, quant_en, mode_16, act_type = 0, mode_signed = 0, reg_mode_val;
   int testNum;
   
-#if 1
+#if 0
   /******************************************************************************/
   // Test 3: 8-bit, ReLU + quant (scale 0.125)
+  passCount = 0;
+  failCount = 0;
+
   testNum = 3;
 
   act_en = 0;
@@ -454,129 +447,180 @@ void gemm_test()
 
   GPIO_Write(0xc0000000 | (testNum << 24) | passCount);
   GPIO_Write(0xf0000000 | (testNum << 24) | failCount);
+
+  if (failCount == 0)
+    print("\t\tTest3 PASS\r\n");
+  else
+    print("\t\tTest3 FAIL\r\n");
 #endif
   
 /******************************************************************************/
   // Test 1: 16-bit, packed, no activation/quant
-  testNum = 1;
-  act_en = 0;
-  quant_en = 0;
-  mode_16 = 1;
-  act_type = 0;
-  mode_signed = 0;
 
-  reg_mode_val =
-    (mode_16 << GEMM_MODE_DW16) |
-    (act_en << GEMM_MODE_ACT) |
-    (quant_en << GEMM_MODE_QUANT) |
-    (act_type << GEMM_MODE_ACT_TYPE) |
-    (mode_signed << GEMM_MODE_SIGNED);
-
-  load_input_matrices(mode_16, signed_in);
-
-  REG32(GEMM_BASE + GEMM_MODE) = reg_mode_val;
+  if (REG32(D2D_BASE + D2D_CPU_ID) == 0) {
+    
+    passCount = 0;
+    failCount = 0;
+    
+    testNum = 1;
+    act_en = 0;
+    quant_en = 0;
+    mode_16 = 1;
+    act_type = 0;
+    mode_signed = 0;
+    
+    reg_mode_val =
+      (mode_16 << GEMM_MODE_DW16) |
+      (act_en << GEMM_MODE_ACT) |
+      (quant_en << GEMM_MODE_QUANT) |
+      (act_type << GEMM_MODE_ACT_TYPE) |
+      (mode_signed << GEMM_MODE_SIGNED);
+    
+    load_input_matrices(mode_16, signed_in);
+    
+    REG32(GEMM_BASE + GEMM_MODE) = reg_mode_val;
+    
+    REG32(GEMM_BASE + GEMM_CTRL_STAT) = 1; // start gemm
+    
+    while(REG32(GEMM_BASE + GEMM_CTRL_STAT) & 0x8000) {} // wait for done
+    
+    gemm_check_results (testNum, (int) &MatC[0][0], mode_16, act_en, quant_en, act_type, 65536, 0, 0);
+    
+    GPIO_Write(0xc0000000 | (testNum << 24) | passCount);
+    GPIO_Write(0xf0000000 | (testNum << 24) | failCount);
+    
+    if (failCount == 0)
+      print("\t\tTest1 PASS\r\n");
+    else
+      print("\t\tTest1 FAIL\r\n");
+  }
   
-  REG32(GEMM_BASE + GEMM_CTRL_STAT) = 1; // start gemm
-
-  while(REG32(GEMM_BASE + GEMM_CTRL_STAT) & 0x8000) {} // wait for done
-
-  gemm_check_results (testNum, (int) &MatC[0][0], mode_16, act_en, quant_en, act_type, 65536, 0, 0);
-
-  GPIO_Write(0xc0000000 | (testNum << 24) | passCount);
-  GPIO_Write(0xf0000000 | (testNum << 24) | failCount);
-
 /******************************************************************************/
   // Test 2: 16-bit, ReLU activation
-  testNum = 2;
-  act_en = 1;
-  quant_en = 0;
-  mode_16 = 1;
-  act_type = 1;
-  mode_signed = 0;
+
+  if (REG32(D2D_BASE + D2D_CPU_ID) == 1) {
+    passCount = 0;
+    failCount = 0;
+    
+    testNum = 2;
+    act_en = 1;
+    quant_en = 0;
+    mode_16 = 1;
+    act_type = 1;
+    mode_signed = 0;
+    
+    reg_mode_val =
+      (mode_16 << GEMM_MODE_DW16) |
+      (act_en << GEMM_MODE_ACT) |
+      (quant_en << GEMM_MODE_QUANT) |
+      (act_type << GEMM_MODE_ACT_TYPE) |
+      (mode_signed << GEMM_MODE_SIGNED);
+    
+    load_input_matrices(mode_16, signed_in);
+    
+    REG32(GEMM_BASE + GEMM_MODE) = reg_mode_val;
+    
+    REG32(GEMM_BASE + GEMM_CTRL_STAT) = 1; // start gemm
+    
+    while(REG32(GEMM_BASE + GEMM_CTRL_STAT) & 0x8000) {} // wait for done
+    
+    gemm_check_results (testNum, (int) &MatC[0][0], mode_16, act_en, quant_en, act_type, 65536, 0, 0);
+    
+    GPIO_Write(0xc0000000 | (testNum << 24) | passCount);
+    GPIO_Write(0xf0000000 | (testNum << 24) | failCount);
+    
+    if (failCount == 0)
+      print("\t\tTest2 PASS\r\n");
+    else
+      print("\t\tTest2 FAIL\r\n");
+  }
   
-  reg_mode_val =
-    (mode_16 << GEMM_MODE_DW16) |
-    (act_en << GEMM_MODE_ACT) |
-    (quant_en << GEMM_MODE_QUANT) |
-    (act_type << GEMM_MODE_ACT_TYPE) |
-    (mode_signed << GEMM_MODE_SIGNED);
-
-  load_input_matrices(mode_16, signed_in);
-
-  REG32(GEMM_BASE + GEMM_MODE) = reg_mode_val;
-  
-  REG32(GEMM_BASE + GEMM_CTRL_STAT) = 1; // start gemm
-
-  while(REG32(GEMM_BASE + GEMM_CTRL_STAT) & 0x8000) {} // wait for done
-
-  gemm_check_results (testNum, (int) &MatC[0][0], mode_16, act_en, quant_en, act_type, 65536, 0, 0);
-
-  GPIO_Write(0xc0000000 | (testNum << 24) | passCount);
-  GPIO_Write(0xf0000000 | (testNum << 24) | failCount);
-
 /******************************************************************************/
   // Test 3: 8-bit, ReLU + quant (scale 0.125)
-  testNum = 3;
-  act_en = 0;
-  quant_en = 0; //1;
-  mode_16 = 0;
-  act_type = 0; //1;
-  mode_signed = 0;
 
-  reg_mode_val =
-    (mode_16 << GEMM_MODE_DW16) |
-    (act_en << GEMM_MODE_ACT) |
-    (quant_en << GEMM_MODE_QUANT) |
-    (act_type << GEMM_MODE_ACT_TYPE) |
-    (mode_signed << GEMM_MODE_SIGNED);
-
-  load_input_matrices(mode_16, signed_in);
-
-  REG32(GEMM_BASE + GEMM_MODE) = reg_mode_val;
+  if (REG32(D2D_BASE + D2D_CPU_ID) == 0) {
+    passCount = 0;
+    failCount = 0;
+    
+    testNum = 3;
+    act_en = 0;
+    quant_en = 0; //1;
+    mode_16 = 0;
+    act_type = 0; //1;
+    mode_signed = 0;
+    
+    reg_mode_val =
+      (mode_16 << GEMM_MODE_DW16) |
+      (act_en << GEMM_MODE_ACT) |
+      (quant_en << GEMM_MODE_QUANT) |
+      (act_type << GEMM_MODE_ACT_TYPE) |
+      (mode_signed << GEMM_MODE_SIGNED);
+    
+    load_input_matrices(mode_16, signed_in);
+    
+    REG32(GEMM_BASE + GEMM_MODE) = reg_mode_val;
+    
+    REG32(GEMM_BASE + GEMM_CTRL_STAT) = 1; // start gemm
+    
+    while(REG32(GEMM_BASE + GEMM_CTRL_STAT) & 0x8000) {} // wait for done
+    
+    gemm_check_results (testNum, (int) &MatC[0][0], mode_16, act_en, quant_en, act_type, 65536, 0, 0);
+    
+    GPIO_Write(0xc0000000 | (testNum << 24) | passCount);
+    GPIO_Write(0xf0000000 | (testNum << 24) | failCount);
+    
+    if (failCount == 0)
+      print("\t\tTest3 PASS\r\n");
+    else
+      print("\t\tTest3 FAIL\r\n");
+  }
   
-  REG32(GEMM_BASE + GEMM_CTRL_STAT) = 1; // start gemm
-
-  while(REG32(GEMM_BASE + GEMM_CTRL_STAT) & 0x8000) {} // wait for done
-
-  gemm_check_results (testNum, (int) &MatC[0][0], mode_16, act_en, quant_en, act_type, 65536, 0, 0);
-
-  GPIO_Write(0xc0000000 | (testNum << 24) | passCount);
-  GPIO_Write(0xf0000000 | (testNum << 24) | failCount);
-
 /******************************************************************************/
   // Test 4: 8-bit, LeakyReLU alpha=0.125 + quant 0.5
-  testNum = 4;
-  act_en = 1;
-  quant_en = 1;
-  mode_16 = 0;
-  act_type = 1;
-  mode_signed = 0;
 
-  reg_mode_val =
-    (mode_16 << GEMM_MODE_DW16) |
-    (act_en << GEMM_MODE_ACT) |
-    (quant_en << GEMM_MODE_QUANT) |
-    (act_type << GEMM_MODE_ACT_TYPE) |
-    (mode_signed << GEMM_MODE_SIGNED);
-
-  load_input_matrices(mode_16, signed_in);
-
-  REG32(GEMM_BASE + GEMM_MODE) = reg_mode_val;
+  if (REG32(D2D_BASE + D2D_CPU_ID) == 1) {
+    passCount = 0;
+    failCount = 0;
+    
+    testNum = 4;
+    act_en = 1;
+    quant_en = 1;
+    mode_16 = 0;
+    act_type = 1;
+    mode_signed = 0;
+    
+    reg_mode_val =
+      (mode_16 << GEMM_MODE_DW16) |
+      (act_en << GEMM_MODE_ACT) |
+      (quant_en << GEMM_MODE_QUANT) |
+      (act_type << GEMM_MODE_ACT_TYPE) |
+      (mode_signed << GEMM_MODE_SIGNED);
+    
+    load_input_matrices(mode_16, signed_in);
+    
+    REG32(GEMM_BASE + GEMM_MODE) = reg_mode_val;
+    
+    REG32(GEMM_BASE + GEMM_CTRL_STAT) = 1; // start gemm
+    
+    while(REG32(GEMM_BASE + GEMM_CTRL_STAT) & 0x8000) {} // wait for done
+    
+    gemm_check_results (testNum, (int) &MatC[0][0], mode_16, act_en, quant_en, act_type, 65536, 0, 0);
+    
+    GPIO_Write(0xc0000000 | (testNum << 24) | passCount);
+    GPIO_Write(0xf0000000 | (testNum << 24) | failCount);
+    
+    if (failCount == 0)
+      print("\t\tTest4 PASS\r\n");
+    else
+      print("\t\tTest4 FAIL\r\n");
+  }
   
-  REG32(GEMM_BASE + GEMM_CTRL_STAT) = 1; // start gemm
-
-  while(REG32(GEMM_BASE + GEMM_CTRL_STAT) & 0x8000) {} // wait for done
-
-  gemm_check_results (testNum, (int) &MatC[0][0], mode_16, act_en, quant_en, act_type, 65536, 0, 0);
-
-  GPIO_Write(0xc0000000 | (testNum << 24) | passCount);
-  GPIO_Write(0xf0000000 | (testNum << 24) | failCount);
-
 /******************************************************************************/
   GPIO_Write(0x5555dddd);
 /******************************************************************************/
 }
 
+#if 0
 void simple_d2d_test()
 {
   uint32 count;
@@ -592,6 +636,7 @@ void simple_d2d_test()
   GPIO_Write(0xa2000000 + REG32(GEMM_BASE + GEMM_BASE_B));
   GPIO_Write(0xa2000000 + REG32(GEMM_BASE + GEMM_BASE_C));
 }
+#endif
 
 /*$$EXTERNAL EXEPTIONS*/
 /******************************************************************************/
@@ -622,18 +667,17 @@ void main()
   REG32(GPIO_BASE + RGPIO_INTE) = 0x0;   // Disable interrupts from GPIO
 
   print("\n\r\n\t");
-  print("==OpenRisc 1200 SOC==\n\r\n");
+  print("==OpenRisc 1200 SOC(");
+  if (REG32(D2D_BASE + D2D_CPU_ID) == 0)
+    print("0)==\n\r\n");
+  else
+    print("1)==\n\r\n");
   GPIO_Write(0x1111);
-
-  print("\n\r");
 
   GPIO_Write(0x2222);
   print("Running from DRAM\n\r");
 
   GPIO_Write(0x3333);
-  print("\n\r");
-
-  print("System Clock: 30MHz\n\r\n");
 
   GPIO_Write(0x4444);
 
