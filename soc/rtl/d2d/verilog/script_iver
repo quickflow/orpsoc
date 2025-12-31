@@ -1,3 +1,2 @@
-iverilog -g2012 -o sim.out d2d.v wb_simple_ram.v tb_d2d.v
-vvp sim.out -lxt2 |tee output.log
-
+iverilog -g2012 -o d2d_sim d2d_link_top.v tb_d2d_link.v
+vvp d2d_sim -lxt2 |tee output.log
