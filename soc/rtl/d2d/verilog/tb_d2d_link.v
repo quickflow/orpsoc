@@ -11,9 +11,6 @@ localparam TX_MEM_BASE = 32'h0000_1000;
 localparam RX_MEM_BASE = 32'h0000_2000;
 localparam MEM_SIZE = 1024; // 1024 64-bit words
 
-   localparam TX_DELAY = 5;
-   localparam RX_DELAY = 9;
-
 // Clocks and Resets
 reg wb_clk;
 reg d2d_clk;
@@ -29,21 +26,13 @@ reg [31:0] csr_wb_dat_i;
 wire csr_wb_ack_o;
 wire [31:0] csr_wb_dat_o;
 
-wire tx_wb_cyc_o;
-wire tx_wb_stb_o;
-wire tx_wb_we_o;
-wire [31:0] tx_wb_adr_o;
-wire [31:0] tx_wb_dat_o;
-reg tx_wb_ack_i;
-reg [31:0] tx_wb_dat_i;
-
-wire rx_wb_cyc_o;
-wire rx_wb_stb_o;
-wire rx_wb_we_o;
-wire [31:0] rx_wb_adr_o;
-wire [31:0] rx_wb_dat_o;
-reg rx_wb_ack_i;
-reg [31:0] rx_wb_dat_i;
+wire wb_cyc_o;
+wire wb_stb_o;
+wire wb_we_o;
+wire [31:0] wb_adr_o;
+wire [31:0] wb_dat_o;
+reg wb_ack_i;
+reg [31:0] wb_dat_i;
 
 // D2D interfaces
 wire [63:0] tx_data;
@@ -66,7 +55,7 @@ reg [31:0] tx_data_offset;
 reg [31:0] rx_data_offset;
 
 // D2D Link DUT
-d2d_link_top dut (
+d2d_link_wrapper dut (
     // Wishbone CSR Interface
     .wb_clk(wb_clk),
     .wb_rst_n(wb_rst_n),
@@ -80,23 +69,14 @@ d2d_link_top dut (
     .csr_wb_ack_o(csr_wb_ack_o),
     .csr_wb_dat_o(csr_wb_dat_o),
     
-    // TX DMA Wishbone Master
-    .tx_wb_cyc_o(tx_wb_cyc_o),
-    .tx_wb_stb_o(tx_wb_stb_o),
-    .tx_wb_we_o(tx_wb_we_o),
-    .tx_wb_adr_o(tx_wb_adr_o),
-    .tx_wb_dat_o(tx_wb_dat_o),
-    .tx_wb_ack_i(tx_wb_ack_i),
-    .tx_wb_dat_i(tx_wb_dat_i),
-    
-    // RX DMA Wishbone Master
-    .rx_wb_cyc_o(rx_wb_cyc_o),
-    .rx_wb_stb_o(rx_wb_stb_o),
-    .rx_wb_we_o(rx_wb_we_o),
-    .rx_wb_adr_o(rx_wb_adr_o),
-    .rx_wb_dat_o(rx_wb_dat_o),
-    .rx_wb_ack_i(rx_wb_ack_i),
-    .rx_wb_dat_i(rx_wb_dat_i),
+    // DMA Wishbone Master
+    .wb_cyc_o(wb_cyc_o),
+    .wb_stb_o(wb_stb_o),
+    .wb_we_o(wb_we_o),
+    .wb_adr_o(wb_adr_o),
+    .wb_dat_o(wb_dat_o),
+    .wb_ack_i(wb_ack_i),
+    .wb_dat_i(wb_dat_i),
     
     // D2D Interface
     .d2d_clk(d2d_clk),
@@ -110,16 +90,16 @@ d2d_link_top dut (
     // RX D2D Interface
     .rx_data(tx_data),
     .rx_valid(tx_valid),
-    .rx_ready(rx_ready)
+    .rx_ready(rx_ready),
+
+    .cpuID(0)
 );
 
-   integer tx_dma_delay;
-   integer rx_dma_delay;
+   integer dma_delay;
    
 initial begin
-   $value$plusargs("tx_dma_delay=%d", tx_dma_delay);
-   $value$plusargs("rx_dma_delay=%d", rx_dma_delay);
-   $display("using tx_dma_delay(%d) and rx_dma_delay(%d)", tx_dma_delay, rx_dma_delay);
+   $value$plusargs("dma_delay=%d", dma_delay);
+   $display("using dma_delay(%d)", dma_delay);
 end
 
 // Clock generation
@@ -192,70 +172,37 @@ endfunction
 // Wishbone Slave Memory Models - FIXED VERSION
 always @(posedge wb_clk or negedge wb_rst_n) begin
    if (!wb_rst_n) begin
-      tx_wb_ack_i <= 1'b0;
+      wb_ack_i <= 1'b0;
    end
-   // TX DMA Memory (source memory) - Read only
    else begin
-      if (tx_wb_cyc_o && tx_wb_stb_o && !tx_wb_ack_i) begin
+      if (wb_cyc_o && wb_stb_o && !wb_ack_i) begin
 	 // Random latency
-	 if ($urandom_range(0, tx_dma_delay) > 0) begin
-            repeat($urandom_range(1, tx_dma_delay)) @(posedge wb_clk);
+	 if ($urandom_range(0, dma_delay) > 0) begin
+            repeat($urandom_range(1, dma_delay)) @(posedge wb_clk);
 	 end
 	 
-	 if (!tx_wb_we_o) begin
+	 if (!wb_we_o) begin
             // Read from system memory - FIX: send ack for each 32-bit read
-            tx_wb_dat_i <= read_memory32(tx_wb_adr_o);
-//            $display("[%0t] TX DMA Read: Addr=%h, Data=%h", $time, tx_wb_adr_o, read_memory32(tx_wb_adr_o));
+            wb_dat_i <= read_memory32(wb_adr_o);
+//            $display("[%0t] TX DMA Read: Addr=%h, Data=%h", $time, wb_adr_o, read_memory32(wb_adr_o));
 	 end else begin
             // Write to system memory (shouldn't happen for TX DMA)
-            write_memory32(tx_wb_adr_o, tx_wb_dat_o);
-//            $display("[%0t] TX DMA Write (unexpected): Addr=%h, Data=%h", $time, tx_wb_adr_o, tx_wb_dat_o);
+            write_memory32(wb_adr_o, wb_dat_o);
+//            $display("[%0t] TX DMA Write (unexpected): Addr=%h, Data=%h", $time, wb_adr_o, wb_dat_o);
 	 end
 	 
-	 tx_wb_ack_i <= 1'b1;
-      end // if (tx_wb_cyc_o && tx_wb_stb_o && !tx_wb_ack_i)
-      else begin
-	 tx_wb_ack_i <= 1'b0;
-      end // else: !if(tx_wb_cyc_o && tx_wb_stb_o && !tx_wb_ack_i)
-   end // else: !if(!wb_rst_n)
-end // always @ (posedge wb_clk or negedge wb_rst_n)
+	 wb_ack_i <= 1'b1;
+      end // if (wb_cyc_o && wb_stb_o && !wb_ack_i)
       
-always @(posedge wb_clk or negedge wb_rst_n) begin
-   if (!wb_rst_n) begin
-      rx_wb_ack_i <= 1'b0;
-   end
-   // TX DMA Memory (source memory) - Read only
-   else begin
-      // RX DMA Memory (destination memory) - Write only
-      if (rx_wb_cyc_o && rx_wb_stb_o && !rx_wb_ack_i) begin
-	 // Random latency
-	 if ($urandom_range(0, rx_dma_delay) > 0) begin
-            repeat($urandom_range(1, rx_dma_delay)) @(posedge wb_clk);
-	 end
-	 
-	 if (rx_wb_we_o) begin
-            // Write to system memory - FIX: send ack for each 32-bit write
-            write_memory32(rx_wb_adr_o, rx_wb_dat_o);
-//            $display("[%0t] RX DMA Write: Addr=%h, Data=%h", $time, rx_wb_adr_o, rx_wb_dat_o);
-	 end else begin
-            // Read from system memory
-            rx_wb_dat_i <= read_memory32(rx_wb_adr_o);
-//            $display("[%0t] RX DMA Read (unexpected): Addr=%h, Data=%h", $time, rx_wb_adr_o, read_memory32(rx_wb_adr_o));
-	 end
-	 
-	 rx_wb_ack_i <= 1'b1;
-      end // if (rx_wb_cyc_o && rx_wb_stb_o && !rx_wb_ack_i)
       else begin
-	 rx_wb_ack_i <= 1'b0;
-      end // else: !if(rx_wb_cyc_o && rx_wb_stb_o && !rx_wb_ack_i)
+	 wb_ack_i <= 1'b0;
+      end // else: !if(wb_cyc_o && wb_stb_o && !wb_ack_i)
    end // else: !if(!wb_rst_n)
-   
 end
 
 // D2D Link Model (connects TX to RX)
 reg [63:0] d2d_link_data;
 reg d2d_link_valid;
-integer d2d_latency_counter;
 
 always @(posedge d2d_clk) begin
     rx_valid <= 1'b0;
@@ -264,19 +211,6 @@ always @(posedge d2d_clk) begin
     
     // Pass through TX data to RX with random latency
     if (tx_valid && !d2d_link_valid) begin
-        d2d_latency_counter = $urandom_range(1, 5);
-/*
-         if (d2d_latency_counter > 0) begin
-            // Wait for random number of cycles
-            fork
-                begin
-                    repeat(d2d_latency_counter) @(posedge d2d_clk);
-                    d2d_link_data <= tx_data;
-                    d2d_link_valid <= 1'b1;
-                end
-            join_none
-        end else
-*/
        begin
             d2d_link_data <= tx_data;
             d2d_link_valid <= 1'b1;
@@ -393,6 +327,7 @@ task verify_data;
     end
 endtask
 
+/*
 // Monitor D2D transactions
 always @(posedge d2d_clk) begin
     if (tx_valid && tx_ready) begin
@@ -402,7 +337,8 @@ always @(posedge d2d_clk) begin
         $display("[%0t] D2D RX: Data=%h", $time, rx_data);
     end
 end
-
+*/
+   
 // Main test sequence
 initial begin
     // Initialize
@@ -512,9 +448,9 @@ initial begin
     // Print summary
     $display("\n[%0t] ===========================================", $time);
     if (test_pass) begin
-        $display("[%0t] TEST PASSED tx_delay(%d) rx_delay(%d)", $time, tx_dma_delay, rx_dma_delay);
+        $display("[%0t] TEST PASSED dma_delay(%d)", $time, dma_delay);
     end else begin
-        $display("[%0t] TEST FAILED tx_delay(%d) rx_delay(%d) with %0d errors", $time, tx_dma_delay, rx_dma_delay, errors);
+        $display("[%0t] TEST FAILED dma_delay(%d) with %0d errors", $time, dma_delay, errors);
     end
     $display("[%0t] ===========================================\n", $time);
     

@@ -1,7 +1,5 @@
-iverilog -g2012 -o d2d_sim d2d_link_top.v tb_d2d_link.v
+iverilog -g2012 -o d2d_sim d2d_link_top.v d2d_link_wrapper.v tb_d2d_link.v 
 
 for ((i=1; i<16; i++)); do
-    for ((j=1; j<16; j++)); do
-    	vvp d2d_sim -lxt2 +tx_dma_delay=$i +rx_dma_delay=$j |tee output.$i.$j.log
-    done
+    vvp d2d_sim -lxt2 +dma_delay=$i |tee output.$i.log
 done

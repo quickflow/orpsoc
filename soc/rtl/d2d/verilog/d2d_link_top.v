@@ -46,7 +46,9 @@ module d2d_link_top
    // RX D2D Interface
    input wire [63:0] rx_data,
    input wire	     rx_valid,
-   output reg	     rx_ready
+   output reg	     rx_ready,
+
+   input wire [7:0]  cpuID
    );
    
    // ============================================================================
@@ -283,6 +285,9 @@ module d2d_link_top
          csr_status[STATUS_TX_FIFO_EMPTY] <= tx_fifo_empty_sync[2];
          csr_status[STATUS_RX_FIFO_FULL] <= rx_fifo_full_sync[2];
          csr_status[STATUS_RX_FIFO_EMPTY] <= rx_fifo_empty_sync[2];
+
+	 csr_status[31:24] <= cpuID;
+	 
       end
    end
    
@@ -560,7 +565,6 @@ module d2d_link_top
          tx_fifo_wdata <= 64'h0;
       end else begin
          tx_fifo_wr_en <= 1'b0;
-         tx_wb_stb_o <= 1'b0;
          
          case (tx_dma_state)
            TX_DMA_IDLE: begin
