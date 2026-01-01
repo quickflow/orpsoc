@@ -31,17 +31,34 @@
 
 #define D2D_BASE 0x70000000
 
-#define D2D_TX_SRC 0x00
-#define D2D_TX_LEN 0x04
-#define D2D_TX_CSR 0x08
-#define D2D_RX_SRC 0x0C
-#define D2D_RX_LEN 0x10
-#define D2D_RX_CSR 0x14
-#define D2D_CPU_ID 0x20
+#define D2D_STATUS 0x00
+#define D2D_CTRL   0x04
+#define D2D_TX_SRC 0x08
+#define D2D_TX_DST 0x0C
+#define D2D_TX_LEN 0x10
+#define D2D_RX_SRC 0x14
+#define D2D_RX_DST 0x18
+#define D2D_RX_LEN 0x1C
 
-#define D2D_CSR_START 0
-#define D2D_CSR_BUSY  1
-#define D2D_CSR_DONE  2
+#define D2D_CTRL_TX_START  0
+#define D2D_CTRL_RX_START  1
+#define D2D_CTRL_TX_RESET  2
+#define D2D_CTRL_RX_RESET  3
+#define D2D_CTRL_TX_ENABLE 4
+#define D2D_CTRL_RX_ENABLE 5
+
+#define D2D_STAT_TX_DONE   0
+#define D2D_STAT_RX_DONE   1
+#define D2D_STAT_TX_BUSY   2
+#define D2D_STAT_RX_BUSY   3
+#define D2D_STAT_TX_FULL   4
+#define D2D_STAT_TX_EMPTY  5
+#define D2D_STAT_RX_FULL   6
+#define D2D_STAT_RX_EMPTY  7
+#define D2D_STAT_TX_ERROR  8
+#define D2D_STAT_RX_ERROR  9
+
+#define CPUID ((REG32(D2D_BASE + D2D_STATUS) >> 24) && 0xff)
 
 /******************************************************************************/
 /*                               GEMM                                         */

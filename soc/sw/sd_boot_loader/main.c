@@ -166,33 +166,6 @@ void spiMaster_init()
   };
 }
 
-void simple_gemm_test()
-{
-  REG32(GEMM_BASE + GEMM_BASE_A) = 0x11000;
-  REG32(GEMM_BASE + GEMM_BASE_B) = 0x12000;
-  REG32(GEMM_BASE + GEMM_BASE_C) = 0x13000;
-
-  GPIO_Write(0xaa000000 + REG32(GEMM_BASE + GEMM_BASE_A));
-  GPIO_Write(0xaa000000 + REG32(GEMM_BASE + GEMM_BASE_B));
-  GPIO_Write(0xaa000000 + REG32(GEMM_BASE + GEMM_BASE_C));
-}
-
-void simple_d2d_test()
-{
-  uint32 count;
-  for(count=0; count<256; count+=4) {
-    REG32(0x1100 + count) = count;
-  }
-
-  REG32(D2D_BASE + D2D_TX_SRC) = 0x11000;
-  REG32(D2D_BASE + D2D_TX_LEN) = 0x100;
-  REG32(D2D_BASE + D2D_TX_CSR) = (1 << D2D_CSR_START);
-
-  GPIO_Write(0xa2000000 + REG32(GEMM_BASE + GEMM_BASE_A));
-  GPIO_Write(0xa2000000 + REG32(GEMM_BASE + GEMM_BASE_B));
-  GPIO_Write(0xa2000000 + REG32(GEMM_BASE + GEMM_BASE_C));
-}
-
 int spiMaster_test()
 {
   uint32 tip_count = 0;
@@ -419,8 +392,14 @@ void main()
   REG32(GPIO_BASE + RGPIO_INTE) = 0x0;   // Disable interrupts from GPIO
 
   print("\n\r\n\t");
-  print("==OpenRisc 1200 SOC==\n\r\n");
+  print("==OpenRisc 1200 SOC(");
+  if (CPUID == 0)
+    print("0");
+  if (CPUID == 1)
+    print("1");
+  print(")==\n\r\n");
   print("Hi Andy\r\n");
+
   GPIO_Write(0x1);
 
   GPIO_Write(0x2);
@@ -444,10 +423,6 @@ void main()
   GPIO_Write(0x6);
 
   //  ddr_sdram_sample_test();
-
-  //  simple_gfx_test();
-  simple_gemm_test();
-  simple_d2d_test();
 
   GPIO_Write(0x61);
 
