@@ -155,8 +155,6 @@ module CPUboard_tb ();
 
    assign c0_d2d_rst_n = d2d_rstn;
    
-   assign c0_d2d_tx_ready = 1'b1;
-   
    or1k_soc_top soc0
      (
       // Clk and reset
@@ -212,9 +210,9 @@ module CPUboard_tb ();
       .d2d_rst_n              (c0_d2d_rst_n),
       .d2d_tx_data            (c0_d2d_tx_data),
       .d2d_tx_valid           (c0_d2d_tx_valid),
-      .d2d_tx_ready           (c0_d2d_tx_ready),
-      .d2d_rx_data            (c0_d2d_rx_data),
-      .d2d_rx_valid           (c0_d2d_rx_valid),
+      .d2d_tx_ready           (c1_d2d_rx_ready),
+      .d2d_rx_data            (c1_d2d_tx_data),
+      .d2d_rx_valid           (c1_d2d_tx_valid),
       .d2d_rx_ready           (c0_d2d_rx_ready),
 
       .cpuID                  (8'h00)
@@ -241,14 +239,14 @@ module CPUboard_tb ();
 	 // 0xff has been written to GPIO, so the
 	 // sofware has completed its tests
 	 $display("\n\n**** PASS C0 **** indicator for Software execution complete.\n\n");
-	 $fflush(uart_mon0.fd);
+//	 $fflush(uart_mon0.fd);
 	 //	       repeat(1000000) @(posedge clk);
 	 $finish();
       end else if (c0_gpio_pad_io == 32'hdeadbeef) begin
 	 // 0x55 has been written to GPIO, so the
 	 // there was an error during the tests
 	 $display("\n\n**** FAIL C0 **** indicator during Software tests. Finishing simulation.");
-	 $fflush(uart_mon0.fd);
+//	 $fflush(uart_mon0.fd);
 	 repeat(1000000) @(posedge clk);
 	 $finish();
       end
@@ -264,7 +262,7 @@ module CPUboard_tb ();
 	    $display("Completed");
 	    //		 Flash.StoreToFile;
 	    
-	    $fflush(uart_mon0.fd);
+//	    $fflush(uart_mon0.fd);
 	    $finish();
 	 end
 	 counter0 = counter0 + 1;
@@ -434,8 +432,6 @@ module CPUboard_tb ();
 
    assign c1_d2d_rst_n = d2d_rstn;
    
-   assign c1_d2d_tx_ready = 1'b1;
-   
    or1k_soc_top soc1
      (
       // Clk and reset
@@ -491,9 +487,9 @@ module CPUboard_tb ();
       .d2d_rst_n              (c1_d2d_rst_n),
       .d2d_tx_data            (c1_d2d_tx_data),
       .d2d_tx_valid           (c1_d2d_tx_valid),
-      .d2d_tx_ready           (c1_d2d_tx_ready),
-      .d2d_rx_data            (c1_d2d_rx_data),
-      .d2d_rx_valid           (c1_d2d_rx_valid),
+      .d2d_tx_ready           (c0_d2d_rx_ready),
+      .d2d_rx_data            (c0_d2d_tx_data),
+      .d2d_rx_valid           (c0_d2d_tx_valid),
       .d2d_rx_ready           (c1_d2d_rx_ready),
       
       .cpuID                  (8'h01)
@@ -520,14 +516,14 @@ module CPUboard_tb ();
 	 // 0xff has been written to GPIO, so the
 	 // sofware has completed its tests
 	 $display("\n\n**** PASS C1 **** indicator for Software execution complete.\n\n");
-	 $fflush(uart_mon1.fd);
+//	 $fflush(uart_mon1.fd);
 	 //	       repeat(1000000) @(posedge clk);
 	 $finish();
       end else if (c1_gpio_pad_io == 32'hdeadbeef) begin
 	 // 0x55 has been written to GPIO, so the
 	 // there was an error during the tests
 	 $display("\n\n**** FAIL C1 **** indicator during Software tests. Finishing simulation.");
-	 $fflush(uart_mon1.fd);
+//	 $fflush(uart_mon1.fd);
 	 repeat(1000000) @(posedge clk);
 	 $finish();
       end
@@ -543,7 +539,7 @@ module CPUboard_tb ();
 	    $display("Completed");
 	    //		 Flash.StoreToFile;
 	    
-	    $fflush(uart_mon1.fd);
+//	    $fflush(uart_mon1.fd);
 	    $finish();
 	 end
 	 counter1 = counter1 + 1;
@@ -605,7 +601,7 @@ module CPUboard_tb ();
    uart_mon uart_mon1
      (
       .clk (clk), // System clock
-      .reset (~rstn), // Reset signal
+      .reset (~rstn_dly),
       .rx (c1_uart_stx_pad_o),
       .monID (8'h01)
       );
