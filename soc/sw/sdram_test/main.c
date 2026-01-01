@@ -457,7 +457,7 @@ void gemm_test()
 /******************************************************************************/
   // Test 1: 16-bit, packed, no activation/quant
 
-  if (REG32(D2D_BASE + D2D_CPU_ID) == 0) {
+  if (CPUID == 0) {
     
     passCount = 0;
     failCount = 0;
@@ -498,7 +498,7 @@ void gemm_test()
 /******************************************************************************/
   // Test 2: 16-bit, ReLU activation
 
-  if (REG32(D2D_BASE + D2D_CPU_ID) == 1) {
+  if (CPUID == 1) {
     passCount = 0;
     failCount = 0;
     
@@ -538,7 +538,7 @@ void gemm_test()
 /******************************************************************************/
   // Test 3: 8-bit, ReLU + quant (scale 0.125)
 
-  if (REG32(D2D_BASE + D2D_CPU_ID) == 0) {
+  if (CPUID == 0) {
     passCount = 0;
     failCount = 0;
     
@@ -578,7 +578,7 @@ void gemm_test()
 /******************************************************************************/
   // Test 4: 8-bit, LeakyReLU alpha=0.125 + quant 0.5
 
-  if (REG32(D2D_BASE + D2D_CPU_ID) == 1) {
+  if (CPUID == 1) {
     passCount = 0;
     failCount = 0;
     
@@ -620,21 +620,86 @@ void gemm_test()
 /******************************************************************************/
 }
 
-#if 0
-void simple_d2d_test()
+uint32 d2d_mat_rx[1024];
+uint32 d2d_mat_tx[1024];
+
+#if 1
+void d2d_test()
 {
   uint32 count;
-  for(count=0; count<256; count+=4) {
-    REG32(0x1100 + count) = count;
+  uint32 val;
+
+  print("\n\rD2D Test\n\r");
+
+  GPIO_Write((uint32) &d2d_mat_tx[0]);
+  for(count=0; count<256; count++) {
+    val = (CPUID << 24) + count;
+    d2d_mat_tx[count] = val;
+    //    GPIO_Write(val);
   }
 
-  REG32(D2D_BASE + D2D_TX_SRC) = 0x11000;
-  REG32(D2D_BASE + D2D_TX_LEN) = 0x100;
-  REG32(D2D_BASE + D2D_TX_CSR) = (1 << D2D_CSR_START);
+  GPIO_Write(0xaaaa5555);
+  
+  //  if (CPUID == 0)
+    {
+      REG32(D2D_BASE + D2D_TX_SRC) = (uint32) &d2d_mat_tx[0];
+      //    GPIO_Write(REG32(D2D_BASE + D2D_TX_SRC));
+      REG32(D2D_BASE + D2D_TX_LEN) = 0x100;
+      REG32(D2D_BASE + D2D_CTRL) = (1 << D2D_CTRL_TX_START) | (1 << D2D_CTRL_TX_ENABLE);
+    }
+  
+    //  if (CPUID == 1)
+    {
+      REG32(D2D_BASE + D2D_RX_DST) = (uint32) &d2d_mat_rx[0];
+      REG32(D2D_BASE + D2D_RX_LEN) = 0x100;
+      REG32(D2D_BASE + D2D_CTRL) = (1 << D2D_CTRL_RX_START) | (1 << D2D_CTRL_RX_ENABLE);
+    }
+  
+    //  if (CPUID == 0)
+    {
+      count = 0;
+      while(count++ < 10000) {
+	if ((REG32(D2D_BASE + D2D_STATUS) & (1 << D2D_STAT_TX_DONE)) == (1 << D2D_STAT_TX_DONE))
+	  break;
+      }
+    }      
 
-  GPIO_Write(0xa2000000 + REG32(GEMM_BASE + GEMM_BASE_A));
-  GPIO_Write(0xa2000000 + REG32(GEMM_BASE + GEMM_BASE_B));
-  GPIO_Write(0xa2000000 + REG32(GEMM_BASE + GEMM_BASE_C));
+  GPIO_Write(0xbbbb4444);
+
+  //  if (CPUID == 1)
+    {
+      count = 0;
+      while(count++ < 10000) {
+	//	GPIO_Write(0xaaa00000 + count);
+	//	GPIO_Write(0x11100000 + (REG32(D2D_BASE + D2D_STATUS) && (1 << D2D_STAT_RX_DONE)));
+	if ((REG32(D2D_BASE + D2D_STATUS) & (1 << D2D_STAT_RX_DONE)) == (1 << D2D_STAT_RX_DONE))
+	  break;
+      }
+      
+      GPIO_Write(0xbbbb5555);
+      
+      val = CPUID;
+      passCount = 0;
+      failCount = 0;
+      
+      for(count=0; count<256; count++) {
+	if (val == 0) {
+	  if (d2d_mat_rx[count] == (0x01000000 | count))
+	    passCount++;
+	  else
+	    failCount++;
+	}
+	else if (val == 1) {
+	  if (d2d_mat_rx[count] == (0x00000000 | count))
+	    passCount++;
+	  else
+	    failCount++;
+	}
+      }
+      
+      GPIO_Write(0xdd000000 | passCount);
+      GPIO_Write(0xdf000000 | failCount);
+    }
 }
 #endif
 
@@ -668,7 +733,7 @@ void main()
 
   print("\n\r\n\t");
   print("==OpenRisc 1200 SOC(");
-  if (REG32(D2D_BASE + D2D_CPU_ID) == 0)
+  if (CPUID == 0)
     print("0)==\n\r\n");
   else
     print("1)==\n\r\n");
@@ -679,6 +744,9 @@ void main()
 
   GPIO_Write(0x3333);
 
+  d2d_test();
+  //  GPIO_Write(PASS_CODE);
+  
   GPIO_Write(0x4444);
 
   gemm_test();
