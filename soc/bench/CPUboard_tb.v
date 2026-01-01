@@ -150,6 +150,14 @@ module CPUboard_tb ();
    wire		c0_d2d_rx_valid;
    wire		c0_d2d_rx_ready;
    
+   // D2D
+   wire [63:0]	c1_d2d_tx_data;
+   wire		c1_d2d_tx_valid;
+   wire		c1_d2d_tx_ready;
+   wire [63:0]	c1_d2d_rx_data;
+   wire		c1_d2d_rx_valid;
+   wire		c1_d2d_rx_ready;
+   
    assign c0_wb_clk = clk;
    assign c0_d2d_clk = d2d_clk;
 
@@ -240,14 +248,14 @@ module CPUboard_tb ();
 	 // sofware has completed its tests
 	 $display("\n\n**** PASS C0 **** indicator for Software execution complete.\n\n");
 //	 $fflush(uart_mon0.fd);
-	 //	       repeat(1000000) @(posedge clk);
+	 repeat(1000) @(posedge clk);
 	 $finish();
       end else if (c0_gpio_pad_io == 32'hdeadbeef) begin
 	 // 0x55 has been written to GPIO, so the
 	 // there was an error during the tests
 	 $display("\n\n**** FAIL C0 **** indicator during Software tests. Finishing simulation.");
 //	 $fflush(uart_mon0.fd);
-	 repeat(1000000) @(posedge clk);
+	 repeat(1000) @(posedge clk);
 	 $finish();
       end
    end   
@@ -419,14 +427,6 @@ module CPUboard_tb ();
    
    wire [31:0]	c1_gpio_pad_io;
    
-   // D2D
-   wire [63:0]	c1_d2d_tx_data;
-   wire		c1_d2d_tx_valid;
-   wire		c1_d2d_tx_ready;
-   wire [63:0]	c1_d2d_rx_data;
-   wire		c1_d2d_rx_valid;
-   wire		c1_d2d_rx_ready;
-   
    assign c1_wb_clk = clk;
    assign c1_d2d_clk = d2d_clk;
 
@@ -517,14 +517,14 @@ module CPUboard_tb ();
 	 // sofware has completed its tests
 	 $display("\n\n**** PASS C1 **** indicator for Software execution complete.\n\n");
 //	 $fflush(uart_mon1.fd);
-	 //	       repeat(1000000) @(posedge clk);
+	 repeat(1000) @(posedge clk);
 	 $finish();
       end else if (c1_gpio_pad_io == 32'hdeadbeef) begin
 	 // 0x55 has been written to GPIO, so the
 	 // there was an error during the tests
 	 $display("\n\n**** FAIL C1 **** indicator during Software tests. Finishing simulation.");
 //	 $fflush(uart_mon1.fd);
-	 repeat(1000000) @(posedge clk);
+	 repeat(1000) @(posedge clk);
 	 $finish();
       end
    end   
