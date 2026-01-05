@@ -71,7 +71,8 @@ module gfx_wbm_read (clk_i, rst_i,
   assign texture_dat_o = dat_i;
   // This interface is read only
   assign we_o   = 1'b0;
-  assign stb_o  = 1'b1;
+//  assign stb_o  = 1'b1;
+  assign stb_o  = cyc_o;
   assign sint_o = err_i;
   assign bte_o  = 2'b00;
   assign cti_o  = 3'b000;

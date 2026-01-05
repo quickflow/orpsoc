@@ -66,7 +66,8 @@ module gfx_wbm_write (clk_i, rst_i,
   assign sint_o = err_i;
   // We only write, these can be constant
   assign we_o   = 1'b1;
-  assign stb_o  = 1'b1;
+//  assign stb_o  = 1'b1;
+  assign stb_o  = cyc_o;
   assign cti_o  = 3'b000;
   assign bte_o  = 2'b00;
 
