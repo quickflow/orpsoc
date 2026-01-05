@@ -4,7 +4,7 @@ MEMORY
 {
     ld_info     : ORIGIN = 0x00000000, LENGTH = 0x000000F0 
     vectors     : ORIGIN = 0x00000100, LENGTH = 0x00000D00 - 0x100
-    ram         : ORIGIN = 0x00000D00, LENGTH = 0x00008000 - 0x0A00
+    ram         : ORIGIN = 0x00000D00, LENGTH = 0x0000C000 - 0x0A00
 }
  
 /*

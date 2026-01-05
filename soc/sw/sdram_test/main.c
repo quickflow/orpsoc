@@ -620,8 +620,12 @@ void gemm_test()
 /******************************************************************************/
 }
 
-uint32 d2d_mat_rx[1024];
-uint32 d2d_mat_tx[1024];
+uint32 d2d0_mat_rx[1024];
+uint32 d2d0_mat_tx[1024];
+uint32 d2d1_mat_rx[1024];
+uint32 d2d1_mat_tx[1024];
+uint32 d2d2_mat_rx[1024];
+uint32 d2d2_mat_tx[1024];
 
 #if 1
 void d2d_test()
@@ -631,75 +635,154 @@ void d2d_test()
 
   print("\n\rD2D Test\n\r");
 
-  GPIO_Write((uint32) &d2d_mat_tx[0]);
+  // set up the tx matrices
+  
+  GPIO_Write((uint32) &d2d0_mat_tx[0]);
   for(count=0; count<256; count++) {
-    val = (CPUID << 24) + count;
-    d2d_mat_tx[count] = val;
+    val = (CPUID << 24) + (0<<16) + count;
+    d2d0_mat_tx[count] = val;
+    //    GPIO_Write(val);
+  }
+
+  GPIO_Write((uint32) &d2d1_mat_tx[0]);
+  for(count=0; count<256; count++) {
+    val = (CPUID << 24) + (1<<16) + count;
+    d2d1_mat_tx[count] = val;
+    //    GPIO_Write(val);
+  }
+
+  GPIO_Write((uint32) &d2d2_mat_tx[0]);
+  for(count=0; count<256; count++) {
+    val = (CPUID << 24) + (2<<16) + count;
+    d2d2_mat_tx[count] = val;
     //    GPIO_Write(val);
   }
 
   GPIO_Write(0xaaaa5555);
   
-  //  if (CPUID == 0)
-    {
-      REG32(D2D_BASE + D2D_TX_SRC) = (uint32) &d2d_mat_tx[0];
-      //    GPIO_Write(REG32(D2D_BASE + D2D_TX_SRC));
-      REG32(D2D_BASE + D2D_TX_LEN) = 0x100;
-      REG32(D2D_BASE + D2D_CTRL) = (1 << D2D_CTRL_TX_START) | (1 << D2D_CTRL_TX_ENABLE);
-    }
-  
-    //  if (CPUID == 1)
-    {
-      REG32(D2D_BASE + D2D_RX_DST) = (uint32) &d2d_mat_rx[0];
-      REG32(D2D_BASE + D2D_RX_LEN) = 0x100;
-      REG32(D2D_BASE + D2D_CTRL) = (1 << D2D_CTRL_RX_START) | (1 << D2D_CTRL_RX_ENABLE);
-    }
-  
-    //  if (CPUID == 0)
-    {
-      count = 0;
-      while(count++ < 10000) {
-	if ((REG32(D2D_BASE + D2D_STATUS) & (1 << D2D_STAT_TX_DONE)) == (1 << D2D_STAT_TX_DONE))
-	  break;
-      }
-    }      
+  // start the tx engines
+  {
+    REG32(D2D0_BASE + D2D_TX_SRC) = (uint32) &d2d0_mat_tx[0];
+    //    GPIO_Write(REG32(D2D0_BASE + D2D_TX_SRC));
+    REG32(D2D0_BASE + D2D_TX_LEN) = 0x100;
+    REG32(D2D0_BASE + D2D_CTRL) |= (1 << D2D_CTRL_TX_START) | (1 << D2D_CTRL_TX_ENABLE);
+  }
 
+  {
+    REG32(D2D1_BASE + D2D_TX_SRC) = (uint32) &d2d1_mat_tx[0];
+    //    GPIO_Write(REG32(D2D1_BASE + D2D_TX_SRC));
+    REG32(D2D1_BASE + D2D_TX_LEN) = 0x100;
+    REG32(D2D1_BASE + D2D_CTRL) |= (1 << D2D_CTRL_TX_START) | (1 << D2D_CTRL_TX_ENABLE);
+  }
+
+  {
+    REG32(D2D2_BASE + D2D_TX_SRC) = (uint32) &d2d2_mat_tx[0];
+    //    GPIO_Write(REG32(D2D2_BASE + D2D_TX_SRC));
+    REG32(D2D2_BASE + D2D_TX_LEN) = 0x100;
+    REG32(D2D2_BASE + D2D_CTRL) |= (1 << D2D_CTRL_TX_START) | (1 << D2D_CTRL_TX_ENABLE);
+  }
+  
+  // start the tx engines
+  {
+    REG32(D2D0_BASE + D2D_RX_DST) = (uint32) &d2d0_mat_rx[0];
+    REG32(D2D0_BASE + D2D_RX_LEN) = 0x100;
+    REG32(D2D0_BASE + D2D_CTRL) |= (1 << D2D_CTRL_RX_START) | (1 << D2D_CTRL_RX_ENABLE);
+  }
+  
+  {
+    REG32(D2D1_BASE + D2D_RX_DST) = (uint32) &d2d1_mat_rx[0];
+    REG32(D2D1_BASE + D2D_RX_LEN) = 0x100;
+    REG32(D2D1_BASE + D2D_CTRL) |= (1 << D2D_CTRL_RX_START) | (1 << D2D_CTRL_RX_ENABLE);
+  }
+  
+  {
+    REG32(D2D2_BASE + D2D_RX_DST) = (uint32) &d2d2_mat_rx[0];
+    REG32(D2D2_BASE + D2D_RX_LEN) = 0x100;
+    REG32(D2D2_BASE + D2D_CTRL) |= (1 << D2D_CTRL_RX_START) | (1 << D2D_CTRL_RX_ENABLE);
+  }
+  
+  // check tx engines done
+  {
+    count = 0;
+    while(count++ < 10000) {
+      uint32 tx_engines_done = 0;
+      tx_engines_done = (REG32(D2D0_BASE + D2D_STATUS) & (1 << D2D_STAT_TX_DONE)) == (1 << D2D_STAT_TX_DONE);
+      if (tx_engines_done > 0)
+	GPIO_Write(0x12300000 + tx_engines_done);
+      tx_engines_done += (REG32(D2D1_BASE + D2D_STATUS) & (1 << D2D_STAT_TX_DONE)) == (1 << D2D_STAT_TX_DONE);
+      if (tx_engines_done > 0)
+	GPIO_Write(0x12340000 + tx_engines_done);
+      tx_engines_done += (REG32(D2D2_BASE + D2D_STATUS) & (1 << D2D_STAT_TX_DONE)) == (1 << D2D_STAT_TX_DONE);
+      if (tx_engines_done > 0)
+	GPIO_Write(0x12345000 + tx_engines_done);
+
+      if (tx_engines_done == 3)
+	break;
+    }
+  }      
+  
   GPIO_Write(0xbbbb4444);
+  
+  // check rx engines done
+  {
+    count = 0;
+    while(count++ < 10000) {
+      uint32 rx_engines_done = 0;
+      rx_engines_done = (REG32(D2D0_BASE + D2D_STATUS) & (1 << D2D_STAT_RX_DONE)) == (1 << D2D_STAT_RX_DONE);
+      if (rx_engines_done > 0)
+	GPIO_Write(0x32100000 + rx_engines_done);
+      rx_engines_done += (REG32(D2D1_BASE + D2D_STATUS) & (1 << D2D_STAT_RX_DONE)) == (1 << D2D_STAT_RX_DONE);
+      if (rx_engines_done > 0)
+	GPIO_Write(0x432100000 + rx_engines_done);
+      rx_engines_done += (REG32(D2D2_BASE + D2D_STATUS) & (1 << D2D_STAT_RX_DONE)) == (1 << D2D_STAT_RX_DONE);
+      if (rx_engines_done > 0)
+	GPIO_Write(0x54321000 + rx_engines_done);
 
-  //  if (CPUID == 1)
-    {
-      count = 0;
-      while(count++ < 10000) {
-	//	GPIO_Write(0xaaa00000 + count);
-	//	GPIO_Write(0x11100000 + (REG32(D2D_BASE + D2D_STATUS) && (1 << D2D_STAT_RX_DONE)));
-	if ((REG32(D2D_BASE + D2D_STATUS) & (1 << D2D_STAT_RX_DONE)) == (1 << D2D_STAT_RX_DONE))
-	  break;
-      }
-      
-      GPIO_Write(0xbbbb5555);
-      
-      val = CPUID;
-      passCount = 0;
-      failCount = 0;
-      
-      for(count=0; count<256; count++) {
-	if (val == 0) {
-	  if (d2d_mat_rx[count] == (0x01000000 | count))
-	    passCount++;
-	  else
-	    failCount++;
-	}
-	else if (val == 1) {
-	  if (d2d_mat_rx[count] == (0x00000000 | count))
-	    passCount++;
-	  else
-	    failCount++;
-	}
-      }
-      
-      GPIO_Write(0xdd000000 | passCount);
-      GPIO_Write(0xdf000000 | failCount);
+      if (rx_engines_done == 3)
+	break;
     }
+    
+    GPIO_Write(0xbbbb5555);
+    
+    // check results
+
+    passCount = 0;
+    failCount = 0;
+    for(count=0; count<256; count++) {
+      if (d2d0_mat_rx[count] == (0x01000000 | count))
+	passCount++;
+      else
+	failCount++;
+    }
+
+    GPIO_Write(0xdd000000 | passCount);
+    GPIO_Write(0xdf000000 | failCount);
+    
+    passCount = 0;
+    failCount = 0;
+    for(count=0; count<256; count++) {
+      if (d2d1_mat_rx[count] == (0x01010000 | count))
+	passCount++;
+      else
+	failCount++;
+    }
+
+    GPIO_Write(0xdd010000 | passCount);
+    GPIO_Write(0xdf010000 | failCount);
+    
+    passCount = 0;
+    failCount = 0;
+    for(count=0; count<256; count++) {
+      if (d2d2_mat_rx[count] == (0x01020000 | count))
+	passCount++;
+      else
+	failCount++;
+    }
+
+    GPIO_Write(0xdd020000 | passCount);
+    GPIO_Write(0xdf020000 | failCount);
+    
+  }
 }
 #endif
 
@@ -745,6 +828,7 @@ void main()
   GPIO_Write(0x3333);
 
   d2d_test();
+
   //  GPIO_Write(PASS_CODE);
   
   GPIO_Write(0x4444);
