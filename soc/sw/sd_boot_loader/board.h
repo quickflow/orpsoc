@@ -29,7 +29,9 @@
 /*                               D2D                                          */
 /******************************************************************************/
 
-#define D2D_BASE 0x70000000
+#define D2D0_BASE 0x70000000
+#define D2D1_BASE 0x80000000
+#define D2D2_BASE 0x90000000
 
 #define D2D_STATUS 0x00
 #define D2D_CTRL   0x04
@@ -58,7 +60,7 @@
 #define D2D_STAT_TX_ERROR  8
 #define D2D_STAT_RX_ERROR  9
 
-#define CPUID ((REG32(D2D_BASE + D2D_STATUS) >> 24) && 0xff)
+#define CPUID ((REG32(D2D0_BASE + D2D_STATUS) >> 24) & 0xff)
 
 /******************************************************************************/
 /*                               GEMM                                         */

@@ -397,8 +397,14 @@ void main()
     print("0");
   if (CPUID == 1)
     print("1");
+  if (CPUID == 2)
+    print("2");
+  if (CPUID == 3)
+    print("3");
   print(")==\n\r\n");
   print("Hi Andy\r\n");
+
+  GPIO_Write(CPUID);
 
   GPIO_Write(0x1);
 
