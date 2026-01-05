@@ -62,6 +62,8 @@ module wb_conmax_pri_enc(
 		valid,
 		pri0, pri1, pri2, pri3,
 		pri4, pri5, pri6, pri7,
+		pri8, pri9, pri10, pri11,
+		pri12, pri13, pri14, pri15,
 		pri_out
 		);
 
@@ -77,9 +79,11 @@ parameter	[1:0]	pri_sel = 2'd0;
 // Module IOs
 //
 
-input	[7:0]	valid;
+input	[15:0]	valid;
 input	[1:0]	pri0, pri1, pri2, pri3;
 input	[1:0]	pri4, pri5, pri6, pri7;
+input	[1:0]	pri8, pri9, pri10, pri11;
+input	[1:0]	pri12, pri13, pri14, pri15;
 output	[1:0]	pri_out;
 
 ////////////////////////////////////////////////////////////////////
@@ -89,6 +93,8 @@ output	[1:0]	pri_out;
 
 wire	[3:0]	pri0_out, pri1_out, pri2_out, pri3_out;
 wire	[3:0]	pri4_out, pri5_out, pri6_out, pri7_out;
+wire	[3:0]	pri8_out, pri9_out, pri10_out, pri11_out;
+wire	[3:0]	pri12_out, pri13_out, pri14_out, pri15_out;
 wire	[3:0]	pri_out_tmp;
 reg	[1:0]	pri_out0, pri_out1;
 wire	[1:0]	pri_out;
@@ -147,14 +153,64 @@ wb_conmax_pri_dec #(pri_sel) pd7(
 		.pri_out(	pri7_out	)
 		);
 
+wb_conmax_pri_dec #(pri_sel) pd8(
+		.valid(		valid[8]	),
+		.pri_in(	pri8		),
+		.pri_out(	pri8_out	)
+		);
+
+wb_conmax_pri_dec #(pri_sel) pd9(
+		.valid(		valid[9]	),
+		.pri_in(	pri9		),
+		.pri_out(	pri9_out	)
+		);
+
+wb_conmax_pri_dec #(pri_sel) pd10(
+		.valid(		valid[10]	),
+		.pri_in(	pri10		),
+		.pri_out(	pri10_out	)
+		);
+
+wb_conmax_pri_dec #(pri_sel) pd11(
+		.valid(		valid[11]	),
+		.pri_in(	pri11		),
+		.pri_out(	pri11_out	)
+		);
+
+wb_conmax_pri_dec #(pri_sel) pd12(
+		.valid(		valid[12]	),
+		.pri_in(	pri12		),
+		.pri_out(	pri12_out	)
+		);
+
+wb_conmax_pri_dec #(pri_sel) pd13(
+		.valid(		valid[13]	),
+		.pri_in(	pri13		),
+		.pri_out(	pri13_out	)
+		);
+
+wb_conmax_pri_dec #(pri_sel) pd14(
+		.valid(		valid[14]	),
+		.pri_in(	pri14		),
+		.pri_out(	pri14_out	)
+		);
+
+wb_conmax_pri_dec #(pri_sel) pd15(
+		.valid(		valid[15]	),
+		.pri_in(	pri15		),
+		.pri_out(	pri15_out	)
+		);
+
 ////////////////////////////////////////////////////////////////////
 //
 // Priority Encoding
 //
 
 assign pri_out_tmp =	pri0_out | pri1_out | pri2_out | pri3_out |
-			pri4_out | pri5_out | pri6_out | pri7_out;
-
+			pri4_out | pri5_out | pri6_out | pri7_out |
+			pri8_out | pri9_out | pri10_out | pri11_out |
+			pri12_out | pri13_out | pri14_out | pri15_out ;
+   
 // 4 Priority Levels
 always @(pri_out_tmp)
 	if(pri_out_tmp[3])	pri_out1 = 2'h3;

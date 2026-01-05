@@ -77,8 +77,8 @@ parameter	[1:0]	pri_sel = 2'd0;
 
 input		clk_i, rst_i;
 input	[15:0]	conf;
-input	[7:0]	req;
-output	[2:0]	sel;
+input	[15:0]	req;
+output	[3:0]	sel;
 input		next;
 
 ////////////////////////////////////////////////////////////////////
@@ -88,14 +88,16 @@ input		next;
 
 wire	[1:0]	pri0, pri1, pri2, pri3;
 wire	[1:0]	pri4, pri5, pri6, pri7;
+wire	[1:0]	pri8, pri9, pri10, pri11;
+wire	[1:0]	pri12, pri13, pri14, pri15;
 wire	[1:0]	pri_out_d;
 reg	[1:0]	pri_out;
 
-wire	[7:0]	req_p0, req_p1, req_p2, req_p3;
-wire	[2:0]	gnt_p0, gnt_p1, gnt_p2, gnt_p3;
+wire	[15:0]	req_p0, req_p1, req_p2, req_p3;
+wire	[3:0]	gnt_p0, gnt_p1, gnt_p2, gnt_p3;
 
-reg	[2:0]	sel1, sel2;
-wire	[2:0]	sel;
+reg	[3:0]	sel1, sel2;
+wire	[3:0]	sel;
 
 ////////////////////////////////////////////////////////////////////
 //
@@ -125,6 +127,30 @@ assign pri6[1] = (pri_sel == 2'd2) ? conf[13] : 1'b0;
 
 assign pri7[0] = (pri_sel == 2'd0) ? 1'b0 : conf[14];
 assign pri7[1] = (pri_sel == 2'd2) ? conf[15] : 1'b0;
+
+assign pri8[0] = (pri_sel == 2'd0) ? 1'b0 : conf[14];
+assign pri8[1] = (pri_sel == 2'd2) ? conf[15] : 1'b0;
+
+assign pri9[0] = (pri_sel == 2'd0) ? 1'b0 : conf[14];
+assign pri9[1] = (pri_sel == 2'd2) ? conf[15] : 1'b0;
+
+assign pri10[0] = (pri_sel == 2'd0) ? 1'b0 : conf[14];
+assign pri10[1] = (pri_sel == 2'd2) ? conf[15] : 1'b0;
+
+assign pri11[0] = (pri_sel == 2'd0) ? 1'b0 : conf[14];
+assign pri11[1] = (pri_sel == 2'd2) ? conf[15] : 1'b0;
+
+assign pri12[0] = (pri_sel == 2'd0) ? 1'b0 : conf[14];
+assign pri12[1] = (pri_sel == 2'd2) ? conf[15] : 1'b0;
+
+assign pri13[0] = (pri_sel == 2'd0) ? 1'b0 : conf[14];
+assign pri13[1] = (pri_sel == 2'd2) ? conf[15] : 1'b0;
+
+assign pri14[0] = (pri_sel == 2'd0) ? 1'b0 : conf[14];
+assign pri14[1] = (pri_sel == 2'd2) ? conf[15] : 1'b0;
+
+assign pri15[0] = (pri_sel == 2'd0) ? 1'b0 : conf[14];
+assign pri15[1] = (pri_sel == 2'd2) ? conf[15] : 1'b0;
 
 // Priority Encoder
 wb_conmax_pri_enc #(pri_sel) pri_enc(
@@ -158,6 +184,14 @@ assign req_p0[4] = req[4] & (pri4 == 2'd0);
 assign req_p0[5] = req[5] & (pri5 == 2'd0);
 assign req_p0[6] = req[6] & (pri6 == 2'd0);
 assign req_p0[7] = req[7] & (pri7 == 2'd0);
+assign req_p0[8] = req[8] & (pri8 == 2'd0);
+assign req_p0[9] = req[9] & (pri9 == 2'd0);
+assign req_p0[10] = req[10] & (pri10 == 2'd0);
+assign req_p0[11] = req[11] & (pri11 == 2'd0);
+assign req_p0[12] = req[12] & (pri12 == 2'd0);
+assign req_p0[13] = req[13] & (pri13 == 2'd0);
+assign req_p0[14] = req[14] & (pri14 == 2'd0);
+assign req_p0[15] = req[15] & (pri15 == 2'd0);
 
 assign req_p1[0] = req[0] & (pri0 == 2'd1);
 assign req_p1[1] = req[1] & (pri1 == 2'd1);
@@ -167,6 +201,14 @@ assign req_p1[4] = req[4] & (pri4 == 2'd1);
 assign req_p1[5] = req[5] & (pri5 == 2'd1);
 assign req_p1[6] = req[6] & (pri6 == 2'd1);
 assign req_p1[7] = req[7] & (pri7 == 2'd1);
+assign req_p1[8] = req[8] & (pri8 == 2'd1);
+assign req_p1[9] = req[9] & (pri9 == 2'd1);
+assign req_p1[10] = req[10] & (pri10 == 2'd1);
+assign req_p1[11] = req[11] & (pri11 == 2'd1);
+assign req_p1[12] = req[12] & (pri12 == 2'd1);
+assign req_p1[13] = req[13] & (pri13 == 2'd1);
+assign req_p1[14] = req[14] & (pri14 == 2'd1);
+assign req_p1[15] = req[15] & (pri15 == 2'd1);
 
 assign req_p2[0] = req[0] & (pri0 == 2'd2);
 assign req_p2[1] = req[1] & (pri1 == 2'd2);
@@ -176,6 +218,14 @@ assign req_p2[4] = req[4] & (pri4 == 2'd2);
 assign req_p2[5] = req[5] & (pri5 == 2'd2);
 assign req_p2[6] = req[6] & (pri6 == 2'd2);
 assign req_p2[7] = req[7] & (pri7 == 2'd2);
+assign req_p2[8] = req[8] & (pri8 == 2'd2);
+assign req_p2[9] = req[9] & (pri9 == 2'd2);
+assign req_p2[10] = req[10] & (pri10 == 2'd2);
+assign req_p2[11] = req[11] & (pri11 == 2'd2);
+assign req_p2[12] = req[12] & (pri12 == 2'd2);
+assign req_p2[13] = req[13] & (pri13 == 2'd2);
+assign req_p2[14] = req[14] & (pri14 == 2'd2);
+assign req_p2[15] = req[15] & (pri15 == 2'd2);
 
 assign req_p3[0] = req[0] & (pri0 == 2'd3);
 assign req_p3[1] = req[1] & (pri1 == 2'd3);
@@ -185,6 +235,14 @@ assign req_p3[4] = req[4] & (pri4 == 2'd3);
 assign req_p3[5] = req[5] & (pri5 == 2'd3);
 assign req_p3[6] = req[6] & (pri6 == 2'd3);
 assign req_p3[7] = req[7] & (pri7 == 2'd3);
+assign req_p3[8] = req[8] & (pri8 == 2'd3);
+assign req_p3[9] = req[9] & (pri9 == 2'd3);
+assign req_p3[10] = req[10] & (pri10 == 2'd3);
+assign req_p3[11] = req[11] & (pri11 == 2'd3);
+assign req_p3[12] = req[12] & (pri12 == 2'd3);
+assign req_p3[13] = req[13] & (pri13 == 2'd3);
+assign req_p3[14] = req[14] & (pri14 == 2'd3);
+assign req_p3[15] = req[15] & (pri15 == 2'd3);
 
 wb_conmax_arb arb0(
 	.clk(		clk_i		),

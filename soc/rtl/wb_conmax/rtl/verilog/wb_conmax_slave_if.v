@@ -96,7 +96,40 @@ module wb_conmax_slave_if(
 
 	// Master 7 Interface
 	m7_data_i, m7_data_o, m7_addr_i, m7_sel_i, m7_we_i, m7_cyc_i,
-	m7_stb_i, m7_ack_o, m7_err_o, m7_rty_o
+	m7_stb_i, m7_ack_o, m7_err_o, m7_rty_o,
+			  
+	// Master 8 Interface
+	m8_data_i, m8_data_o, m8_addr_i, m8_sel_i, m8_we_i, m8_cyc_i,
+	m8_stb_i, m8_ack_o, m8_err_o, m8_rty_o,
+			  
+	// Master 9 Interface
+	m9_data_i, m9_data_o, m9_addr_i, m9_sel_i, m9_we_i, m9_cyc_i,
+	m9_stb_i, m9_ack_o, m9_err_o, m9_rty_o,
+			  
+	// Master 10 Interface
+	m10_data_i, m10_data_o, m10_addr_i, m10_sel_i, m10_we_i, m10_cyc_i,
+	m10_stb_i, m10_ack_o, m10_err_o, m10_rty_o,
+			  
+	// Master 11 Interface
+	m11_data_i, m11_data_o, m11_addr_i, m11_sel_i, m11_we_i, m11_cyc_i,
+	m11_stb_i, m11_ack_o, m11_err_o, m11_rty_o,
+			  
+	// Master 12 Interface
+	m12_data_i, m12_data_o, m12_addr_i, m12_sel_i, m12_we_i, m12_cyc_i,
+	m12_stb_i, m12_ack_o, m12_err_o, m12_rty_o,
+			  
+	// Master 13 Interface
+	m13_data_i, m13_data_o, m13_addr_i, m13_sel_i, m13_we_i, m13_cyc_i,
+	m13_stb_i, m13_ack_o, m13_err_o, m13_rty_o,
+			  
+	// Master 14 Interface
+	m14_data_i, m14_data_o, m14_addr_i, m14_sel_i, m14_we_i, m14_cyc_i,
+	m14_stb_i, m14_ack_o, m14_err_o, m14_rty_o,
+			  
+	// Master 15 Interface
+	m15_data_i, m15_data_o, m15_addr_i, m15_sel_i, m15_we_i, m15_cyc_i,
+	m15_stb_i, m15_ack_o, m15_err_o, m15_rty_o,
+			  
 	);
 
 ////////////////////////////////////////////////////////////////////
@@ -225,6 +258,102 @@ output			m7_ack_o;
 output			m7_err_o;
 output			m7_rty_o;
 
+// Master 8 Interface
+input	[dw-1:0]	m8_data_i;
+output	[dw-1:0]	m8_data_o;
+input	[aw-1:0]	m8_addr_i;
+input	[sw-1:0]	m8_sel_i;
+input			m8_we_i;
+input			m8_cyc_i;
+input			m8_stb_i;
+output			m8_ack_o;
+output			m8_err_o;
+output			m8_rty_o;
+
+// Master 9 Interface
+input	[dw-1:0]	m9_data_i;
+output	[dw-1:0]	m9_data_o;
+input	[aw-1:0]	m9_addr_i;
+input	[sw-1:0]	m9_sel_i;
+input			m9_we_i;
+input			m9_cyc_i;
+input			m9_stb_i;
+output			m9_ack_o;
+output			m9_err_o;
+output			m9_rty_o;
+
+// Master 10 Interface
+input	[dw-1:0]	m10_data_i;
+output	[dw-1:0]	m10_data_o;
+input	[aw-1:0]	m10_addr_i;
+input	[sw-1:0]	m10_sel_i;
+input			m10_we_i;
+input			m10_cyc_i;
+input			m10_stb_i;
+output			m10_ack_o;
+output			m10_err_o;
+output			m10_rty_o;
+
+// Master 11 Interface
+input	[dw-1:0]	m11_data_i;
+output	[dw-1:0]	m11_data_o;
+input	[aw-1:0]	m11_addr_i;
+input	[sw-1:0]	m11_sel_i;
+input			m11_we_i;
+input			m11_cyc_i;
+input			m11_stb_i;
+output			m11_ack_o;
+output			m11_err_o;
+output			m11_rty_o;
+
+// Master 12 Interface
+input	[dw-1:0]	m12_data_i;
+output	[dw-1:0]	m12_data_o;
+input	[aw-1:0]	m12_addr_i;
+input	[sw-1:0]	m12_sel_i;
+input			m12_we_i;
+input			m12_cyc_i;
+input			m12_stb_i;
+output			m12_ack_o;
+output			m12_err_o;
+output			m12_rty_o;
+
+// Master 13 Interface
+input	[dw-1:0]	m13_data_i;
+output	[dw-1:0]	m13_data_o;
+input	[aw-1:0]	m13_addr_i;
+input	[sw-1:0]	m13_sel_i;
+input			m13_we_i;
+input			m13_cyc_i;
+input			m13_stb_i;
+output			m13_ack_o;
+output			m13_err_o;
+output			m13_rty_o;
+
+// Master 14 Interface
+input	[dw-1:0]	m14_data_i;
+output	[dw-1:0]	m14_data_o;
+input	[aw-1:0]	m14_addr_i;
+input	[sw-1:0]	m14_sel_i;
+input			m14_we_i;
+input			m14_cyc_i;
+input			m14_stb_i;
+output			m14_ack_o;
+output			m14_err_o;
+output			m14_rty_o;
+
+// Master 15 Interface
+input	[dw-1:0]	m15_data_i;
+output	[dw-1:0]	m15_data_o;
+input	[aw-1:0]	m15_addr_i;
+input	[sw-1:0]	m15_sel_i;
+input			m15_we_i;
+input			m15_cyc_i;
+input			m15_stb_i;
+output			m15_ack_o;
+output			m15_err_o;
+output			m15_rty_o;
+
 ////////////////////////////////////////////////////////////////////
 //
 // Local Wires
@@ -236,13 +365,15 @@ reg	[sw-1:0]	wb_sel_o;
 reg			wb_we_o;
 reg			wb_cyc_o;
 reg			wb_stb_o;
-wire	[2:0]		mast_sel_simple;
-wire	[2:0]		mast_sel_pe;
-wire	[2:0]		mast_sel;
+wire	[3:0]		mast_sel_simple;
+wire	[3:0]		mast_sel_pe;
+wire	[3:0]		mast_sel;
 
 reg			next;
 reg			m0_cyc_r, m1_cyc_r, m2_cyc_r, m3_cyc_r;
 reg			m4_cyc_r, m5_cyc_r, m6_cyc_r, m7_cyc_r;
+reg			m8_cyc_r, m9_cyc_r, m10_cyc_r, m11_cyc_r;
+reg			m12_cyc_r, m13_cyc_r, m14_cyc_r, m15_cyc_r;
 
 ////////////////////////////////////////////////////////////////////
 //
@@ -256,7 +387,15 @@ always @(posedge clk_i)
 wb_conmax_arb arb(
 	.clk(		clk_i		),
 	.rst(		rst_i		),
-	.req(	{	m7_cyc_i,
+	.req(	{	m15_cyc_i,
+			m14_cyc_i,
+			m13_cyc_i,
+			m12_cyc_i,
+			m11_cyc_i,
+			m10_cyc_i,
+			m9_cyc_i,
+			m8_cyc_i,
+			m7_cyc_i,
 			m6_cyc_i,
 			m5_cyc_i,
 			m4_cyc_i,
@@ -272,7 +411,15 @@ wb_conmax_msel #(pri_sel) msel(
 	.clk_i(		clk_i		),
 	.rst_i(		rst_i		),
 	.conf(		conf		),
-	.req(	{	m7_cyc_i,
+	.req(	{	m15_cyc_i,
+			m14_cyc_i,
+			m13_cyc_i,
+			m12_cyc_i,
+			m11_cyc_i,
+			m10_cyc_i,
+			m9_cyc_i,
+			m8_cyc_i,
+			m7_cyc_i,
 			m6_cyc_i,
 			m5_cyc_i,
 			m4_cyc_i,
@@ -291,45 +438,68 @@ assign mast_sel = (pri_sel == 2'd0) ? mast_sel_simple : mast_sel_pe;
 // Address & Data Pass
 //
 
-always @(mast_sel or m0_addr_i or m1_addr_i or m2_addr_i or m3_addr_i
-	or m4_addr_i or m5_addr_i or m6_addr_i or m7_addr_i)
+always @(*)
 	case(mast_sel)	// synopsys parallel_case
-	   3'd0: wb_addr_o = m0_addr_i;
-	   3'd1: wb_addr_o = m1_addr_i;
-	   3'd2: wb_addr_o = m2_addr_i;
-	   3'd3: wb_addr_o = m3_addr_i;
-	   3'd4: wb_addr_o = m4_addr_i;
-	   3'd5: wb_addr_o = m5_addr_i;
-	   3'd6: wb_addr_o = m6_addr_i;
-	   3'd7: wb_addr_o = m7_addr_i;
+	   4'd0: wb_addr_o = m0_addr_i;
+	   4'd1: wb_addr_o = m1_addr_i;
+	   4'd2: wb_addr_o = m2_addr_i;
+	   4'd3: wb_addr_o = m3_addr_i;
+	   4'd4: wb_addr_o = m4_addr_i;
+	   4'd5: wb_addr_o = m5_addr_i;
+	   4'd6: wb_addr_o = m6_addr_i;
+	   4'd7: wb_addr_o = m7_addr_i;
+	   4'd8: wb_addr_o = m8_addr_i;
+	   4'd9: wb_addr_o = m9_addr_i;
+	   4'd10: wb_addr_o = m10_addr_i;
+	   4'd11: wb_addr_o = m11_addr_i;
+	   4'd12: wb_addr_o = m12_addr_i;
+	   4'd13: wb_addr_o = m13_addr_i;
+	   4'd14: wb_addr_o = m14_addr_i;
+	   4'd15: wb_addr_o = m15_addr_i;
 	   default: wb_addr_o = {aw{1'bx}};
 	endcase
 
 always @(mast_sel or m0_sel_i or m1_sel_i or m2_sel_i or m3_sel_i
 	or m4_sel_i or m5_sel_i or m6_sel_i or m7_sel_i)
 	case(mast_sel)	// synopsys parallel_case
-	   3'd0: wb_sel_o = m0_sel_i;
-	   3'd1: wb_sel_o = m1_sel_i;
-	   3'd2: wb_sel_o = m2_sel_i;
-	   3'd3: wb_sel_o = m3_sel_i;
-	   3'd4: wb_sel_o = m4_sel_i;
-	   3'd5: wb_sel_o = m5_sel_i;
-	   3'd6: wb_sel_o = m6_sel_i;
-	   3'd7: wb_sel_o = m7_sel_i;
+	   4'd0: wb_sel_o = m0_sel_i;
+	   4'd1: wb_sel_o = m1_sel_i;
+	   4'd2: wb_sel_o = m2_sel_i;
+	   4'd3: wb_sel_o = m3_sel_i;
+	   4'd4: wb_sel_o = m4_sel_i;
+	   4'd5: wb_sel_o = m5_sel_i;
+	   4'd6: wb_sel_o = m6_sel_i;
+	   4'd7: wb_sel_o = m7_sel_i;
+	   4'd8: wb_sel_o = m8_sel_i;
+	   4'd9: wb_sel_o = m9_sel_i;
+	   4'd10: wb_sel_o = m10_sel_i;
+	   4'd11: wb_sel_o = m11_sel_i;
+	   4'd12: wb_sel_o = m12_sel_i;
+	   4'd13: wb_sel_o = m13_sel_i;
+	   4'd14: wb_sel_o = m14_sel_i;
+	   4'd15: wb_sel_o = m15_sel_i;
 	   default: wb_sel_o = {sw{1'bx}};
 	endcase
 
 always @(mast_sel or m0_data_i or m1_data_i or m2_data_i or m3_data_i
 	or m4_data_i or m5_data_i or m6_data_i or m7_data_i)
 	case(mast_sel)	// synopsys parallel_case
-	   3'd0: wb_data_o = m0_data_i;
-	   3'd1: wb_data_o = m1_data_i;
-	   3'd2: wb_data_o = m2_data_i;
-	   3'd3: wb_data_o = m3_data_i;
-	   3'd4: wb_data_o = m4_data_i;
-	   3'd5: wb_data_o = m5_data_i;
-	   3'd6: wb_data_o = m6_data_i;
-	   3'd7: wb_data_o = m7_data_i;
+	   4'd0: wb_data_o = m0_data_i;
+	   4'd1: wb_data_o = m1_data_i;
+	   4'd2: wb_data_o = m2_data_i;
+	   4'd3: wb_data_o = m3_data_i;
+	   4'd4: wb_data_o = m4_data_i;
+	   4'd5: wb_data_o = m5_data_i;
+	   4'd6: wb_data_o = m6_data_i;
+	   4'd7: wb_data_o = m7_data_i;
+	   4'd8: wb_data_o = m8_data_i;
+	   4'd9: wb_data_o = m9_data_i;
+	   4'd10: wb_data_o = m10_data_i;
+	   4'd11: wb_data_o = m11_data_i;
+	   4'd12: wb_data_o = m12_data_i;
+	   4'd13: wb_data_o = m13_data_i;
+	   4'd14: wb_data_o = m14_data_i;
+	   4'd15: wb_data_o = m15_data_i;
 	   default: wb_data_o = {dw{1'bx}};
 	endcase
 
@@ -341,106 +511,153 @@ assign m4_data_o = wb_data_i;
 assign m5_data_o = wb_data_i;
 assign m6_data_o = wb_data_i;
 assign m7_data_o = wb_data_i;
+assign m8_data_o = wb_data_i;
+assign m9_data_o = wb_data_i;
+assign m10_data_o = wb_data_i;
+assign m11_data_o = wb_data_i;
+assign m12_data_o = wb_data_i;
+assign m13_data_o = wb_data_i;
+assign m14_data_o = wb_data_i;
+assign m15_data_o = wb_data_i;
 
 ////////////////////////////////////////////////////////////////////
 //
 // Control Signal Pass
 //
 
-always @(mast_sel or m0_we_i or m1_we_i or m2_we_i or m3_we_i
-	or m4_we_i or m5_we_i or m6_we_i or m7_we_i)
+always @(*)
 	case(mast_sel)	// synopsys parallel_case
-	   3'd0: wb_we_o = m0_we_i;
-	   3'd1: wb_we_o = m1_we_i;
-	   3'd2: wb_we_o = m2_we_i;
-	   3'd3: wb_we_o = m3_we_i;
-	   3'd4: wb_we_o = m4_we_i;
-	   3'd5: wb_we_o = m5_we_i;
-	   3'd6: wb_we_o = m6_we_i;
-	   3'd7: wb_we_o = m7_we_i;
+	   4'd0: wb_we_o = m0_we_i;
+	   4'd1: wb_we_o = m1_we_i;
+	   4'd2: wb_we_o = m2_we_i;
+	   4'd3: wb_we_o = m3_we_i;
+	   4'd4: wb_we_o = m4_we_i;
+	   4'd5: wb_we_o = m5_we_i;
+	   4'd6: wb_we_o = m6_we_i;
+	   4'd7: wb_we_o = m7_we_i;
+	   4'd8: wb_we_o = m8_we_i;
+	   4'd9: wb_we_o = m9_we_i;
+	   4'd10: wb_we_o = m10_we_i;
+	   4'd11: wb_we_o = m11_we_i;
+	   4'd12: wb_we_o = m12_we_i;
+	   4'd13: wb_we_o = m13_we_i;
+	   4'd14: wb_we_o = m14_we_i;
+	   4'd15: wb_we_o = m15_we_i;
 	   default: wb_we_o = 1'bx;
 	endcase
 
-always @(posedge clk_i)
+always @(posedge clk_i) begin
 	m0_cyc_r <=  m0_cyc_i;
-
-always @(posedge clk_i)
 	m1_cyc_r <=  m1_cyc_i;
-
-always @(posedge clk_i)
 	m2_cyc_r <=  m2_cyc_i;
-
-always @(posedge clk_i)
 	m3_cyc_r <=  m3_cyc_i;
-
-always @(posedge clk_i)
 	m4_cyc_r <=  m4_cyc_i;
-
-always @(posedge clk_i)
 	m5_cyc_r <=  m5_cyc_i;
-
-always @(posedge clk_i)
 	m6_cyc_r <=  m6_cyc_i;
-
-always @(posedge clk_i)
 	m7_cyc_r <=  m7_cyc_i;
+	m8_cyc_r <=  m8_cyc_i;
+	m9_cyc_r <=  m9_cyc_i;
+	m10_cyc_r <=  m10_cyc_i;
+	m11_cyc_r <=  m11_cyc_i;
+	m12_cyc_r <=  m12_cyc_i;
+	m13_cyc_r <=  m13_cyc_i;
+	m14_cyc_r <=  m14_cyc_i;
+	m15_cyc_r <=  m15_cyc_i;
+end // always @ (posedge clk_i)
+   
 
-always @(mast_sel or m0_cyc_i or m1_cyc_i or m2_cyc_i or m3_cyc_i
-	or m4_cyc_i or m5_cyc_i or m6_cyc_i or m7_cyc_i
-	or m0_cyc_r or m1_cyc_r or m2_cyc_r or m3_cyc_r
-	or m4_cyc_r or m5_cyc_r or m6_cyc_r or m7_cyc_r)
+always @(*)
 	case(mast_sel)	// synopsys parallel_case
-	   3'd0: wb_cyc_o = m0_cyc_i & m0_cyc_r;
-	   3'd1: wb_cyc_o = m1_cyc_i & m1_cyc_r;
-	   3'd2: wb_cyc_o = m2_cyc_i & m2_cyc_r;
-	   3'd3: wb_cyc_o = m3_cyc_i & m3_cyc_r;
-	   3'd4: wb_cyc_o = m4_cyc_i & m4_cyc_r;
-	   3'd5: wb_cyc_o = m5_cyc_i & m5_cyc_r;
-	   3'd6: wb_cyc_o = m6_cyc_i & m6_cyc_r;
-	   3'd7: wb_cyc_o = m7_cyc_i & m7_cyc_r;
+	   4'd0: wb_cyc_o = m0_cyc_i & m0_cyc_r;
+	   4'd1: wb_cyc_o = m1_cyc_i & m1_cyc_r;
+	   4'd2: wb_cyc_o = m2_cyc_i & m2_cyc_r;
+	   4'd3: wb_cyc_o = m3_cyc_i & m3_cyc_r;
+	   4'd4: wb_cyc_o = m4_cyc_i & m4_cyc_r;
+	   4'd5: wb_cyc_o = m5_cyc_i & m5_cyc_r;
+	   4'd6: wb_cyc_o = m6_cyc_i & m6_cyc_r;
+	   4'd7: wb_cyc_o = m7_cyc_i & m7_cyc_r;
+	   4'd8: wb_cyc_o = m8_cyc_i & m8_cyc_r;
+	   4'd9: wb_cyc_o = m9_cyc_i & m9_cyc_r;
+	   4'd10: wb_cyc_o = m10_cyc_i & m10_cyc_r;
+	   4'd11: wb_cyc_o = m11_cyc_i & m11_cyc_r;
+	   4'd12: wb_cyc_o = m12_cyc_i & m12_cyc_r;
+	   4'd13: wb_cyc_o = m13_cyc_i & m13_cyc_r;
+	   4'd14: wb_cyc_o = m14_cyc_i & m14_cyc_r;
+	   4'd15: wb_cyc_o = m15_cyc_i & m15_cyc_r;
 	   default: wb_cyc_o = 1'b0;
 	endcase
 
-always @(mast_sel or m0_stb_i or m1_stb_i or m2_stb_i or m3_stb_i
-	or m4_stb_i or m5_stb_i or m6_stb_i or m7_stb_i)
+always @(*)
 	case(mast_sel)	// synopsys parallel_case
-	   3'd0: wb_stb_o = m0_stb_i;
-	   3'd1: wb_stb_o = m1_stb_i;
-	   3'd2: wb_stb_o = m2_stb_i;
-	   3'd3: wb_stb_o = m3_stb_i;
-	   3'd4: wb_stb_o = m4_stb_i;
-	   3'd5: wb_stb_o = m5_stb_i;
-	   3'd6: wb_stb_o = m6_stb_i;
-	   3'd7: wb_stb_o = m7_stb_i;
+	   4'd0: wb_stb_o = m0_stb_i;
+	   4'd1: wb_stb_o = m1_stb_i;
+	   4'd2: wb_stb_o = m2_stb_i;
+	   4'd3: wb_stb_o = m3_stb_i;
+	   4'd4: wb_stb_o = m4_stb_i;
+	   4'd5: wb_stb_o = m5_stb_i;
+	   4'd6: wb_stb_o = m6_stb_i;
+	   4'd7: wb_stb_o = m7_stb_i;
+	   4'd8: wb_stb_o = m8_stb_i;
+	   4'd9: wb_stb_o = m9_stb_i;
+	   4'd10: wb_stb_o = m10_stb_i;
+	   4'd11: wb_stb_o = m11_stb_i;
+	   4'd12: wb_stb_o = m12_stb_i;
+	   4'd13: wb_stb_o = m13_stb_i;
+	   4'd14: wb_stb_o = m14_stb_i;
+	   4'd15: wb_stb_o = m15_stb_i;
 	   default: wb_stb_o = 1'b0;
 	endcase
 
-assign m0_ack_o = (mast_sel==3'd0) & wb_ack_i;
-assign m1_ack_o = (mast_sel==3'd1) & wb_ack_i;
-assign m2_ack_o = (mast_sel==3'd2) & wb_ack_i;
-assign m3_ack_o = (mast_sel==3'd3) & wb_ack_i;
-assign m4_ack_o = (mast_sel==3'd4) & wb_ack_i;
-assign m5_ack_o = (mast_sel==3'd5) & wb_ack_i;
-assign m6_ack_o = (mast_sel==3'd6) & wb_ack_i;
-assign m7_ack_o = (mast_sel==3'd7) & wb_ack_i;
+assign m0_ack_o = (mast_sel==4'd0) & wb_ack_i;
+assign m1_ack_o = (mast_sel==4'd1) & wb_ack_i;
+assign m2_ack_o = (mast_sel==4'd2) & wb_ack_i;
+assign m3_ack_o = (mast_sel==4'd3) & wb_ack_i;
+assign m4_ack_o = (mast_sel==4'd4) & wb_ack_i;
+assign m5_ack_o = (mast_sel==4'd5) & wb_ack_i;
+assign m6_ack_o = (mast_sel==4'd6) & wb_ack_i;
+assign m7_ack_o = (mast_sel==4'd7) & wb_ack_i;
+assign m8_ack_o = (mast_sel==4'd8) & wb_ack_i;
+assign m9_ack_o = (mast_sel==4'd9) & wb_ack_i;
+assign m10_ack_o = (mast_sel==4'd10) & wb_ack_i;
+assign m11_ack_o = (mast_sel==4'd11) & wb_ack_i;
+assign m12_ack_o = (mast_sel==4'd12) & wb_ack_i;
+assign m13_ack_o = (mast_sel==4'd13) & wb_ack_i;
+assign m14_ack_o = (mast_sel==4'd14) & wb_ack_i;
+assign m15_ack_o = (mast_sel==4'd15) & wb_ack_i;
 
-assign m0_err_o = (mast_sel==3'd0) & wb_err_i;
-assign m1_err_o = (mast_sel==3'd1) & wb_err_i;
-assign m2_err_o = (mast_sel==3'd2) & wb_err_i;
-assign m3_err_o = (mast_sel==3'd3) & wb_err_i;
-assign m4_err_o = (mast_sel==3'd4) & wb_err_i;
-assign m5_err_o = (mast_sel==3'd5) & wb_err_i;
-assign m6_err_o = (mast_sel==3'd6) & wb_err_i;
-assign m7_err_o = (mast_sel==3'd7) & wb_err_i;
+assign m0_err_o = (mast_sel==4'd0) & wb_err_i;
+assign m1_err_o = (mast_sel==4'd1) & wb_err_i;
+assign m2_err_o = (mast_sel==4'd2) & wb_err_i;
+assign m3_err_o = (mast_sel==4'd3) & wb_err_i;
+assign m4_err_o = (mast_sel==4'd4) & wb_err_i;
+assign m5_err_o = (mast_sel==4'd5) & wb_err_i;
+assign m6_err_o = (mast_sel==4'd6) & wb_err_i;
+assign m7_err_o = (mast_sel==4'd7) & wb_err_i;
+assign m8_err_o = (mast_sel==4'd8) & wb_err_i;
+assign m9_err_o = (mast_sel==4'd9) & wb_err_i;
+assign m10_err_o = (mast_sel==4'd10) & wb_err_i;
+assign m11_err_o = (mast_sel==4'd11) & wb_err_i;
+assign m12_err_o = (mast_sel==4'd12) & wb_err_i;
+assign m13_err_o = (mast_sel==4'd13) & wb_err_i;
+assign m14_err_o = (mast_sel==4'd14) & wb_err_i;
+assign m15_err_o = (mast_sel==4'd15) & wb_err_i;
 
-assign m0_rty_o = (mast_sel==3'd0) & wb_rty_i;
-assign m1_rty_o = (mast_sel==3'd1) & wb_rty_i;
-assign m2_rty_o = (mast_sel==3'd2) & wb_rty_i;
-assign m3_rty_o = (mast_sel==3'd3) & wb_rty_i;
-assign m4_rty_o = (mast_sel==3'd4) & wb_rty_i;
-assign m5_rty_o = (mast_sel==3'd5) & wb_rty_i;
-assign m6_rty_o = (mast_sel==3'd6) & wb_rty_i;
-assign m7_rty_o = (mast_sel==3'd7) & wb_rty_i;
+assign m0_rty_o = (mast_sel==4'd0) & wb_rty_i;
+assign m1_rty_o = (mast_sel==4'd1) & wb_rty_i;
+assign m2_rty_o = (mast_sel==4'd2) & wb_rty_i;
+assign m3_rty_o = (mast_sel==4'd3) & wb_rty_i;
+assign m4_rty_o = (mast_sel==4'd4) & wb_rty_i;
+assign m5_rty_o = (mast_sel==4'd5) & wb_rty_i;
+assign m6_rty_o = (mast_sel==4'd6) & wb_rty_i;
+assign m7_rty_o = (mast_sel==4'd7) & wb_rty_i;
+assign m8_rty_o = (mast_sel==4'd8) & wb_rty_i;
+assign m9_rty_o = (mast_sel==4'd9) & wb_rty_i;
+assign m10_rty_o = (mast_sel==4'd10) & wb_rty_i;
+assign m11_rty_o = (mast_sel==4'd11) & wb_rty_i;
+assign m12_rty_o = (mast_sel==4'd12) & wb_rty_i;
+assign m13_rty_o = (mast_sel==4'd13) & wb_rty_i;
+assign m14_rty_o = (mast_sel==4'd14) & wb_rty_i;
+assign m15_rty_o = (mast_sel==4'd15) & wb_rty_i;
 
 endmodule
 

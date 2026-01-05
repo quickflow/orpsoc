@@ -72,7 +72,6 @@ module wb_conmax_rf(
 		// Configuration Registers
 		conf0, conf1, conf2, conf3, conf4, conf5, conf6, conf7,
 		conf8, conf9, conf10, conf11, conf12, conf13, conf14, conf15
-
 		);
 
 ////////////////////////////////////////////////////////////////////
@@ -139,9 +138,10 @@ output	[15:0]		conf15;
 // Local Wires
 //
 
-reg	[15:0]	conf0, conf1, conf2, conf3, conf4, conf5;
-reg	[15:0]	conf6, conf7, conf8, conf9, conf10, conf11;
-reg	[15:0]	conf12, conf13, conf14, conf15;
+   reg [15:0]		conf0, conf1, conf2, conf3;
+   reg [15:0]		conf4, conf5, conf6, conf7;
+   reg [15:0]		conf8, conf9, conf10, conf11;
+   reg [15:0]		conf12, conf13, conf14, conf15;
 
 //synopsys infer_multibit "conf0"
 //synopsys infer_multibit "conf1"
@@ -185,106 +185,64 @@ always @(posedge clk_i)
 
 // Writre Logic
 always @(posedge clk_i or posedge rst_i)
-	if(rst_i)					conf0 <=  16'h0;
-	else
-	if(rf_we & (i_wb_addr_i[5:2] == 4'd0) )		conf0 <=  i_wb_data_i[15:0];
-
-always @(posedge clk_i or posedge rst_i)
-	if(rst_i)					conf1 <=  16'h0;
-	else
-	if(rf_we & (i_wb_addr_i[5:2] == 4'd1) )		conf1 <=  i_wb_data_i[15:0];
-
-always @(posedge clk_i or posedge rst_i)
-	if(rst_i)					conf2 <=  16'h0;
-	else
-	if(rf_we & (i_wb_addr_i[5:2] == 4'd2) )		conf2 <=  i_wb_data_i[15:0];
-
-always @(posedge clk_i or posedge rst_i)
-	if(rst_i)					conf3 <=  16'h0;
-	else
-	if(rf_we & (i_wb_addr_i[5:2] == 4'd3) )		conf3 <=  i_wb_data_i[15:0];
-
-always @(posedge clk_i or posedge rst_i)
-	if(rst_i)					conf4 <=  16'h0;
-	else
-	if(rf_we & (i_wb_addr_i[5:2] == 4'd4) )		conf4 <=  i_wb_data_i[15:0];
-
-always @(posedge clk_i or posedge rst_i)
-	if(rst_i)					conf5 <=  16'h0;
-	else
-	if(rf_we & (i_wb_addr_i[5:2] == 4'd5) )		conf5 <=  i_wb_data_i[15:0];
-
-always @(posedge clk_i or posedge rst_i)
-	if(rst_i)					conf6 <=  16'h0;
-	else
-	if(rf_we & (i_wb_addr_i[5:2] == 4'd6) )		conf6 <=  i_wb_data_i[15:0];
-
-always @(posedge clk_i or posedge rst_i)
-	if(rst_i)					conf7 <=  16'h0;
-	else
-	if(rf_we & (i_wb_addr_i[5:2] == 4'd7) )		conf7 <=  i_wb_data_i[15:0];
-
-always @(posedge clk_i or posedge rst_i)
-	if(rst_i)					conf8 <=  16'h0;
-	else
-	if(rf_we & (i_wb_addr_i[5:2] == 4'd8) )		conf8 <=  i_wb_data_i[15:0];
-
-always @(posedge clk_i or posedge rst_i)
-	if(rst_i)					conf9 <=  16'h0;
-	else
-	if(rf_we & (i_wb_addr_i[5:2] == 4'd9) )		conf9 <=  i_wb_data_i[15:0];
-
-always @(posedge clk_i or posedge rst_i)
-	if(rst_i)					conf10 <=  16'h0;
-	else
-	if(rf_we & (i_wb_addr_i[5:2] == 4'd10) )	conf10 <=  i_wb_data_i[15:0];
-
-always @(posedge clk_i or posedge rst_i)
-	if(rst_i)					conf11 <=  16'h0;
-	else
-	if(rf_we & (i_wb_addr_i[5:2] == 4'd11) )	conf11 <=  i_wb_data_i[15:0];
-
-always @(posedge clk_i or posedge rst_i)
-	if(rst_i)					conf12 <=  16'h0;
-	else
-	if(rf_we & (i_wb_addr_i[5:2] == 4'd12) )	conf12 <=  i_wb_data_i[15:0];
-
-always @(posedge clk_i or posedge rst_i)
-	if(rst_i)					conf13 <=  16'h0;
-	else
-	if(rf_we & (i_wb_addr_i[5:2] == 4'd13) )	conf13 <=  i_wb_data_i[15:0];
-
-always @(posedge clk_i or posedge rst_i)
-	if(rst_i)					conf14 <=  16'h0;
-	else
-	if(rf_we & (i_wb_addr_i[5:2] == 4'd14) )	conf14 <=  i_wb_data_i[15:0];
-
-always @(posedge clk_i or posedge rst_i)
-	if(rst_i)					conf15 <=  16'h0;
-	else
-	if(rf_we & (i_wb_addr_i[5:2] == 4'd15) )	conf15 <=  i_wb_data_i[15:0];
+	if(rst_i) begin
+	   conf0 <=  16'h0;
+	   conf1 <=  16'h0;
+	   conf2 <=  16'h0;
+	   conf3 <=  16'h0;
+	   conf4 <=  16'h0;
+	   conf5 <=  16'h0;
+	   conf6 <=  16'h0;
+	   conf7 <=  16'h0;
+	   conf8 <=  16'h0;
+	   conf9 <=  16'h0;
+	   conf10 <=  16'h0;
+	   conf11 <=  16'h0;
+	   conf12 <=  16'h0;
+	   conf13 <=  16'h0;
+	   conf14 <=  16'h0;
+	   conf15 <=  16'h0;
+	end else begin // if (rst_i)
+	   if(rf_we & (i_wb_addr_i[5:2] == 5'd0) )		conf0 <=  i_wb_data_i[15:0];
+	   if(rf_we & (i_wb_addr_i[5:2] == 5'd1) )		conf1 <=  i_wb_data_i[15:0];
+	   if(rf_we & (i_wb_addr_i[5:2] == 5'd2) )		conf2 <=  i_wb_data_i[15:0];
+	   if(rf_we & (i_wb_addr_i[5:2] == 5'd3) )		conf3 <=  i_wb_data_i[15:0];
+	   if(rf_we & (i_wb_addr_i[5:2] == 5'd4) )		conf4 <=  i_wb_data_i[15:0];
+	   if(rf_we & (i_wb_addr_i[5:2] == 5'd5) )		conf5 <=  i_wb_data_i[15:0];
+	   if(rf_we & (i_wb_addr_i[5:2] == 5'd6) )		conf6 <=  i_wb_data_i[15:0];
+	   if(rf_we & (i_wb_addr_i[5:2] == 5'd7) )		conf7 <=  i_wb_data_i[15:0];
+	   if(rf_we & (i_wb_addr_i[5:2] == 5'd8) )		conf8 <=  i_wb_data_i[15:0];
+	   if(rf_we & (i_wb_addr_i[5:2] == 5'd9) )		conf9 <=  i_wb_data_i[15:0];
+	   if(rf_we & (i_wb_addr_i[5:2] == 5'd10) )	conf10 <=  i_wb_data_i[15:0];
+	   if(rf_we & (i_wb_addr_i[5:2] == 5'd11) )	conf11 <=  i_wb_data_i[15:0];
+	   if(rf_we & (i_wb_addr_i[5:2] == 5'd12) )	conf12 <=  i_wb_data_i[15:0];
+	   if(rf_we & (i_wb_addr_i[5:2] == 5'd13) )	conf13 <=  i_wb_data_i[15:0];
+	   if(rf_we & (i_wb_addr_i[5:2] == 5'd14) )	conf14 <=  i_wb_data_i[15:0];
+	   if(rf_we & (i_wb_addr_i[5:2] == 5'd15) )	conf15 <=  i_wb_data_i[15:0];
+	end // else: !if(rst_i)
+   
 
 // Read Logic
 always @(posedge clk_i)
 	if(!rf_sel)	rf_dout <=  16'h0;
 	else
 	case(i_wb_addr_i[5:2])
-	   4'd0:	rf_dout <=  conf0;
-	   4'd1:	rf_dout <=  conf1;
-	   4'd2:	rf_dout <=  conf2;
-	   4'd3:	rf_dout <=  conf3;
-	   4'd4:	rf_dout <=  conf4;
-	   4'd5:	rf_dout <=  conf5;
-	   4'd6:	rf_dout <=  conf6;
-	   4'd7:	rf_dout <=  conf7;
-	   4'd8:	rf_dout <=  conf8;
-	   4'd9:	rf_dout <=  conf9;
-	   4'd10:	rf_dout <=  conf10;
-	   4'd11:	rf_dout <=  conf11;
-	   4'd12:	rf_dout <=  conf12;
-	   4'd13:	rf_dout <=  conf13;
-	   4'd14:	rf_dout <=  conf14;
-	   4'd15:	rf_dout <=  conf15;
+	   5'd0:	rf_dout <=  conf0;
+	   5'd1:	rf_dout <=  conf1;
+	   5'd2:	rf_dout <=  conf2;
+	   5'd3:	rf_dout <=  conf3;
+	   5'd4:	rf_dout <=  conf4;
+	   5'd5:	rf_dout <=  conf5;
+	   5'd6:	rf_dout <=  conf6;
+	   5'd7:	rf_dout <=  conf7;
+	   5'd8:	rf_dout <=  conf8;
+	   5'd9:	rf_dout <=  conf9;
+	   5'd10:	rf_dout <=  conf10;
+	   5'd11:	rf_dout <=  conf11;
+	   5'd12:	rf_dout <=  conf12;
+	   5'd13:	rf_dout <=  conf13;
+	   5'd14:	rf_dout <=  conf14;
+	   5'd15:	rf_dout <=  conf15;
 	endcase
 
 ////////////////////////////////////////////////////////////////////

@@ -93,6 +93,38 @@ module wb_conmax_top(
 	m7_data_i, m7_data_o, m7_addr_i, m7_sel_i, m7_we_i, m7_cyc_i,
 	m7_stb_i, m7_ack_o, m7_err_o, m7_rty_o,
 
+	// Master 8 Interface
+	m8_data_i, m8_data_o, m8_addr_i, m8_sel_i, m8_we_i, m8_cyc_i,
+	m8_stb_i, m8_ack_o, m8_err_o, m8_rty_o,
+
+	// Master 9 Interface
+	m9_data_i, m9_data_o, m9_addr_i, m9_sel_i, m9_we_i, m9_cyc_i,
+	m9_stb_i, m9_ack_o, m9_err_o, m9_rty_o,
+
+	// Master 10 Interface
+	m10_data_i, m10_data_o, m10_addr_i, m10_sel_i, m10_we_i, m10_cyc_i,
+	m10_stb_i, m10_ack_o, m10_err_o, m10_rty_o,
+
+	// Master 11 Interface
+	m11_data_i, m11_data_o, m11_addr_i, m11_sel_i, m11_we_i, m11_cyc_i,
+	m11_stb_i, m11_ack_o, m11_err_o, m11_rty_o,
+
+	// Master 12 Interface
+	m12_data_i, m12_data_o, m12_addr_i, m12_sel_i, m12_we_i, m12_cyc_i,
+	m12_stb_i, m12_ack_o, m12_err_o, m12_rty_o,
+
+	// Master 13 Interface
+	m13_data_i, m13_data_o, m13_addr_i, m13_sel_i, m13_we_i, m13_cyc_i,
+	m13_stb_i, m13_ack_o, m13_err_o, m13_rty_o,
+
+	// Master 14 Interface
+	m14_data_i, m14_data_o, m14_addr_i, m14_sel_i, m14_we_i, m14_cyc_i,
+	m14_stb_i, m14_ack_o, m14_err_o, m14_rty_o,
+
+	// Master 15 Interface
+	m15_data_i, m15_data_o, m15_addr_i, m15_sel_i, m15_we_i, m15_cyc_i,
+	m15_stb_i, m15_ack_o, m15_err_o, m15_rty_o,
+
 	// Slave 0 Interface
 	s0_data_i, s0_data_o, s0_addr_o, s0_sel_o, s0_we_o, s0_cyc_o,
 	s0_stb_o, s0_ack_i, s0_err_i, s0_rty_i,
@@ -287,6 +319,102 @@ input			m7_stb_i;
 output			m7_ack_o;
 output			m7_err_o;
 output			m7_rty_o;
+
+// Master 8 Interface
+input	[dw-1:0]	m8_data_i;
+output	[dw-1:0]	m8_data_o;
+input	[aw-1:0]	m8_addr_i;
+input	[sw-1:0]	m8_sel_i;
+input			m8_we_i;
+input			m8_cyc_i;
+input			m8_stb_i;
+output			m8_ack_o;
+output			m8_err_o;
+output			m8_rty_o;
+
+// Master 9 Interface
+input	[dw-1:0]	m9_data_i;
+output	[dw-1:0]	m9_data_o;
+input	[aw-1:0]	m9_addr_i;
+input	[sw-1:0]	m9_sel_i;
+input			m9_we_i;
+input			m9_cyc_i;
+input			m9_stb_i;
+output			m9_ack_o;
+output			m9_err_o;
+output			m9_rty_o;
+
+// Master 10 Interface
+input	[dw-1:0]	m10_data_i;
+output	[dw-1:0]	m10_data_o;
+input	[aw-1:0]	m10_addr_i;
+input	[sw-1:0]	m10_sel_i;
+input			m10_we_i;
+input			m10_cyc_i;
+input			m10_stb_i;
+output			m10_ack_o;
+output			m10_err_o;
+output			m10_rty_o;
+
+// Master 11 Interface
+input	[dw-1:0]	m11_data_i;
+output	[dw-1:0]	m11_data_o;
+input	[aw-1:0]	m11_addr_i;
+input	[sw-1:0]	m11_sel_i;
+input			m11_we_i;
+input			m11_cyc_i;
+input			m11_stb_i;
+output			m11_ack_o;
+output			m11_err_o;
+output			m11_rty_o;
+
+// Master 12 Interface
+input	[dw-1:0]	m12_data_i;
+output	[dw-1:0]	m12_data_o;
+input	[aw-1:0]	m12_addr_i;
+input	[sw-1:0]	m12_sel_i;
+input			m12_we_i;
+input			m12_cyc_i;
+input			m12_stb_i;
+output			m12_ack_o;
+output			m12_err_o;
+output			m12_rty_o;
+
+// Master 13 Interface
+input	[dw-1:0]	m13_data_i;
+output	[dw-1:0]	m13_data_o;
+input	[aw-1:0]	m13_addr_i;
+input	[sw-1:0]	m13_sel_i;
+input			m13_we_i;
+input			m13_cyc_i;
+input			m13_stb_i;
+output			m13_ack_o;
+output			m13_err_o;
+output			m13_rty_o;
+
+// Master 14 Interface
+input	[dw-1:0]	m14_data_i;
+output	[dw-1:0]	m14_data_o;
+input	[aw-1:0]	m14_addr_i;
+input	[sw-1:0]	m14_sel_i;
+input			m14_we_i;
+input			m14_cyc_i;
+input			m14_stb_i;
+output			m14_ack_o;
+output			m14_err_o;
+output			m14_rty_o;
+
+// Master 15 Interface
+input	[dw-1:0]	m15_data_i;
+output	[dw-1:0]	m15_data_o;
+input	[aw-1:0]	m15_addr_i;
+input	[sw-1:0]	m15_sel_i;
+input			m15_we_i;
+input			m15_cyc_i;
+input			m15_stb_i;
+output			m15_ack_o;
+output			m15_err_o;
+output			m15_rty_o;
 
 // Slave 0 Interface
 input	[dw-1:0]	s0_data_i;
@@ -1776,6 +1904,1286 @@ wire			m7s15_stb;
 wire			m7s15_ack;
 wire			m7s15_err;
 wire			m7s15_rty;
+wire	[dw-1:0]	m8s0_data_i;
+wire	[dw-1:0]	m8s0_data_o;
+wire	[aw-1:0]	m8s0_addr;
+wire	[sw-1:0]	m8s0_sel;
+wire			m8s0_we;
+wire			m8s0_cyc;
+wire			m8s0_stb;
+wire			m8s0_ack;
+wire			m8s0_err;
+wire			m8s0_rty;
+wire	[dw-1:0]	m8s1_data_i;
+wire	[dw-1:0]	m8s1_data_o;
+wire	[aw-1:0]	m8s1_addr;
+wire	[sw-1:0]	m8s1_sel;
+wire			m8s1_we;
+wire			m8s1_cyc;
+wire			m8s1_stb;
+wire			m8s1_ack;
+wire			m8s1_err;
+wire			m8s1_rty;
+wire	[dw-1:0]	m8s2_data_i;
+wire	[dw-1:0]	m8s2_data_o;
+wire	[aw-1:0]	m8s2_addr;
+wire	[sw-1:0]	m8s2_sel;
+wire			m8s2_we;
+wire			m8s2_cyc;
+wire			m8s2_stb;
+wire			m8s2_ack;
+wire			m8s2_err;
+wire			m8s2_rty;
+wire	[dw-1:0]	m8s3_data_i;
+wire	[dw-1:0]	m8s3_data_o;
+wire	[aw-1:0]	m8s3_addr;
+wire	[sw-1:0]	m8s3_sel;
+wire			m8s3_we;
+wire			m8s3_cyc;
+wire			m8s3_stb;
+wire			m8s3_ack;
+wire			m8s3_err;
+wire			m8s3_rty;
+wire	[dw-1:0]	m8s4_data_i;
+wire	[dw-1:0]	m8s4_data_o;
+wire	[aw-1:0]	m8s4_addr;
+wire	[sw-1:0]	m8s4_sel;
+wire			m8s4_we;
+wire			m8s4_cyc;
+wire			m8s4_stb;
+wire			m8s4_ack;
+wire			m8s4_err;
+wire			m8s4_rty;
+wire	[dw-1:0]	m8s5_data_i;
+wire	[dw-1:0]	m8s5_data_o;
+wire	[aw-1:0]	m8s5_addr;
+wire	[sw-1:0]	m8s5_sel;
+wire			m8s5_we;
+wire			m8s5_cyc;
+wire			m8s5_stb;
+wire			m8s5_ack;
+wire			m8s5_err;
+wire			m8s5_rty;
+wire	[dw-1:0]	m8s6_data_i;
+wire	[dw-1:0]	m8s6_data_o;
+wire	[aw-1:0]	m8s6_addr;
+wire	[sw-1:0]	m8s6_sel;
+wire			m8s6_we;
+wire			m8s6_cyc;
+wire			m8s6_stb;
+wire			m8s6_ack;
+wire			m8s6_err;
+wire			m8s6_rty;
+wire	[dw-1:0]	m8s7_data_i;
+wire	[dw-1:0]	m8s7_data_o;
+wire	[aw-1:0]	m8s7_addr;
+wire	[sw-1:0]	m8s7_sel;
+wire			m8s7_we;
+wire			m8s7_cyc;
+wire			m8s7_stb;
+wire			m8s7_ack;
+wire			m8s7_err;
+wire			m8s7_rty;
+wire	[dw-1:0]	m8s8_data_i;
+wire	[dw-1:0]	m8s8_data_o;
+wire	[aw-1:0]	m8s8_addr;
+wire	[sw-1:0]	m8s8_sel;
+wire			m8s8_we;
+wire			m8s8_cyc;
+wire			m8s8_stb;
+wire			m8s8_ack;
+wire			m8s8_err;
+wire			m8s8_rty;
+wire	[dw-1:0]	m8s9_data_i;
+wire	[dw-1:0]	m8s9_data_o;
+wire	[aw-1:0]	m8s9_addr;
+wire	[sw-1:0]	m8s9_sel;
+wire			m8s9_we;
+wire			m8s9_cyc;
+wire			m8s9_stb;
+wire			m8s9_ack;
+wire			m8s9_err;
+wire			m8s9_rty;
+wire	[dw-1:0]	m8s10_data_i;
+wire	[dw-1:0]	m8s10_data_o;
+wire	[aw-1:0]	m8s10_addr;
+wire	[sw-1:0]	m8s10_sel;
+wire			m8s10_we;
+wire			m8s10_cyc;
+wire			m8s10_stb;
+wire			m8s10_ack;
+wire			m8s10_err;
+wire			m8s10_rty;
+wire	[dw-1:0]	m8s11_data_i;
+wire	[dw-1:0]	m8s11_data_o;
+wire	[aw-1:0]	m8s11_addr;
+wire	[sw-1:0]	m8s11_sel;
+wire			m8s11_we;
+wire			m8s11_cyc;
+wire			m8s11_stb;
+wire			m8s11_ack;
+wire			m8s11_err;
+wire			m8s11_rty;
+wire	[dw-1:0]	m8s12_data_i;
+wire	[dw-1:0]	m8s12_data_o;
+wire	[aw-1:0]	m8s12_addr;
+wire	[sw-1:0]	m8s12_sel;
+wire			m8s12_we;
+wire			m8s12_cyc;
+wire			m8s12_stb;
+wire			m8s12_ack;
+wire			m8s12_err;
+wire			m8s12_rty;
+wire	[dw-1:0]	m8s13_data_i;
+wire	[dw-1:0]	m8s13_data_o;
+wire	[aw-1:0]	m8s13_addr;
+wire	[sw-1:0]	m8s13_sel;
+wire			m8s13_we;
+wire			m8s13_cyc;
+wire			m8s13_stb;
+wire			m8s13_ack;
+wire			m8s13_err;
+wire			m8s13_rty;
+wire	[dw-1:0]	m8s14_data_i;
+wire	[dw-1:0]	m8s14_data_o;
+wire	[aw-1:0]	m8s14_addr;
+wire	[sw-1:0]	m8s14_sel;
+wire			m8s14_we;
+wire			m8s14_cyc;
+wire			m8s14_stb;
+wire			m8s14_ack;
+wire			m8s14_err;
+wire			m8s14_rty;
+wire	[dw-1:0]	m8s15_data_i;
+wire	[dw-1:0]	m8s15_data_o;
+wire	[aw-1:0]	m8s15_addr;
+wire	[sw-1:0]	m8s15_sel;
+wire			m8s15_we;
+wire			m8s15_cyc;
+wire			m8s15_stb;
+wire			m8s15_ack;
+wire			m8s15_err;
+wire			m8s15_rty;
+wire	[dw-1:0]	m9s0_data_i;
+wire	[dw-1:0]	m9s0_data_o;
+wire	[aw-1:0]	m9s0_addr;
+wire	[sw-1:0]	m9s0_sel;
+wire			m9s0_we;
+wire			m9s0_cyc;
+wire			m9s0_stb;
+wire			m9s0_ack;
+wire			m9s0_err;
+wire			m9s0_rty;
+wire	[dw-1:0]	m9s1_data_i;
+wire	[dw-1:0]	m9s1_data_o;
+wire	[aw-1:0]	m9s1_addr;
+wire	[sw-1:0]	m9s1_sel;
+wire			m9s1_we;
+wire			m9s1_cyc;
+wire			m9s1_stb;
+wire			m9s1_ack;
+wire			m9s1_err;
+wire			m9s1_rty;
+wire	[dw-1:0]	m9s2_data_i;
+wire	[dw-1:0]	m9s2_data_o;
+wire	[aw-1:0]	m9s2_addr;
+wire	[sw-1:0]	m9s2_sel;
+wire			m9s2_we;
+wire			m9s2_cyc;
+wire			m9s2_stb;
+wire			m9s2_ack;
+wire			m9s2_err;
+wire			m9s2_rty;
+wire	[dw-1:0]	m9s3_data_i;
+wire	[dw-1:0]	m9s3_data_o;
+wire	[aw-1:0]	m9s3_addr;
+wire	[sw-1:0]	m9s3_sel;
+wire			m9s3_we;
+wire			m9s3_cyc;
+wire			m9s3_stb;
+wire			m9s3_ack;
+wire			m9s3_err;
+wire			m9s3_rty;
+wire	[dw-1:0]	m9s4_data_i;
+wire	[dw-1:0]	m9s4_data_o;
+wire	[aw-1:0]	m9s4_addr;
+wire	[sw-1:0]	m9s4_sel;
+wire			m9s4_we;
+wire			m9s4_cyc;
+wire			m9s4_stb;
+wire			m9s4_ack;
+wire			m9s4_err;
+wire			m9s4_rty;
+wire	[dw-1:0]	m9s5_data_i;
+wire	[dw-1:0]	m9s5_data_o;
+wire	[aw-1:0]	m9s5_addr;
+wire	[sw-1:0]	m9s5_sel;
+wire			m9s5_we;
+wire			m9s5_cyc;
+wire			m9s5_stb;
+wire			m9s5_ack;
+wire			m9s5_err;
+wire			m9s5_rty;
+wire	[dw-1:0]	m9s6_data_i;
+wire	[dw-1:0]	m9s6_data_o;
+wire	[aw-1:0]	m9s6_addr;
+wire	[sw-1:0]	m9s6_sel;
+wire			m9s6_we;
+wire			m9s6_cyc;
+wire			m9s6_stb;
+wire			m9s6_ack;
+wire			m9s6_err;
+wire			m9s6_rty;
+wire	[dw-1:0]	m9s7_data_i;
+wire	[dw-1:0]	m9s7_data_o;
+wire	[aw-1:0]	m9s7_addr;
+wire	[sw-1:0]	m9s7_sel;
+wire			m9s7_we;
+wire			m9s7_cyc;
+wire			m9s7_stb;
+wire			m9s7_ack;
+wire			m9s7_err;
+wire			m9s7_rty;
+wire	[dw-1:0]	m9s8_data_i;
+wire	[dw-1:0]	m9s8_data_o;
+wire	[aw-1:0]	m9s8_addr;
+wire	[sw-1:0]	m9s8_sel;
+wire			m9s8_we;
+wire			m9s8_cyc;
+wire			m9s8_stb;
+wire			m9s8_ack;
+wire			m9s8_err;
+wire			m9s8_rty;
+wire	[dw-1:0]	m9s9_data_i;
+wire	[dw-1:0]	m9s9_data_o;
+wire	[aw-1:0]	m9s9_addr;
+wire	[sw-1:0]	m9s9_sel;
+wire			m9s9_we;
+wire			m9s9_cyc;
+wire			m9s9_stb;
+wire			m9s9_ack;
+wire			m9s9_err;
+wire			m9s9_rty;
+wire	[dw-1:0]	m9s10_data_i;
+wire	[dw-1:0]	m9s10_data_o;
+wire	[aw-1:0]	m9s10_addr;
+wire	[sw-1:0]	m9s10_sel;
+wire			m9s10_we;
+wire			m9s10_cyc;
+wire			m9s10_stb;
+wire			m9s10_ack;
+wire			m9s10_err;
+wire			m9s10_rty;
+wire	[dw-1:0]	m9s11_data_i;
+wire	[dw-1:0]	m9s11_data_o;
+wire	[aw-1:0]	m9s11_addr;
+wire	[sw-1:0]	m9s11_sel;
+wire			m9s11_we;
+wire			m9s11_cyc;
+wire			m9s11_stb;
+wire			m9s11_ack;
+wire			m9s11_err;
+wire			m9s11_rty;
+wire	[dw-1:0]	m9s12_data_i;
+wire	[dw-1:0]	m9s12_data_o;
+wire	[aw-1:0]	m9s12_addr;
+wire	[sw-1:0]	m9s12_sel;
+wire			m9s12_we;
+wire			m9s12_cyc;
+wire			m9s12_stb;
+wire			m9s12_ack;
+wire			m9s12_err;
+wire			m9s12_rty;
+wire	[dw-1:0]	m9s13_data_i;
+wire	[dw-1:0]	m9s13_data_o;
+wire	[aw-1:0]	m9s13_addr;
+wire	[sw-1:0]	m9s13_sel;
+wire			m9s13_we;
+wire			m9s13_cyc;
+wire			m9s13_stb;
+wire			m9s13_ack;
+wire			m9s13_err;
+wire			m9s13_rty;
+wire	[dw-1:0]	m9s14_data_i;
+wire	[dw-1:0]	m9s14_data_o;
+wire	[aw-1:0]	m9s14_addr;
+wire	[sw-1:0]	m9s14_sel;
+wire			m9s14_we;
+wire			m9s14_cyc;
+wire			m9s14_stb;
+wire			m9s14_ack;
+wire			m9s14_err;
+wire			m9s14_rty;
+wire	[dw-1:0]	m9s15_data_i;
+wire	[dw-1:0]	m9s15_data_o;
+wire	[aw-1:0]	m9s15_addr;
+wire	[sw-1:0]	m9s15_sel;
+wire			m9s15_we;
+wire			m9s15_cyc;
+wire			m9s15_stb;
+wire			m9s15_ack;
+wire			m9s15_err;
+wire			m9s15_rty;
+wire	[dw-1:0]	m10s0_data_i;
+wire	[dw-1:0]	m10s0_data_o;
+wire	[aw-1:0]	m10s0_addr;
+wire	[sw-1:0]	m10s0_sel;
+wire			m10s0_we;
+wire			m10s0_cyc;
+wire			m10s0_stb;
+wire			m10s0_ack;
+wire			m10s0_err;
+wire			m10s0_rty;
+wire	[dw-1:0]	m10s1_data_i;
+wire	[dw-1:0]	m10s1_data_o;
+wire	[aw-1:0]	m10s1_addr;
+wire	[sw-1:0]	m10s1_sel;
+wire			m10s1_we;
+wire			m10s1_cyc;
+wire			m10s1_stb;
+wire			m10s1_ack;
+wire			m10s1_err;
+wire			m10s1_rty;
+wire	[dw-1:0]	m10s2_data_i;
+wire	[dw-1:0]	m10s2_data_o;
+wire	[aw-1:0]	m10s2_addr;
+wire	[sw-1:0]	m10s2_sel;
+wire			m10s2_we;
+wire			m10s2_cyc;
+wire			m10s2_stb;
+wire			m10s2_ack;
+wire			m10s2_err;
+wire			m10s2_rty;
+wire	[dw-1:0]	m10s3_data_i;
+wire	[dw-1:0]	m10s3_data_o;
+wire	[aw-1:0]	m10s3_addr;
+wire	[sw-1:0]	m10s3_sel;
+wire			m10s3_we;
+wire			m10s3_cyc;
+wire			m10s3_stb;
+wire			m10s3_ack;
+wire			m10s3_err;
+wire			m10s3_rty;
+wire	[dw-1:0]	m10s4_data_i;
+wire	[dw-1:0]	m10s4_data_o;
+wire	[aw-1:0]	m10s4_addr;
+wire	[sw-1:0]	m10s4_sel;
+wire			m10s4_we;
+wire			m10s4_cyc;
+wire			m10s4_stb;
+wire			m10s4_ack;
+wire			m10s4_err;
+wire			m10s4_rty;
+wire	[dw-1:0]	m10s5_data_i;
+wire	[dw-1:0]	m10s5_data_o;
+wire	[aw-1:0]	m10s5_addr;
+wire	[sw-1:0]	m10s5_sel;
+wire			m10s5_we;
+wire			m10s5_cyc;
+wire			m10s5_stb;
+wire			m10s5_ack;
+wire			m10s5_err;
+wire			m10s5_rty;
+wire	[dw-1:0]	m10s6_data_i;
+wire	[dw-1:0]	m10s6_data_o;
+wire	[aw-1:0]	m10s6_addr;
+wire	[sw-1:0]	m10s6_sel;
+wire			m10s6_we;
+wire			m10s6_cyc;
+wire			m10s6_stb;
+wire			m10s6_ack;
+wire			m10s6_err;
+wire			m10s6_rty;
+wire	[dw-1:0]	m10s7_data_i;
+wire	[dw-1:0]	m10s7_data_o;
+wire	[aw-1:0]	m10s7_addr;
+wire	[sw-1:0]	m10s7_sel;
+wire			m10s7_we;
+wire			m10s7_cyc;
+wire			m10s7_stb;
+wire			m10s7_ack;
+wire			m10s7_err;
+wire			m10s7_rty;
+wire	[dw-1:0]	m10s8_data_i;
+wire	[dw-1:0]	m10s8_data_o;
+wire	[aw-1:0]	m10s8_addr;
+wire	[sw-1:0]	m10s8_sel;
+wire			m10s8_we;
+wire			m10s8_cyc;
+wire			m10s8_stb;
+wire			m10s8_ack;
+wire			m10s8_err;
+wire			m10s8_rty;
+wire	[dw-1:0]	m10s9_data_i;
+wire	[dw-1:0]	m10s9_data_o;
+wire	[aw-1:0]	m10s9_addr;
+wire	[sw-1:0]	m10s9_sel;
+wire			m10s9_we;
+wire			m10s9_cyc;
+wire			m10s9_stb;
+wire			m10s9_ack;
+wire			m10s9_err;
+wire			m10s9_rty;
+wire	[dw-1:0]	m10s10_data_i;
+wire	[dw-1:0]	m10s10_data_o;
+wire	[aw-1:0]	m10s10_addr;
+wire	[sw-1:0]	m10s10_sel;
+wire			m10s10_we;
+wire			m10s10_cyc;
+wire			m10s10_stb;
+wire			m10s10_ack;
+wire			m10s10_err;
+wire			m10s10_rty;
+wire	[dw-1:0]	m10s11_data_i;
+wire	[dw-1:0]	m10s11_data_o;
+wire	[aw-1:0]	m10s11_addr;
+wire	[sw-1:0]	m10s11_sel;
+wire			m10s11_we;
+wire			m10s11_cyc;
+wire			m10s11_stb;
+wire			m10s11_ack;
+wire			m10s11_err;
+wire			m10s11_rty;
+wire	[dw-1:0]	m10s12_data_i;
+wire	[dw-1:0]	m10s12_data_o;
+wire	[aw-1:0]	m10s12_addr;
+wire	[sw-1:0]	m10s12_sel;
+wire			m10s12_we;
+wire			m10s12_cyc;
+wire			m10s12_stb;
+wire			m10s12_ack;
+wire			m10s12_err;
+wire			m10s12_rty;
+wire	[dw-1:0]	m10s13_data_i;
+wire	[dw-1:0]	m10s13_data_o;
+wire	[aw-1:0]	m10s13_addr;
+wire	[sw-1:0]	m10s13_sel;
+wire			m10s13_we;
+wire			m10s13_cyc;
+wire			m10s13_stb;
+wire			m10s13_ack;
+wire			m10s13_err;
+wire			m10s13_rty;
+wire	[dw-1:0]	m10s14_data_i;
+wire	[dw-1:0]	m10s14_data_o;
+wire	[aw-1:0]	m10s14_addr;
+wire	[sw-1:0]	m10s14_sel;
+wire			m10s14_we;
+wire			m10s14_cyc;
+wire			m10s14_stb;
+wire			m10s14_ack;
+wire			m10s14_err;
+wire			m10s14_rty;
+wire	[dw-1:0]	m10s15_data_i;
+wire	[dw-1:0]	m10s15_data_o;
+wire	[aw-1:0]	m10s15_addr;
+wire	[sw-1:0]	m10s15_sel;
+wire			m10s15_we;
+wire			m10s15_cyc;
+wire			m10s15_stb;
+wire			m10s15_ack;
+wire			m10s15_err;
+wire			m10s15_rty;
+wire	[dw-1:0]	m11s0_data_i;
+wire	[dw-1:0]	m11s0_data_o;
+wire	[aw-1:0]	m11s0_addr;
+wire	[sw-1:0]	m11s0_sel;
+wire			m11s0_we;
+wire			m11s0_cyc;
+wire			m11s0_stb;
+wire			m11s0_ack;
+wire			m11s0_err;
+wire			m11s0_rty;
+wire	[dw-1:0]	m11s1_data_i;
+wire	[dw-1:0]	m11s1_data_o;
+wire	[aw-1:0]	m11s1_addr;
+wire	[sw-1:0]	m11s1_sel;
+wire			m11s1_we;
+wire			m11s1_cyc;
+wire			m11s1_stb;
+wire			m11s1_ack;
+wire			m11s1_err;
+wire			m11s1_rty;
+wire	[dw-1:0]	m11s2_data_i;
+wire	[dw-1:0]	m11s2_data_o;
+wire	[aw-1:0]	m11s2_addr;
+wire	[sw-1:0]	m11s2_sel;
+wire			m11s2_we;
+wire			m11s2_cyc;
+wire			m11s2_stb;
+wire			m11s2_ack;
+wire			m11s2_err;
+wire			m11s2_rty;
+wire	[dw-1:0]	m11s3_data_i;
+wire	[dw-1:0]	m11s3_data_o;
+wire	[aw-1:0]	m11s3_addr;
+wire	[sw-1:0]	m11s3_sel;
+wire			m11s3_we;
+wire			m11s3_cyc;
+wire			m11s3_stb;
+wire			m11s3_ack;
+wire			m11s3_err;
+wire			m11s3_rty;
+wire	[dw-1:0]	m11s4_data_i;
+wire	[dw-1:0]	m11s4_data_o;
+wire	[aw-1:0]	m11s4_addr;
+wire	[sw-1:0]	m11s4_sel;
+wire			m11s4_we;
+wire			m11s4_cyc;
+wire			m11s4_stb;
+wire			m11s4_ack;
+wire			m11s4_err;
+wire			m11s4_rty;
+wire	[dw-1:0]	m11s5_data_i;
+wire	[dw-1:0]	m11s5_data_o;
+wire	[aw-1:0]	m11s5_addr;
+wire	[sw-1:0]	m11s5_sel;
+wire			m11s5_we;
+wire			m11s5_cyc;
+wire			m11s5_stb;
+wire			m11s5_ack;
+wire			m11s5_err;
+wire			m11s5_rty;
+wire	[dw-1:0]	m11s6_data_i;
+wire	[dw-1:0]	m11s6_data_o;
+wire	[aw-1:0]	m11s6_addr;
+wire	[sw-1:0]	m11s6_sel;
+wire			m11s6_we;
+wire			m11s6_cyc;
+wire			m11s6_stb;
+wire			m11s6_ack;
+wire			m11s6_err;
+wire			m11s6_rty;
+wire	[dw-1:0]	m11s7_data_i;
+wire	[dw-1:0]	m11s7_data_o;
+wire	[aw-1:0]	m11s7_addr;
+wire	[sw-1:0]	m11s7_sel;
+wire			m11s7_we;
+wire			m11s7_cyc;
+wire			m11s7_stb;
+wire			m11s7_ack;
+wire			m11s7_err;
+wire			m11s7_rty;
+wire	[dw-1:0]	m11s8_data_i;
+wire	[dw-1:0]	m11s8_data_o;
+wire	[aw-1:0]	m11s8_addr;
+wire	[sw-1:0]	m11s8_sel;
+wire			m11s8_we;
+wire			m11s8_cyc;
+wire			m11s8_stb;
+wire			m11s8_ack;
+wire			m11s8_err;
+wire			m11s8_rty;
+wire	[dw-1:0]	m11s9_data_i;
+wire	[dw-1:0]	m11s9_data_o;
+wire	[aw-1:0]	m11s9_addr;
+wire	[sw-1:0]	m11s9_sel;
+wire			m11s9_we;
+wire			m11s9_cyc;
+wire			m11s9_stb;
+wire			m11s9_ack;
+wire			m11s9_err;
+wire			m11s9_rty;
+wire	[dw-1:0]	m11s10_data_i;
+wire	[dw-1:0]	m11s10_data_o;
+wire	[aw-1:0]	m11s10_addr;
+wire	[sw-1:0]	m11s10_sel;
+wire			m11s10_we;
+wire			m11s10_cyc;
+wire			m11s10_stb;
+wire			m11s10_ack;
+wire			m11s10_err;
+wire			m11s10_rty;
+wire	[dw-1:0]	m11s11_data_i;
+wire	[dw-1:0]	m11s11_data_o;
+wire	[aw-1:0]	m11s11_addr;
+wire	[sw-1:0]	m11s11_sel;
+wire			m11s11_we;
+wire			m11s11_cyc;
+wire			m11s11_stb;
+wire			m11s11_ack;
+wire			m11s11_err;
+wire			m11s11_rty;
+wire	[dw-1:0]	m11s12_data_i;
+wire	[dw-1:0]	m11s12_data_o;
+wire	[aw-1:0]	m11s12_addr;
+wire	[sw-1:0]	m11s12_sel;
+wire			m11s12_we;
+wire			m11s12_cyc;
+wire			m11s12_stb;
+wire			m11s12_ack;
+wire			m11s12_err;
+wire			m11s12_rty;
+wire	[dw-1:0]	m11s13_data_i;
+wire	[dw-1:0]	m11s13_data_o;
+wire	[aw-1:0]	m11s13_addr;
+wire	[sw-1:0]	m11s13_sel;
+wire			m11s13_we;
+wire			m11s13_cyc;
+wire			m11s13_stb;
+wire			m11s13_ack;
+wire			m11s13_err;
+wire			m11s13_rty;
+wire	[dw-1:0]	m11s14_data_i;
+wire	[dw-1:0]	m11s14_data_o;
+wire	[aw-1:0]	m11s14_addr;
+wire	[sw-1:0]	m11s14_sel;
+wire			m11s14_we;
+wire			m11s14_cyc;
+wire			m11s14_stb;
+wire			m11s14_ack;
+wire			m11s14_err;
+wire			m11s14_rty;
+wire	[dw-1:0]	m11s15_data_i;
+wire	[dw-1:0]	m11s15_data_o;
+wire	[aw-1:0]	m11s15_addr;
+wire	[sw-1:0]	m11s15_sel;
+wire			m11s15_we;
+wire			m11s15_cyc;
+wire			m11s15_stb;
+wire			m11s15_ack;
+wire			m11s15_err;
+wire			m11s15_rty;
+wire	[dw-1:0]	m12s0_data_i;
+wire	[dw-1:0]	m12s0_data_o;
+wire	[aw-1:0]	m12s0_addr;
+wire	[sw-1:0]	m12s0_sel;
+wire			m12s0_we;
+wire			m12s0_cyc;
+wire			m12s0_stb;
+wire			m12s0_ack;
+wire			m12s0_err;
+wire			m12s0_rty;
+wire	[dw-1:0]	m12s1_data_i;
+wire	[dw-1:0]	m12s1_data_o;
+wire	[aw-1:0]	m12s1_addr;
+wire	[sw-1:0]	m12s1_sel;
+wire			m12s1_we;
+wire			m12s1_cyc;
+wire			m12s1_stb;
+wire			m12s1_ack;
+wire			m12s1_err;
+wire			m12s1_rty;
+wire	[dw-1:0]	m12s2_data_i;
+wire	[dw-1:0]	m12s2_data_o;
+wire	[aw-1:0]	m12s2_addr;
+wire	[sw-1:0]	m12s2_sel;
+wire			m12s2_we;
+wire			m12s2_cyc;
+wire			m12s2_stb;
+wire			m12s2_ack;
+wire			m12s2_err;
+wire			m12s2_rty;
+wire	[dw-1:0]	m12s3_data_i;
+wire	[dw-1:0]	m12s3_data_o;
+wire	[aw-1:0]	m12s3_addr;
+wire	[sw-1:0]	m12s3_sel;
+wire			m12s3_we;
+wire			m12s3_cyc;
+wire			m12s3_stb;
+wire			m12s3_ack;
+wire			m12s3_err;
+wire			m12s3_rty;
+wire	[dw-1:0]	m12s4_data_i;
+wire	[dw-1:0]	m12s4_data_o;
+wire	[aw-1:0]	m12s4_addr;
+wire	[sw-1:0]	m12s4_sel;
+wire			m12s4_we;
+wire			m12s4_cyc;
+wire			m12s4_stb;
+wire			m12s4_ack;
+wire			m12s4_err;
+wire			m12s4_rty;
+wire	[dw-1:0]	m12s5_data_i;
+wire	[dw-1:0]	m12s5_data_o;
+wire	[aw-1:0]	m12s5_addr;
+wire	[sw-1:0]	m12s5_sel;
+wire			m12s5_we;
+wire			m12s5_cyc;
+wire			m12s5_stb;
+wire			m12s5_ack;
+wire			m12s5_err;
+wire			m12s5_rty;
+wire	[dw-1:0]	m12s6_data_i;
+wire	[dw-1:0]	m12s6_data_o;
+wire	[aw-1:0]	m12s6_addr;
+wire	[sw-1:0]	m12s6_sel;
+wire			m12s6_we;
+wire			m12s6_cyc;
+wire			m12s6_stb;
+wire			m12s6_ack;
+wire			m12s6_err;
+wire			m12s6_rty;
+wire	[dw-1:0]	m12s7_data_i;
+wire	[dw-1:0]	m12s7_data_o;
+wire	[aw-1:0]	m12s7_addr;
+wire	[sw-1:0]	m12s7_sel;
+wire			m12s7_we;
+wire			m12s7_cyc;
+wire			m12s7_stb;
+wire			m12s7_ack;
+wire			m12s7_err;
+wire			m12s7_rty;
+wire	[dw-1:0]	m12s8_data_i;
+wire	[dw-1:0]	m12s8_data_o;
+wire	[aw-1:0]	m12s8_addr;
+wire	[sw-1:0]	m12s8_sel;
+wire			m12s8_we;
+wire			m12s8_cyc;
+wire			m12s8_stb;
+wire			m12s8_ack;
+wire			m12s8_err;
+wire			m12s8_rty;
+wire	[dw-1:0]	m12s9_data_i;
+wire	[dw-1:0]	m12s9_data_o;
+wire	[aw-1:0]	m12s9_addr;
+wire	[sw-1:0]	m12s9_sel;
+wire			m12s9_we;
+wire			m12s9_cyc;
+wire			m12s9_stb;
+wire			m12s9_ack;
+wire			m12s9_err;
+wire			m12s9_rty;
+wire	[dw-1:0]	m12s10_data_i;
+wire	[dw-1:0]	m12s10_data_o;
+wire	[aw-1:0]	m12s10_addr;
+wire	[sw-1:0]	m12s10_sel;
+wire			m12s10_we;
+wire			m12s10_cyc;
+wire			m12s10_stb;
+wire			m12s10_ack;
+wire			m12s10_err;
+wire			m12s10_rty;
+wire	[dw-1:0]	m12s11_data_i;
+wire	[dw-1:0]	m12s11_data_o;
+wire	[aw-1:0]	m12s11_addr;
+wire	[sw-1:0]	m12s11_sel;
+wire			m12s11_we;
+wire			m12s11_cyc;
+wire			m12s11_stb;
+wire			m12s11_ack;
+wire			m12s11_err;
+wire			m12s11_rty;
+wire	[dw-1:0]	m12s12_data_i;
+wire	[dw-1:0]	m12s12_data_o;
+wire	[aw-1:0]	m12s12_addr;
+wire	[sw-1:0]	m12s12_sel;
+wire			m12s12_we;
+wire			m12s12_cyc;
+wire			m12s12_stb;
+wire			m12s12_ack;
+wire			m12s12_err;
+wire			m12s12_rty;
+wire	[dw-1:0]	m12s13_data_i;
+wire	[dw-1:0]	m12s13_data_o;
+wire	[aw-1:0]	m12s13_addr;
+wire	[sw-1:0]	m12s13_sel;
+wire			m12s13_we;
+wire			m12s13_cyc;
+wire			m12s13_stb;
+wire			m12s13_ack;
+wire			m12s13_err;
+wire			m12s13_rty;
+wire	[dw-1:0]	m12s14_data_i;
+wire	[dw-1:0]	m12s14_data_o;
+wire	[aw-1:0]	m12s14_addr;
+wire	[sw-1:0]	m12s14_sel;
+wire			m12s14_we;
+wire			m12s14_cyc;
+wire			m12s14_stb;
+wire			m12s14_ack;
+wire			m12s14_err;
+wire			m12s14_rty;
+wire	[dw-1:0]	m12s15_data_i;
+wire	[dw-1:0]	m12s15_data_o;
+wire	[aw-1:0]	m12s15_addr;
+wire	[sw-1:0]	m12s15_sel;
+wire			m12s15_we;
+wire			m12s15_cyc;
+wire			m12s15_stb;
+wire			m12s15_ack;
+wire			m12s15_err;
+wire			m12s15_rty;
+wire	[dw-1:0]	m13s0_data_i;
+wire	[dw-1:0]	m13s0_data_o;
+wire	[aw-1:0]	m13s0_addr;
+wire	[sw-1:0]	m13s0_sel;
+wire			m13s0_we;
+wire			m13s0_cyc;
+wire			m13s0_stb;
+wire			m13s0_ack;
+wire			m13s0_err;
+wire			m13s0_rty;
+wire	[dw-1:0]	m13s1_data_i;
+wire	[dw-1:0]	m13s1_data_o;
+wire	[aw-1:0]	m13s1_addr;
+wire	[sw-1:0]	m13s1_sel;
+wire			m13s1_we;
+wire			m13s1_cyc;
+wire			m13s1_stb;
+wire			m13s1_ack;
+wire			m13s1_err;
+wire			m13s1_rty;
+wire	[dw-1:0]	m13s2_data_i;
+wire	[dw-1:0]	m13s2_data_o;
+wire	[aw-1:0]	m13s2_addr;
+wire	[sw-1:0]	m13s2_sel;
+wire			m13s2_we;
+wire			m13s2_cyc;
+wire			m13s2_stb;
+wire			m13s2_ack;
+wire			m13s2_err;
+wire			m13s2_rty;
+wire	[dw-1:0]	m13s3_data_i;
+wire	[dw-1:0]	m13s3_data_o;
+wire	[aw-1:0]	m13s3_addr;
+wire	[sw-1:0]	m13s3_sel;
+wire			m13s3_we;
+wire			m13s3_cyc;
+wire			m13s3_stb;
+wire			m13s3_ack;
+wire			m13s3_err;
+wire			m13s3_rty;
+wire	[dw-1:0]	m13s4_data_i;
+wire	[dw-1:0]	m13s4_data_o;
+wire	[aw-1:0]	m13s4_addr;
+wire	[sw-1:0]	m13s4_sel;
+wire			m13s4_we;
+wire			m13s4_cyc;
+wire			m13s4_stb;
+wire			m13s4_ack;
+wire			m13s4_err;
+wire			m13s4_rty;
+wire	[dw-1:0]	m13s5_data_i;
+wire	[dw-1:0]	m13s5_data_o;
+wire	[aw-1:0]	m13s5_addr;
+wire	[sw-1:0]	m13s5_sel;
+wire			m13s5_we;
+wire			m13s5_cyc;
+wire			m13s5_stb;
+wire			m13s5_ack;
+wire			m13s5_err;
+wire			m13s5_rty;
+wire	[dw-1:0]	m13s6_data_i;
+wire	[dw-1:0]	m13s6_data_o;
+wire	[aw-1:0]	m13s6_addr;
+wire	[sw-1:0]	m13s6_sel;
+wire			m13s6_we;
+wire			m13s6_cyc;
+wire			m13s6_stb;
+wire			m13s6_ack;
+wire			m13s6_err;
+wire			m13s6_rty;
+wire	[dw-1:0]	m13s7_data_i;
+wire	[dw-1:0]	m13s7_data_o;
+wire	[aw-1:0]	m13s7_addr;
+wire	[sw-1:0]	m13s7_sel;
+wire			m13s7_we;
+wire			m13s7_cyc;
+wire			m13s7_stb;
+wire			m13s7_ack;
+wire			m13s7_err;
+wire			m13s7_rty;
+wire	[dw-1:0]	m13s8_data_i;
+wire	[dw-1:0]	m13s8_data_o;
+wire	[aw-1:0]	m13s8_addr;
+wire	[sw-1:0]	m13s8_sel;
+wire			m13s8_we;
+wire			m13s8_cyc;
+wire			m13s8_stb;
+wire			m13s8_ack;
+wire			m13s8_err;
+wire			m13s8_rty;
+wire	[dw-1:0]	m13s9_data_i;
+wire	[dw-1:0]	m13s9_data_o;
+wire	[aw-1:0]	m13s9_addr;
+wire	[sw-1:0]	m13s9_sel;
+wire			m13s9_we;
+wire			m13s9_cyc;
+wire			m13s9_stb;
+wire			m13s9_ack;
+wire			m13s9_err;
+wire			m13s9_rty;
+wire	[dw-1:0]	m13s10_data_i;
+wire	[dw-1:0]	m13s10_data_o;
+wire	[aw-1:0]	m13s10_addr;
+wire	[sw-1:0]	m13s10_sel;
+wire			m13s10_we;
+wire			m13s10_cyc;
+wire			m13s10_stb;
+wire			m13s10_ack;
+wire			m13s10_err;
+wire			m13s10_rty;
+wire	[dw-1:0]	m13s11_data_i;
+wire	[dw-1:0]	m13s11_data_o;
+wire	[aw-1:0]	m13s11_addr;
+wire	[sw-1:0]	m13s11_sel;
+wire			m13s11_we;
+wire			m13s11_cyc;
+wire			m13s11_stb;
+wire			m13s11_ack;
+wire			m13s11_err;
+wire			m13s11_rty;
+wire	[dw-1:0]	m13s12_data_i;
+wire	[dw-1:0]	m13s12_data_o;
+wire	[aw-1:0]	m13s12_addr;
+wire	[sw-1:0]	m13s12_sel;
+wire			m13s12_we;
+wire			m13s12_cyc;
+wire			m13s12_stb;
+wire			m13s12_ack;
+wire			m13s12_err;
+wire			m13s12_rty;
+wire	[dw-1:0]	m13s13_data_i;
+wire	[dw-1:0]	m13s13_data_o;
+wire	[aw-1:0]	m13s13_addr;
+wire	[sw-1:0]	m13s13_sel;
+wire			m13s13_we;
+wire			m13s13_cyc;
+wire			m13s13_stb;
+wire			m13s13_ack;
+wire			m13s13_err;
+wire			m13s13_rty;
+wire	[dw-1:0]	m13s14_data_i;
+wire	[dw-1:0]	m13s14_data_o;
+wire	[aw-1:0]	m13s14_addr;
+wire	[sw-1:0]	m13s14_sel;
+wire			m13s14_we;
+wire			m13s14_cyc;
+wire			m13s14_stb;
+wire			m13s14_ack;
+wire			m13s14_err;
+wire			m13s14_rty;
+wire	[dw-1:0]	m13s15_data_i;
+wire	[dw-1:0]	m13s15_data_o;
+wire	[aw-1:0]	m13s15_addr;
+wire	[sw-1:0]	m13s15_sel;
+wire			m13s15_we;
+wire			m13s15_cyc;
+wire			m13s15_stb;
+wire			m13s15_ack;
+wire			m13s15_err;
+wire			m13s15_rty;
+wire	[dw-1:0]	m14s0_data_i;
+wire	[dw-1:0]	m14s0_data_o;
+wire	[aw-1:0]	m14s0_addr;
+wire	[sw-1:0]	m14s0_sel;
+wire			m14s0_we;
+wire			m14s0_cyc;
+wire			m14s0_stb;
+wire			m14s0_ack;
+wire			m14s0_err;
+wire			m14s0_rty;
+wire	[dw-1:0]	m14s1_data_i;
+wire	[dw-1:0]	m14s1_data_o;
+wire	[aw-1:0]	m14s1_addr;
+wire	[sw-1:0]	m14s1_sel;
+wire			m14s1_we;
+wire			m14s1_cyc;
+wire			m14s1_stb;
+wire			m14s1_ack;
+wire			m14s1_err;
+wire			m14s1_rty;
+wire	[dw-1:0]	m14s2_data_i;
+wire	[dw-1:0]	m14s2_data_o;
+wire	[aw-1:0]	m14s2_addr;
+wire	[sw-1:0]	m14s2_sel;
+wire			m14s2_we;
+wire			m14s2_cyc;
+wire			m14s2_stb;
+wire			m14s2_ack;
+wire			m14s2_err;
+wire			m14s2_rty;
+wire	[dw-1:0]	m14s3_data_i;
+wire	[dw-1:0]	m14s3_data_o;
+wire	[aw-1:0]	m14s3_addr;
+wire	[sw-1:0]	m14s3_sel;
+wire			m14s3_we;
+wire			m14s3_cyc;
+wire			m14s3_stb;
+wire			m14s3_ack;
+wire			m14s3_err;
+wire			m14s3_rty;
+wire	[dw-1:0]	m14s4_data_i;
+wire	[dw-1:0]	m14s4_data_o;
+wire	[aw-1:0]	m14s4_addr;
+wire	[sw-1:0]	m14s4_sel;
+wire			m14s4_we;
+wire			m14s4_cyc;
+wire			m14s4_stb;
+wire			m14s4_ack;
+wire			m14s4_err;
+wire			m14s4_rty;
+wire	[dw-1:0]	m14s5_data_i;
+wire	[dw-1:0]	m14s5_data_o;
+wire	[aw-1:0]	m14s5_addr;
+wire	[sw-1:0]	m14s5_sel;
+wire			m14s5_we;
+wire			m14s5_cyc;
+wire			m14s5_stb;
+wire			m14s5_ack;
+wire			m14s5_err;
+wire			m14s5_rty;
+wire	[dw-1:0]	m14s6_data_i;
+wire	[dw-1:0]	m14s6_data_o;
+wire	[aw-1:0]	m14s6_addr;
+wire	[sw-1:0]	m14s6_sel;
+wire			m14s6_we;
+wire			m14s6_cyc;
+wire			m14s6_stb;
+wire			m14s6_ack;
+wire			m14s6_err;
+wire			m14s6_rty;
+wire	[dw-1:0]	m14s7_data_i;
+wire	[dw-1:0]	m14s7_data_o;
+wire	[aw-1:0]	m14s7_addr;
+wire	[sw-1:0]	m14s7_sel;
+wire			m14s7_we;
+wire			m14s7_cyc;
+wire			m14s7_stb;
+wire			m14s7_ack;
+wire			m14s7_err;
+wire			m14s7_rty;
+wire	[dw-1:0]	m14s8_data_i;
+wire	[dw-1:0]	m14s8_data_o;
+wire	[aw-1:0]	m14s8_addr;
+wire	[sw-1:0]	m14s8_sel;
+wire			m14s8_we;
+wire			m14s8_cyc;
+wire			m14s8_stb;
+wire			m14s8_ack;
+wire			m14s8_err;
+wire			m14s8_rty;
+wire	[dw-1:0]	m14s9_data_i;
+wire	[dw-1:0]	m14s9_data_o;
+wire	[aw-1:0]	m14s9_addr;
+wire	[sw-1:0]	m14s9_sel;
+wire			m14s9_we;
+wire			m14s9_cyc;
+wire			m14s9_stb;
+wire			m14s9_ack;
+wire			m14s9_err;
+wire			m14s9_rty;
+wire	[dw-1:0]	m14s10_data_i;
+wire	[dw-1:0]	m14s10_data_o;
+wire	[aw-1:0]	m14s10_addr;
+wire	[sw-1:0]	m14s10_sel;
+wire			m14s10_we;
+wire			m14s10_cyc;
+wire			m14s10_stb;
+wire			m14s10_ack;
+wire			m14s10_err;
+wire			m14s10_rty;
+wire	[dw-1:0]	m14s11_data_i;
+wire	[dw-1:0]	m14s11_data_o;
+wire	[aw-1:0]	m14s11_addr;
+wire	[sw-1:0]	m14s11_sel;
+wire			m14s11_we;
+wire			m14s11_cyc;
+wire			m14s11_stb;
+wire			m14s11_ack;
+wire			m14s11_err;
+wire			m14s11_rty;
+wire	[dw-1:0]	m14s12_data_i;
+wire	[dw-1:0]	m14s12_data_o;
+wire	[aw-1:0]	m14s12_addr;
+wire	[sw-1:0]	m14s12_sel;
+wire			m14s12_we;
+wire			m14s12_cyc;
+wire			m14s12_stb;
+wire			m14s12_ack;
+wire			m14s12_err;
+wire			m14s12_rty;
+wire	[dw-1:0]	m14s13_data_i;
+wire	[dw-1:0]	m14s13_data_o;
+wire	[aw-1:0]	m14s13_addr;
+wire	[sw-1:0]	m14s13_sel;
+wire			m14s13_we;
+wire			m14s13_cyc;
+wire			m14s13_stb;
+wire			m14s13_ack;
+wire			m14s13_err;
+wire			m14s13_rty;
+wire	[dw-1:0]	m14s14_data_i;
+wire	[dw-1:0]	m14s14_data_o;
+wire	[aw-1:0]	m14s14_addr;
+wire	[sw-1:0]	m14s14_sel;
+wire			m14s14_we;
+wire			m14s14_cyc;
+wire			m14s14_stb;
+wire			m14s14_ack;
+wire			m14s14_err;
+wire			m14s14_rty;
+wire	[dw-1:0]	m14s15_data_i;
+wire	[dw-1:0]	m14s15_data_o;
+wire	[aw-1:0]	m14s15_addr;
+wire	[sw-1:0]	m14s15_sel;
+wire			m14s15_we;
+wire			m14s15_cyc;
+wire			m14s15_stb;
+wire			m14s15_ack;
+wire			m14s15_err;
+wire			m14s15_rty;
+wire	[dw-1:0]	m15s0_data_i;
+wire	[dw-1:0]	m15s0_data_o;
+wire	[aw-1:0]	m15s0_addr;
+wire	[sw-1:0]	m15s0_sel;
+wire			m15s0_we;
+wire			m15s0_cyc;
+wire			m15s0_stb;
+wire			m15s0_ack;
+wire			m15s0_err;
+wire			m15s0_rty;
+wire	[dw-1:0]	m15s1_data_i;
+wire	[dw-1:0]	m15s1_data_o;
+wire	[aw-1:0]	m15s1_addr;
+wire	[sw-1:0]	m15s1_sel;
+wire			m15s1_we;
+wire			m15s1_cyc;
+wire			m15s1_stb;
+wire			m15s1_ack;
+wire			m15s1_err;
+wire			m15s1_rty;
+wire	[dw-1:0]	m15s2_data_i;
+wire	[dw-1:0]	m15s2_data_o;
+wire	[aw-1:0]	m15s2_addr;
+wire	[sw-1:0]	m15s2_sel;
+wire			m15s2_we;
+wire			m15s2_cyc;
+wire			m15s2_stb;
+wire			m15s2_ack;
+wire			m15s2_err;
+wire			m15s2_rty;
+wire	[dw-1:0]	m15s3_data_i;
+wire	[dw-1:0]	m15s3_data_o;
+wire	[aw-1:0]	m15s3_addr;
+wire	[sw-1:0]	m15s3_sel;
+wire			m15s3_we;
+wire			m15s3_cyc;
+wire			m15s3_stb;
+wire			m15s3_ack;
+wire			m15s3_err;
+wire			m15s3_rty;
+wire	[dw-1:0]	m15s4_data_i;
+wire	[dw-1:0]	m15s4_data_o;
+wire	[aw-1:0]	m15s4_addr;
+wire	[sw-1:0]	m15s4_sel;
+wire			m15s4_we;
+wire			m15s4_cyc;
+wire			m15s4_stb;
+wire			m15s4_ack;
+wire			m15s4_err;
+wire			m15s4_rty;
+wire	[dw-1:0]	m15s5_data_i;
+wire	[dw-1:0]	m15s5_data_o;
+wire	[aw-1:0]	m15s5_addr;
+wire	[sw-1:0]	m15s5_sel;
+wire			m15s5_we;
+wire			m15s5_cyc;
+wire			m15s5_stb;
+wire			m15s5_ack;
+wire			m15s5_err;
+wire			m15s5_rty;
+wire	[dw-1:0]	m15s6_data_i;
+wire	[dw-1:0]	m15s6_data_o;
+wire	[aw-1:0]	m15s6_addr;
+wire	[sw-1:0]	m15s6_sel;
+wire			m15s6_we;
+wire			m15s6_cyc;
+wire			m15s6_stb;
+wire			m15s6_ack;
+wire			m15s6_err;
+wire			m15s6_rty;
+wire	[dw-1:0]	m15s7_data_i;
+wire	[dw-1:0]	m15s7_data_o;
+wire	[aw-1:0]	m15s7_addr;
+wire	[sw-1:0]	m15s7_sel;
+wire			m15s7_we;
+wire			m15s7_cyc;
+wire			m15s7_stb;
+wire			m15s7_ack;
+wire			m15s7_err;
+wire			m15s7_rty;
+wire	[dw-1:0]	m15s8_data_i;
+wire	[dw-1:0]	m15s8_data_o;
+wire	[aw-1:0]	m15s8_addr;
+wire	[sw-1:0]	m15s8_sel;
+wire			m15s8_we;
+wire			m15s8_cyc;
+wire			m15s8_stb;
+wire			m15s8_ack;
+wire			m15s8_err;
+wire			m15s8_rty;
+wire	[dw-1:0]	m15s9_data_i;
+wire	[dw-1:0]	m15s9_data_o;
+wire	[aw-1:0]	m15s9_addr;
+wire	[sw-1:0]	m15s9_sel;
+wire			m15s9_we;
+wire			m15s9_cyc;
+wire			m15s9_stb;
+wire			m15s9_ack;
+wire			m15s9_err;
+wire			m15s9_rty;
+wire	[dw-1:0]	m15s10_data_i;
+wire	[dw-1:0]	m15s10_data_o;
+wire	[aw-1:0]	m15s10_addr;
+wire	[sw-1:0]	m15s10_sel;
+wire			m15s10_we;
+wire			m15s10_cyc;
+wire			m15s10_stb;
+wire			m15s10_ack;
+wire			m15s10_err;
+wire			m15s10_rty;
+wire	[dw-1:0]	m15s11_data_i;
+wire	[dw-1:0]	m15s11_data_o;
+wire	[aw-1:0]	m15s11_addr;
+wire	[sw-1:0]	m15s11_sel;
+wire			m15s11_we;
+wire			m15s11_cyc;
+wire			m15s11_stb;
+wire			m15s11_ack;
+wire			m15s11_err;
+wire			m15s11_rty;
+wire	[dw-1:0]	m15s12_data_i;
+wire	[dw-1:0]	m15s12_data_o;
+wire	[aw-1:0]	m15s12_addr;
+wire	[sw-1:0]	m15s12_sel;
+wire			m15s12_we;
+wire			m15s12_cyc;
+wire			m15s12_stb;
+wire			m15s12_ack;
+wire			m15s12_err;
+wire			m15s12_rty;
+wire	[dw-1:0]	m15s13_data_i;
+wire	[dw-1:0]	m15s13_data_o;
+wire	[aw-1:0]	m15s13_addr;
+wire	[sw-1:0]	m15s13_sel;
+wire			m15s13_we;
+wire			m15s13_cyc;
+wire			m15s13_stb;
+wire			m15s13_ack;
+wire			m15s13_err;
+wire			m15s13_rty;
+wire	[dw-1:0]	m15s14_data_i;
+wire	[dw-1:0]	m15s14_data_o;
+wire	[aw-1:0]	m15s14_addr;
+wire	[sw-1:0]	m15s14_sel;
+wire			m15s14_we;
+wire			m15s14_cyc;
+wire			m15s14_stb;
+wire			m15s14_ack;
+wire			m15s14_err;
+wire			m15s14_rty;
+wire	[dw-1:0]	m15s15_data_i;
+wire	[dw-1:0]	m15s15_data_o;
+wire	[aw-1:0]	m15s15_addr;
+wire	[sw-1:0]	m15s15_sel;
+wire			m15s15_we;
+wire			m15s15_cyc;
+wire			m15s15_stb;
+wire			m15s15_ack;
+wire			m15s15_err;
+wire			m15s15_rty;
 
 wire	[15:0]		conf0;
 wire	[15:0]		conf1;
@@ -3216,6 +4624,1406 @@ wb_conmax_master_if #(dw,aw,sw)	m7(
 		.s15_rty_i(	m7s15_rty	)
 		);
 
+wb_conmax_master_if #(dw,aw,sw)	m8(
+		.clk_i(		clk_i		),
+		.rst_i(		rst_i		),
+		.wb_data_i(	m8_data_i	),
+		.wb_data_o(	m8_data_o	),
+		.wb_addr_i(	m8_addr_i	),
+		.wb_sel_i(	m8_sel_i	),
+		.wb_we_i(	m8_we_i		),
+		.wb_cyc_i(	m8_cyc_i	),
+		.wb_stb_i(	m8_stb_i	),
+		.wb_ack_o(	m8_ack_o	),
+		.wb_err_o(	m8_err_o	),
+		.wb_rty_o(	m8_rty_o	),
+		.s0_data_i(	m8s0_data_i	),
+		.s0_data_o(	m8s0_data_o	),
+		.s0_addr_o(	m8s0_addr	),
+		.s0_sel_o(	m8s0_sel	),
+		.s0_we_o(	m8s0_we		),
+		.s0_cyc_o(	m8s0_cyc	),
+		.s0_stb_o(	m8s0_stb	),
+		.s0_ack_i(	m8s0_ack	),
+		.s0_err_i(	m8s0_err	),
+		.s0_rty_i(	m8s0_rty	),
+		.s1_data_i(	m8s1_data_i	),
+		.s1_data_o(	m8s1_data_o	),
+		.s1_addr_o(	m8s1_addr	),
+		.s1_sel_o(	m8s1_sel	),
+		.s1_we_o(	m8s1_we		),
+		.s1_cyc_o(	m8s1_cyc	),
+		.s1_stb_o(	m8s1_stb	),
+		.s1_ack_i(	m8s1_ack	),
+		.s1_err_i(	m8s1_err	),
+		.s1_rty_i(	m8s1_rty	),
+		.s2_data_i(	m8s2_data_i	),
+		.s2_data_o(	m8s2_data_o	),
+		.s2_addr_o(	m8s2_addr	),
+		.s2_sel_o(	m8s2_sel	),
+		.s2_we_o(	m8s2_we		),
+		.s2_cyc_o(	m8s2_cyc	),
+		.s2_stb_o(	m8s2_stb	),
+		.s2_ack_i(	m8s2_ack	),
+		.s2_err_i(	m8s2_err	),
+		.s2_rty_i(	m8s2_rty	),
+		.s3_data_i(	m8s3_data_i	),
+		.s3_data_o(	m8s3_data_o	),
+		.s3_addr_o(	m8s3_addr	),
+		.s3_sel_o(	m8s3_sel	),
+		.s3_we_o(	m8s3_we		),
+		.s3_cyc_o(	m8s3_cyc	),
+		.s3_stb_o(	m8s3_stb	),
+		.s3_ack_i(	m8s3_ack	),
+		.s3_err_i(	m8s3_err	),
+		.s3_rty_i(	m8s3_rty	),
+		.s4_data_i(	m8s4_data_i	),
+		.s4_data_o(	m8s4_data_o	),
+		.s4_addr_o(	m8s4_addr	),
+		.s4_sel_o(	m8s4_sel	),
+		.s4_we_o(	m8s4_we		),
+		.s4_cyc_o(	m8s4_cyc	),
+		.s4_stb_o(	m8s4_stb	),
+		.s4_ack_i(	m8s4_ack	),
+		.s4_err_i(	m8s4_err	),
+		.s4_rty_i(	m8s4_rty	),
+		.s5_data_i(	m8s5_data_i	),
+		.s5_data_o(	m8s5_data_o	),
+		.s5_addr_o(	m8s5_addr	),
+		.s5_sel_o(	m8s5_sel	),
+		.s5_we_o(	m8s5_we		),
+		.s5_cyc_o(	m8s5_cyc	),
+		.s5_stb_o(	m8s5_stb	),
+		.s5_ack_i(	m8s5_ack	),
+		.s5_err_i(	m8s5_err	),
+		.s5_rty_i(	m8s5_rty	),
+		.s6_data_i(	m8s6_data_i	),
+		.s6_data_o(	m8s6_data_o	),
+		.s6_addr_o(	m8s6_addr	),
+		.s6_sel_o(	m8s6_sel	),
+		.s6_we_o(	m8s6_we		),
+		.s6_cyc_o(	m8s6_cyc	),
+		.s6_stb_o(	m8s6_stb	),
+		.s6_ack_i(	m8s6_ack	),
+		.s6_err_i(	m8s6_err	),
+		.s6_rty_i(	m8s6_rty	),
+		.s7_data_i(	m8s7_data_i	),
+		.s7_data_o(	m8s7_data_o	),
+		.s7_addr_o(	m8s7_addr	),
+		.s7_sel_o(	m8s7_sel	),
+		.s7_we_o(	m8s7_we		),
+		.s7_cyc_o(	m8s7_cyc	),
+		.s7_stb_o(	m8s7_stb	),
+		.s7_ack_i(	m8s7_ack	),
+		.s7_err_i(	m8s7_err	),
+		.s7_rty_i(	m8s7_rty	),
+		.s8_data_i(	m8s8_data_i	),
+		.s8_data_o(	m8s8_data_o	),
+		.s8_addr_o(	m8s8_addr	),
+		.s8_sel_o(	m8s8_sel	),
+		.s8_we_o(	m8s8_we		),
+		.s8_cyc_o(	m8s8_cyc	),
+		.s8_stb_o(	m8s8_stb	),
+		.s8_ack_i(	m8s8_ack	),
+		.s8_err_i(	m8s8_err	),
+		.s8_rty_i(	m8s8_rty	),
+		.s9_data_i(	m8s9_data_i	),
+		.s9_data_o(	m8s9_data_o	),
+		.s9_addr_o(	m8s9_addr	),
+		.s9_sel_o(	m8s9_sel	),
+		.s9_we_o(	m8s9_we		),
+		.s9_cyc_o(	m8s9_cyc	),
+		.s9_stb_o(	m8s9_stb	),
+		.s9_ack_i(	m8s9_ack	),
+		.s9_err_i(	m8s9_err	),
+		.s9_rty_i(	m8s9_rty	),
+		.s10_data_i(	m8s10_data_i	),
+		.s10_data_o(	m8s10_data_o	),
+		.s10_addr_o(	m8s10_addr	),
+		.s10_sel_o(	m8s10_sel	),
+		.s10_we_o(	m8s10_we	),
+		.s10_cyc_o(	m8s10_cyc	),
+		.s10_stb_o(	m8s10_stb	),
+		.s10_ack_i(	m8s10_ack	),
+		.s10_err_i(	m8s10_err	),
+		.s10_rty_i(	m8s10_rty	),
+		.s11_data_i(	m8s11_data_i	),
+		.s11_data_o(	m8s11_data_o	),
+		.s11_addr_o(	m8s11_addr	),
+		.s11_sel_o(	m8s11_sel	),
+		.s11_we_o(	m8s11_we	),
+		.s11_cyc_o(	m8s11_cyc	),
+		.s11_stb_o(	m8s11_stb	),
+		.s11_ack_i(	m8s11_ack	),
+		.s11_err_i(	m8s11_err	),
+		.s11_rty_i(	m8s11_rty	),
+		.s12_data_i(	m8s12_data_i	),
+		.s12_data_o(	m8s12_data_o	),
+		.s12_addr_o(	m8s12_addr	),
+		.s12_sel_o(	m8s12_sel	),
+		.s12_we_o(	m8s12_we	),
+		.s12_cyc_o(	m8s12_cyc	),
+		.s12_stb_o(	m8s12_stb	),
+		.s12_ack_i(	m8s12_ack	),
+		.s12_err_i(	m8s12_err	),
+		.s12_rty_i(	m8s12_rty	),
+		.s13_data_i(	m8s13_data_i	),
+		.s13_data_o(	m8s13_data_o	),
+		.s13_addr_o(	m8s13_addr	),
+		.s13_sel_o(	m8s13_sel	),
+		.s13_we_o(	m8s13_we	),
+		.s13_cyc_o(	m8s13_cyc	),
+		.s13_stb_o(	m8s13_stb	),
+		.s13_ack_i(	m8s13_ack	),
+		.s13_err_i(	m8s13_err	),
+		.s13_rty_i(	m8s13_rty	),
+		.s14_data_i(	m8s14_data_i	),
+		.s14_data_o(	m8s14_data_o	),
+		.s14_addr_o(	m8s14_addr	),
+		.s14_sel_o(	m8s14_sel	),
+		.s14_we_o(	m8s14_we	),
+		.s14_cyc_o(	m8s14_cyc	),
+		.s14_stb_o(	m8s14_stb	),
+		.s14_ack_i(	m8s14_ack	),
+		.s14_err_i(	m8s14_err	),
+		.s14_rty_i(	m8s14_rty	),
+		.s15_data_i(	m8s15_data_i	),
+		.s15_data_o(	m8s15_data_o	),
+		.s15_addr_o(	m8s15_addr	),
+		.s15_sel_o(	m8s15_sel	),
+		.s15_we_o(	m8s15_we	),
+		.s15_cyc_o(	m8s15_cyc	),
+		.s15_stb_o(	m8s15_stb	),
+		.s15_ack_i(	m8s15_ack	),
+		.s15_err_i(	m8s15_err	),
+		.s15_rty_i(	m8s15_rty	)
+		);
+
+wb_conmax_master_if #(dw,aw,sw)	m9(
+		.clk_i(		clk_i		),
+		.rst_i(		rst_i		),
+		.wb_data_i(	m9_data_i	),
+		.wb_data_o(	m9_data_o	),
+		.wb_addr_i(	m9_addr_i	),
+		.wb_sel_i(	m9_sel_i	),
+		.wb_we_i(	m9_we_i		),
+		.wb_cyc_i(	m9_cyc_i	),
+		.wb_stb_i(	m9_stb_i	),
+		.wb_ack_o(	m9_ack_o	),
+		.wb_err_o(	m9_err_o	),
+		.wb_rty_o(	m9_rty_o	),
+		.s0_data_i(	m9s0_data_i	),
+		.s0_data_o(	m9s0_data_o	),
+		.s0_addr_o(	m9s0_addr	),
+		.s0_sel_o(	m9s0_sel	),
+		.s0_we_o(	m9s0_we		),
+		.s0_cyc_o(	m9s0_cyc	),
+		.s0_stb_o(	m9s0_stb	),
+		.s0_ack_i(	m9s0_ack	),
+		.s0_err_i(	m9s0_err	),
+		.s0_rty_i(	m9s0_rty	),
+		.s1_data_i(	m9s1_data_i	),
+		.s1_data_o(	m9s1_data_o	),
+		.s1_addr_o(	m9s1_addr	),
+		.s1_sel_o(	m9s1_sel	),
+		.s1_we_o(	m9s1_we		),
+		.s1_cyc_o(	m9s1_cyc	),
+		.s1_stb_o(	m9s1_stb	),
+		.s1_ack_i(	m9s1_ack	),
+		.s1_err_i(	m9s1_err	),
+		.s1_rty_i(	m9s1_rty	),
+		.s2_data_i(	m9s2_data_i	),
+		.s2_data_o(	m9s2_data_o	),
+		.s2_addr_o(	m9s2_addr	),
+		.s2_sel_o(	m9s2_sel	),
+		.s2_we_o(	m9s2_we		),
+		.s2_cyc_o(	m9s2_cyc	),
+		.s2_stb_o(	m9s2_stb	),
+		.s2_ack_i(	m9s2_ack	),
+		.s2_err_i(	m9s2_err	),
+		.s2_rty_i(	m9s2_rty	),
+		.s3_data_i(	m9s3_data_i	),
+		.s3_data_o(	m9s3_data_o	),
+		.s3_addr_o(	m9s3_addr	),
+		.s3_sel_o(	m9s3_sel	),
+		.s3_we_o(	m9s3_we		),
+		.s3_cyc_o(	m9s3_cyc	),
+		.s3_stb_o(	m9s3_stb	),
+		.s3_ack_i(	m9s3_ack	),
+		.s3_err_i(	m9s3_err	),
+		.s3_rty_i(	m9s3_rty	),
+		.s4_data_i(	m9s4_data_i	),
+		.s4_data_o(	m9s4_data_o	),
+		.s4_addr_o(	m9s4_addr	),
+		.s4_sel_o(	m9s4_sel	),
+		.s4_we_o(	m9s4_we		),
+		.s4_cyc_o(	m9s4_cyc	),
+		.s4_stb_o(	m9s4_stb	),
+		.s4_ack_i(	m9s4_ack	),
+		.s4_err_i(	m9s4_err	),
+		.s4_rty_i(	m9s4_rty	),
+		.s5_data_i(	m9s5_data_i	),
+		.s5_data_o(	m9s5_data_o	),
+		.s5_addr_o(	m9s5_addr	),
+		.s5_sel_o(	m9s5_sel	),
+		.s5_we_o(	m9s5_we		),
+		.s5_cyc_o(	m9s5_cyc	),
+		.s5_stb_o(	m9s5_stb	),
+		.s5_ack_i(	m9s5_ack	),
+		.s5_err_i(	m9s5_err	),
+		.s5_rty_i(	m9s5_rty	),
+		.s6_data_i(	m9s6_data_i	),
+		.s6_data_o(	m9s6_data_o	),
+		.s6_addr_o(	m9s6_addr	),
+		.s6_sel_o(	m9s6_sel	),
+		.s6_we_o(	m9s6_we		),
+		.s6_cyc_o(	m9s6_cyc	),
+		.s6_stb_o(	m9s6_stb	),
+		.s6_ack_i(	m9s6_ack	),
+		.s6_err_i(	m9s6_err	),
+		.s6_rty_i(	m9s6_rty	),
+		.s7_data_i(	m9s7_data_i	),
+		.s7_data_o(	m9s7_data_o	),
+		.s7_addr_o(	m9s7_addr	),
+		.s7_sel_o(	m9s7_sel	),
+		.s7_we_o(	m9s7_we		),
+		.s7_cyc_o(	m9s7_cyc	),
+		.s7_stb_o(	m9s7_stb	),
+		.s7_ack_i(	m9s7_ack	),
+		.s7_err_i(	m9s7_err	),
+		.s7_rty_i(	m9s7_rty	),
+		.s8_data_i(	m9s8_data_i	),
+		.s8_data_o(	m9s8_data_o	),
+		.s8_addr_o(	m9s8_addr	),
+		.s8_sel_o(	m9s8_sel	),
+		.s8_we_o(	m9s8_we		),
+		.s8_cyc_o(	m9s8_cyc	),
+		.s8_stb_o(	m9s8_stb	),
+		.s8_ack_i(	m9s8_ack	),
+		.s8_err_i(	m9s8_err	),
+		.s8_rty_i(	m9s8_rty	),
+		.s9_data_i(	m9s9_data_i	),
+		.s9_data_o(	m9s9_data_o	),
+		.s9_addr_o(	m9s9_addr	),
+		.s9_sel_o(	m9s9_sel	),
+		.s9_we_o(	m9s9_we		),
+		.s9_cyc_o(	m9s9_cyc	),
+		.s9_stb_o(	m9s9_stb	),
+		.s9_ack_i(	m9s9_ack	),
+		.s9_err_i(	m9s9_err	),
+		.s9_rty_i(	m9s9_rty	),
+		.s10_data_i(	m9s10_data_i	),
+		.s10_data_o(	m9s10_data_o	),
+		.s10_addr_o(	m9s10_addr	),
+		.s10_sel_o(	m9s10_sel	),
+		.s10_we_o(	m9s10_we	),
+		.s10_cyc_o(	m9s10_cyc	),
+		.s10_stb_o(	m9s10_stb	),
+		.s10_ack_i(	m9s10_ack	),
+		.s10_err_i(	m9s10_err	),
+		.s10_rty_i(	m9s10_rty	),
+		.s11_data_i(	m9s11_data_i	),
+		.s11_data_o(	m9s11_data_o	),
+		.s11_addr_o(	m9s11_addr	),
+		.s11_sel_o(	m9s11_sel	),
+		.s11_we_o(	m9s11_we	),
+		.s11_cyc_o(	m9s11_cyc	),
+		.s11_stb_o(	m9s11_stb	),
+		.s11_ack_i(	m9s11_ack	),
+		.s11_err_i(	m9s11_err	),
+		.s11_rty_i(	m9s11_rty	),
+		.s12_data_i(	m9s12_data_i	),
+		.s12_data_o(	m9s12_data_o	),
+		.s12_addr_o(	m9s12_addr	),
+		.s12_sel_o(	m9s12_sel	),
+		.s12_we_o(	m9s12_we	),
+		.s12_cyc_o(	m9s12_cyc	),
+		.s12_stb_o(	m9s12_stb	),
+		.s12_ack_i(	m9s12_ack	),
+		.s12_err_i(	m9s12_err	),
+		.s12_rty_i(	m9s12_rty	),
+		.s13_data_i(	m9s13_data_i	),
+		.s13_data_o(	m9s13_data_o	),
+		.s13_addr_o(	m9s13_addr	),
+		.s13_sel_o(	m9s13_sel	),
+		.s13_we_o(	m9s13_we	),
+		.s13_cyc_o(	m9s13_cyc	),
+		.s13_stb_o(	m9s13_stb	),
+		.s13_ack_i(	m9s13_ack	),
+		.s13_err_i(	m9s13_err	),
+		.s13_rty_i(	m9s13_rty	),
+		.s14_data_i(	m9s14_data_i	),
+		.s14_data_o(	m9s14_data_o	),
+		.s14_addr_o(	m9s14_addr	),
+		.s14_sel_o(	m9s14_sel	),
+		.s14_we_o(	m9s14_we	),
+		.s14_cyc_o(	m9s14_cyc	),
+		.s14_stb_o(	m9s14_stb	),
+		.s14_ack_i(	m9s14_ack	),
+		.s14_err_i(	m9s14_err	),
+		.s14_rty_i(	m9s14_rty	),
+		.s15_data_i(	m9s15_data_i	),
+		.s15_data_o(	m9s15_data_o	),
+		.s15_addr_o(	m9s15_addr	),
+		.s15_sel_o(	m9s15_sel	),
+		.s15_we_o(	m9s15_we	),
+		.s15_cyc_o(	m9s15_cyc	),
+		.s15_stb_o(	m9s15_stb	),
+		.s15_ack_i(	m9s15_ack	),
+		.s15_err_i(	m9s15_err	),
+		.s15_rty_i(	m9s15_rty	)
+		);
+
+wb_conmax_master_if #(dw,aw,sw)	m10(
+		.clk_i(		clk_i		),
+		.rst_i(		rst_i		),
+		.wb_data_i(	m10_data_i	),
+		.wb_data_o(	m10_data_o	),
+		.wb_addr_i(	m10_addr_i	),
+		.wb_sel_i(	m10_sel_i	),
+		.wb_we_i(	m10_we_i		),
+		.wb_cyc_i(	m10_cyc_i	),
+		.wb_stb_i(	m10_stb_i	),
+		.wb_ack_o(	m10_ack_o	),
+		.wb_err_o(	m10_err_o	),
+		.wb_rty_o(	m10_rty_o	),
+		.s0_data_i(	m10s0_data_i	),
+		.s0_data_o(	m10s0_data_o	),
+		.s0_addr_o(	m10s0_addr	),
+		.s0_sel_o(	m10s0_sel	),
+		.s0_we_o(	m10s0_we		),
+		.s0_cyc_o(	m10s0_cyc	),
+		.s0_stb_o(	m10s0_stb	),
+		.s0_ack_i(	m10s0_ack	),
+		.s0_err_i(	m10s0_err	),
+		.s0_rty_i(	m10s0_rty	),
+		.s1_data_i(	m10s1_data_i	),
+		.s1_data_o(	m10s1_data_o	),
+		.s1_addr_o(	m10s1_addr	),
+		.s1_sel_o(	m10s1_sel	),
+		.s1_we_o(	m10s1_we		),
+		.s1_cyc_o(	m10s1_cyc	),
+		.s1_stb_o(	m10s1_stb	),
+		.s1_ack_i(	m10s1_ack	),
+		.s1_err_i(	m10s1_err	),
+		.s1_rty_i(	m10s1_rty	),
+		.s2_data_i(	m10s2_data_i	),
+		.s2_data_o(	m10s2_data_o	),
+		.s2_addr_o(	m10s2_addr	),
+		.s2_sel_o(	m10s2_sel	),
+		.s2_we_o(	m10s2_we		),
+		.s2_cyc_o(	m10s2_cyc	),
+		.s2_stb_o(	m10s2_stb	),
+		.s2_ack_i(	m10s2_ack	),
+		.s2_err_i(	m10s2_err	),
+		.s2_rty_i(	m10s2_rty	),
+		.s3_data_i(	m10s3_data_i	),
+		.s3_data_o(	m10s3_data_o	),
+		.s3_addr_o(	m10s3_addr	),
+		.s3_sel_o(	m10s3_sel	),
+		.s3_we_o(	m10s3_we		),
+		.s3_cyc_o(	m10s3_cyc	),
+		.s3_stb_o(	m10s3_stb	),
+		.s3_ack_i(	m10s3_ack	),
+		.s3_err_i(	m10s3_err	),
+		.s3_rty_i(	m10s3_rty	),
+		.s4_data_i(	m10s4_data_i	),
+		.s4_data_o(	m10s4_data_o	),
+		.s4_addr_o(	m10s4_addr	),
+		.s4_sel_o(	m10s4_sel	),
+		.s4_we_o(	m10s4_we		),
+		.s4_cyc_o(	m10s4_cyc	),
+		.s4_stb_o(	m10s4_stb	),
+		.s4_ack_i(	m10s4_ack	),
+		.s4_err_i(	m10s4_err	),
+		.s4_rty_i(	m10s4_rty	),
+		.s5_data_i(	m10s5_data_i	),
+		.s5_data_o(	m10s5_data_o	),
+		.s5_addr_o(	m10s5_addr	),
+		.s5_sel_o(	m10s5_sel	),
+		.s5_we_o(	m10s5_we		),
+		.s5_cyc_o(	m10s5_cyc	),
+		.s5_stb_o(	m10s5_stb	),
+		.s5_ack_i(	m10s5_ack	),
+		.s5_err_i(	m10s5_err	),
+		.s5_rty_i(	m10s5_rty	),
+		.s6_data_i(	m10s6_data_i	),
+		.s6_data_o(	m10s6_data_o	),
+		.s6_addr_o(	m10s6_addr	),
+		.s6_sel_o(	m10s6_sel	),
+		.s6_we_o(	m10s6_we		),
+		.s6_cyc_o(	m10s6_cyc	),
+		.s6_stb_o(	m10s6_stb	),
+		.s6_ack_i(	m10s6_ack	),
+		.s6_err_i(	m10s6_err	),
+		.s6_rty_i(	m10s6_rty	),
+		.s7_data_i(	m10s7_data_i	),
+		.s7_data_o(	m10s7_data_o	),
+		.s7_addr_o(	m10s7_addr	),
+		.s7_sel_o(	m10s7_sel	),
+		.s7_we_o(	m10s7_we		),
+		.s7_cyc_o(	m10s7_cyc	),
+		.s7_stb_o(	m10s7_stb	),
+		.s7_ack_i(	m10s7_ack	),
+		.s7_err_i(	m10s7_err	),
+		.s7_rty_i(	m10s7_rty	),
+		.s8_data_i(	m10s8_data_i	),
+		.s8_data_o(	m10s8_data_o	),
+		.s8_addr_o(	m10s8_addr	),
+		.s8_sel_o(	m10s8_sel	),
+		.s8_we_o(	m10s8_we		),
+		.s8_cyc_o(	m10s8_cyc	),
+		.s8_stb_o(	m10s8_stb	),
+		.s8_ack_i(	m10s8_ack	),
+		.s8_err_i(	m10s8_err	),
+		.s8_rty_i(	m10s8_rty	),
+		.s9_data_i(	m10s9_data_i	),
+		.s9_data_o(	m10s9_data_o	),
+		.s9_addr_o(	m10s9_addr	),
+		.s9_sel_o(	m10s9_sel	),
+		.s9_we_o(	m10s9_we		),
+		.s9_cyc_o(	m10s9_cyc	),
+		.s9_stb_o(	m10s9_stb	),
+		.s9_ack_i(	m10s9_ack	),
+		.s9_err_i(	m10s9_err	),
+		.s9_rty_i(	m10s9_rty	),
+		.s10_data_i(	m10s10_data_i	),
+		.s10_data_o(	m10s10_data_o	),
+		.s10_addr_o(	m10s10_addr	),
+		.s10_sel_o(	m10s10_sel	),
+		.s10_we_o(	m10s10_we	),
+		.s10_cyc_o(	m10s10_cyc	),
+		.s10_stb_o(	m10s10_stb	),
+		.s10_ack_i(	m10s10_ack	),
+		.s10_err_i(	m10s10_err	),
+		.s10_rty_i(	m10s10_rty	),
+		.s11_data_i(	m10s11_data_i	),
+		.s11_data_o(	m10s11_data_o	),
+		.s11_addr_o(	m10s11_addr	),
+		.s11_sel_o(	m10s11_sel	),
+		.s11_we_o(	m10s11_we	),
+		.s11_cyc_o(	m10s11_cyc	),
+		.s11_stb_o(	m10s11_stb	),
+		.s11_ack_i(	m10s11_ack	),
+		.s11_err_i(	m10s11_err	),
+		.s11_rty_i(	m10s11_rty	),
+		.s12_data_i(	m10s12_data_i	),
+		.s12_data_o(	m10s12_data_o	),
+		.s12_addr_o(	m10s12_addr	),
+		.s12_sel_o(	m10s12_sel	),
+		.s12_we_o(	m10s12_we	),
+		.s12_cyc_o(	m10s12_cyc	),
+		.s12_stb_o(	m10s12_stb	),
+		.s12_ack_i(	m10s12_ack	),
+		.s12_err_i(	m10s12_err	),
+		.s12_rty_i(	m10s12_rty	),
+		.s13_data_i(	m10s13_data_i	),
+		.s13_data_o(	m10s13_data_o	),
+		.s13_addr_o(	m10s13_addr	),
+		.s13_sel_o(	m10s13_sel	),
+		.s13_we_o(	m10s13_we	),
+		.s13_cyc_o(	m10s13_cyc	),
+		.s13_stb_o(	m10s13_stb	),
+		.s13_ack_i(	m10s13_ack	),
+		.s13_err_i(	m10s13_err	),
+		.s13_rty_i(	m10s13_rty	),
+		.s14_data_i(	m10s14_data_i	),
+		.s14_data_o(	m10s14_data_o	),
+		.s14_addr_o(	m10s14_addr	),
+		.s14_sel_o(	m10s14_sel	),
+		.s14_we_o(	m10s14_we	),
+		.s14_cyc_o(	m10s14_cyc	),
+		.s14_stb_o(	m10s14_stb	),
+		.s14_ack_i(	m10s14_ack	),
+		.s14_err_i(	m10s14_err	),
+		.s14_rty_i(	m10s14_rty	),
+		.s15_data_i(	m10s15_data_i	),
+		.s15_data_o(	m10s15_data_o	),
+		.s15_addr_o(	m10s15_addr	),
+		.s15_sel_o(	m10s15_sel	),
+		.s15_we_o(	m10s15_we	),
+		.s15_cyc_o(	m10s15_cyc	),
+		.s15_stb_o(	m10s15_stb	),
+		.s15_ack_i(	m10s15_ack	),
+		.s15_err_i(	m10s15_err	),
+		.s15_rty_i(	m10s15_rty	)
+		);
+
+wb_conmax_master_if #(dw,aw,sw)	m11(
+		.clk_i(		clk_i		),
+		.rst_i(		rst_i		),
+		.wb_data_i(	m11_data_i	),
+		.wb_data_o(	m11_data_o	),
+		.wb_addr_i(	m11_addr_i	),
+		.wb_sel_i(	m11_sel_i	),
+		.wb_we_i(	m11_we_i		),
+		.wb_cyc_i(	m11_cyc_i	),
+		.wb_stb_i(	m11_stb_i	),
+		.wb_ack_o(	m11_ack_o	),
+		.wb_err_o(	m11_err_o	),
+		.wb_rty_o(	m11_rty_o	),
+		.s0_data_i(	m11s0_data_i	),
+		.s0_data_o(	m11s0_data_o	),
+		.s0_addr_o(	m11s0_addr	),
+		.s0_sel_o(	m11s0_sel	),
+		.s0_we_o(	m11s0_we		),
+		.s0_cyc_o(	m11s0_cyc	),
+		.s0_stb_o(	m11s0_stb	),
+		.s0_ack_i(	m11s0_ack	),
+		.s0_err_i(	m11s0_err	),
+		.s0_rty_i(	m11s0_rty	),
+		.s1_data_i(	m11s1_data_i	),
+		.s1_data_o(	m11s1_data_o	),
+		.s1_addr_o(	m11s1_addr	),
+		.s1_sel_o(	m11s1_sel	),
+		.s1_we_o(	m11s1_we		),
+		.s1_cyc_o(	m11s1_cyc	),
+		.s1_stb_o(	m11s1_stb	),
+		.s1_ack_i(	m11s1_ack	),
+		.s1_err_i(	m11s1_err	),
+		.s1_rty_i(	m11s1_rty	),
+		.s2_data_i(	m11s2_data_i	),
+		.s2_data_o(	m11s2_data_o	),
+		.s2_addr_o(	m11s2_addr	),
+		.s2_sel_o(	m11s2_sel	),
+		.s2_we_o(	m11s2_we		),
+		.s2_cyc_o(	m11s2_cyc	),
+		.s2_stb_o(	m11s2_stb	),
+		.s2_ack_i(	m11s2_ack	),
+		.s2_err_i(	m11s2_err	),
+		.s2_rty_i(	m11s2_rty	),
+		.s3_data_i(	m11s3_data_i	),
+		.s3_data_o(	m11s3_data_o	),
+		.s3_addr_o(	m11s3_addr	),
+		.s3_sel_o(	m11s3_sel	),
+		.s3_we_o(	m11s3_we		),
+		.s3_cyc_o(	m11s3_cyc	),
+		.s3_stb_o(	m11s3_stb	),
+		.s3_ack_i(	m11s3_ack	),
+		.s3_err_i(	m11s3_err	),
+		.s3_rty_i(	m11s3_rty	),
+		.s4_data_i(	m11s4_data_i	),
+		.s4_data_o(	m11s4_data_o	),
+		.s4_addr_o(	m11s4_addr	),
+		.s4_sel_o(	m11s4_sel	),
+		.s4_we_o(	m11s4_we		),
+		.s4_cyc_o(	m11s4_cyc	),
+		.s4_stb_o(	m11s4_stb	),
+		.s4_ack_i(	m11s4_ack	),
+		.s4_err_i(	m11s4_err	),
+		.s4_rty_i(	m11s4_rty	),
+		.s5_data_i(	m11s5_data_i	),
+		.s5_data_o(	m11s5_data_o	),
+		.s5_addr_o(	m11s5_addr	),
+		.s5_sel_o(	m11s5_sel	),
+		.s5_we_o(	m11s5_we		),
+		.s5_cyc_o(	m11s5_cyc	),
+		.s5_stb_o(	m11s5_stb	),
+		.s5_ack_i(	m11s5_ack	),
+		.s5_err_i(	m11s5_err	),
+		.s5_rty_i(	m11s5_rty	),
+		.s6_data_i(	m11s6_data_i	),
+		.s6_data_o(	m11s6_data_o	),
+		.s6_addr_o(	m11s6_addr	),
+		.s6_sel_o(	m11s6_sel	),
+		.s6_we_o(	m11s6_we		),
+		.s6_cyc_o(	m11s6_cyc	),
+		.s6_stb_o(	m11s6_stb	),
+		.s6_ack_i(	m11s6_ack	),
+		.s6_err_i(	m11s6_err	),
+		.s6_rty_i(	m11s6_rty	),
+		.s7_data_i(	m11s7_data_i	),
+		.s7_data_o(	m11s7_data_o	),
+		.s7_addr_o(	m11s7_addr	),
+		.s7_sel_o(	m11s7_sel	),
+		.s7_we_o(	m11s7_we		),
+		.s7_cyc_o(	m11s7_cyc	),
+		.s7_stb_o(	m11s7_stb	),
+		.s7_ack_i(	m11s7_ack	),
+		.s7_err_i(	m11s7_err	),
+		.s7_rty_i(	m11s7_rty	),
+		.s8_data_i(	m11s8_data_i	),
+		.s8_data_o(	m11s8_data_o	),
+		.s8_addr_o(	m11s8_addr	),
+		.s8_sel_o(	m11s8_sel	),
+		.s8_we_o(	m11s8_we		),
+		.s8_cyc_o(	m11s8_cyc	),
+		.s8_stb_o(	m11s8_stb	),
+		.s8_ack_i(	m11s8_ack	),
+		.s8_err_i(	m11s8_err	),
+		.s8_rty_i(	m11s8_rty	),
+		.s9_data_i(	m11s9_data_i	),
+		.s9_data_o(	m11s9_data_o	),
+		.s9_addr_o(	m11s9_addr	),
+		.s9_sel_o(	m11s9_sel	),
+		.s9_we_o(	m11s9_we		),
+		.s9_cyc_o(	m11s9_cyc	),
+		.s9_stb_o(	m11s9_stb	),
+		.s9_ack_i(	m11s9_ack	),
+		.s9_err_i(	m11s9_err	),
+		.s9_rty_i(	m11s9_rty	),
+		.s10_data_i(	m11s10_data_i	),
+		.s10_data_o(	m11s10_data_o	),
+		.s10_addr_o(	m11s10_addr	),
+		.s10_sel_o(	m11s10_sel	),
+		.s10_we_o(	m11s10_we	),
+		.s10_cyc_o(	m11s10_cyc	),
+		.s10_stb_o(	m11s10_stb	),
+		.s10_ack_i(	m11s10_ack	),
+		.s10_err_i(	m11s10_err	),
+		.s10_rty_i(	m11s10_rty	),
+		.s11_data_i(	m11s11_data_i	),
+		.s11_data_o(	m11s11_data_o	),
+		.s11_addr_o(	m11s11_addr	),
+		.s11_sel_o(	m11s11_sel	),
+		.s11_we_o(	m11s11_we	),
+		.s11_cyc_o(	m11s11_cyc	),
+		.s11_stb_o(	m11s11_stb	),
+		.s11_ack_i(	m11s11_ack	),
+		.s11_err_i(	m11s11_err	),
+		.s11_rty_i(	m11s11_rty	),
+		.s12_data_i(	m11s12_data_i	),
+		.s12_data_o(	m11s12_data_o	),
+		.s12_addr_o(	m11s12_addr	),
+		.s12_sel_o(	m11s12_sel	),
+		.s12_we_o(	m11s12_we	),
+		.s12_cyc_o(	m11s12_cyc	),
+		.s12_stb_o(	m11s12_stb	),
+		.s12_ack_i(	m11s12_ack	),
+		.s12_err_i(	m11s12_err	),
+		.s12_rty_i(	m11s12_rty	),
+		.s13_data_i(	m11s13_data_i	),
+		.s13_data_o(	m11s13_data_o	),
+		.s13_addr_o(	m11s13_addr	),
+		.s13_sel_o(	m11s13_sel	),
+		.s13_we_o(	m11s13_we	),
+		.s13_cyc_o(	m11s13_cyc	),
+		.s13_stb_o(	m11s13_stb	),
+		.s13_ack_i(	m11s13_ack	),
+		.s13_err_i(	m11s13_err	),
+		.s13_rty_i(	m11s13_rty	),
+		.s14_data_i(	m11s14_data_i	),
+		.s14_data_o(	m11s14_data_o	),
+		.s14_addr_o(	m11s14_addr	),
+		.s14_sel_o(	m11s14_sel	),
+		.s14_we_o(	m11s14_we	),
+		.s14_cyc_o(	m11s14_cyc	),
+		.s14_stb_o(	m11s14_stb	),
+		.s14_ack_i(	m11s14_ack	),
+		.s14_err_i(	m11s14_err	),
+		.s14_rty_i(	m11s14_rty	),
+		.s15_data_i(	m11s15_data_i	),
+		.s15_data_o(	m11s15_data_o	),
+		.s15_addr_o(	m11s15_addr	),
+		.s15_sel_o(	m11s15_sel	),
+		.s15_we_o(	m11s15_we	),
+		.s15_cyc_o(	m11s15_cyc	),
+		.s15_stb_o(	m11s15_stb	),
+		.s15_ack_i(	m11s15_ack	),
+		.s15_err_i(	m11s15_err	),
+		.s15_rty_i(	m11s15_rty	)
+		);
+
+wb_conmax_master_if #(dw,aw,sw)	m12(
+		.clk_i(		clk_i		),
+		.rst_i(		rst_i		),
+		.wb_data_i(	m12_data_i	),
+		.wb_data_o(	m12_data_o	),
+		.wb_addr_i(	m12_addr_i	),
+		.wb_sel_i(	m12_sel_i	),
+		.wb_we_i(	m12_we_i		),
+		.wb_cyc_i(	m12_cyc_i	),
+		.wb_stb_i(	m12_stb_i	),
+		.wb_ack_o(	m12_ack_o	),
+		.wb_err_o(	m12_err_o	),
+		.wb_rty_o(	m12_rty_o	),
+		.s0_data_i(	m12s0_data_i	),
+		.s0_data_o(	m12s0_data_o	),
+		.s0_addr_o(	m12s0_addr	),
+		.s0_sel_o(	m12s0_sel	),
+		.s0_we_o(	m12s0_we		),
+		.s0_cyc_o(	m12s0_cyc	),
+		.s0_stb_o(	m12s0_stb	),
+		.s0_ack_i(	m12s0_ack	),
+		.s0_err_i(	m12s0_err	),
+		.s0_rty_i(	m12s0_rty	),
+		.s1_data_i(	m12s1_data_i	),
+		.s1_data_o(	m12s1_data_o	),
+		.s1_addr_o(	m12s1_addr	),
+		.s1_sel_o(	m12s1_sel	),
+		.s1_we_o(	m12s1_we		),
+		.s1_cyc_o(	m12s1_cyc	),
+		.s1_stb_o(	m12s1_stb	),
+		.s1_ack_i(	m12s1_ack	),
+		.s1_err_i(	m12s1_err	),
+		.s1_rty_i(	m12s1_rty	),
+		.s2_data_i(	m12s2_data_i	),
+		.s2_data_o(	m12s2_data_o	),
+		.s2_addr_o(	m12s2_addr	),
+		.s2_sel_o(	m12s2_sel	),
+		.s2_we_o(	m12s2_we		),
+		.s2_cyc_o(	m12s2_cyc	),
+		.s2_stb_o(	m12s2_stb	),
+		.s2_ack_i(	m12s2_ack	),
+		.s2_err_i(	m12s2_err	),
+		.s2_rty_i(	m12s2_rty	),
+		.s3_data_i(	m12s3_data_i	),
+		.s3_data_o(	m12s3_data_o	),
+		.s3_addr_o(	m12s3_addr	),
+		.s3_sel_o(	m12s3_sel	),
+		.s3_we_o(	m12s3_we		),
+		.s3_cyc_o(	m12s3_cyc	),
+		.s3_stb_o(	m12s3_stb	),
+		.s3_ack_i(	m12s3_ack	),
+		.s3_err_i(	m12s3_err	),
+		.s3_rty_i(	m12s3_rty	),
+		.s4_data_i(	m12s4_data_i	),
+		.s4_data_o(	m12s4_data_o	),
+		.s4_addr_o(	m12s4_addr	),
+		.s4_sel_o(	m12s4_sel	),
+		.s4_we_o(	m12s4_we		),
+		.s4_cyc_o(	m12s4_cyc	),
+		.s4_stb_o(	m12s4_stb	),
+		.s4_ack_i(	m12s4_ack	),
+		.s4_err_i(	m12s4_err	),
+		.s4_rty_i(	m12s4_rty	),
+		.s5_data_i(	m12s5_data_i	),
+		.s5_data_o(	m12s5_data_o	),
+		.s5_addr_o(	m12s5_addr	),
+		.s5_sel_o(	m12s5_sel	),
+		.s5_we_o(	m12s5_we		),
+		.s5_cyc_o(	m12s5_cyc	),
+		.s5_stb_o(	m12s5_stb	),
+		.s5_ack_i(	m12s5_ack	),
+		.s5_err_i(	m12s5_err	),
+		.s5_rty_i(	m12s5_rty	),
+		.s6_data_i(	m12s6_data_i	),
+		.s6_data_o(	m12s6_data_o	),
+		.s6_addr_o(	m12s6_addr	),
+		.s6_sel_o(	m12s6_sel	),
+		.s6_we_o(	m12s6_we		),
+		.s6_cyc_o(	m12s6_cyc	),
+		.s6_stb_o(	m12s6_stb	),
+		.s6_ack_i(	m12s6_ack	),
+		.s6_err_i(	m12s6_err	),
+		.s6_rty_i(	m12s6_rty	),
+		.s7_data_i(	m12s7_data_i	),
+		.s7_data_o(	m12s7_data_o	),
+		.s7_addr_o(	m12s7_addr	),
+		.s7_sel_o(	m12s7_sel	),
+		.s7_we_o(	m12s7_we		),
+		.s7_cyc_o(	m12s7_cyc	),
+		.s7_stb_o(	m12s7_stb	),
+		.s7_ack_i(	m12s7_ack	),
+		.s7_err_i(	m12s7_err	),
+		.s7_rty_i(	m12s7_rty	),
+		.s8_data_i(	m12s8_data_i	),
+		.s8_data_o(	m12s8_data_o	),
+		.s8_addr_o(	m12s8_addr	),
+		.s8_sel_o(	m12s8_sel	),
+		.s8_we_o(	m12s8_we		),
+		.s8_cyc_o(	m12s8_cyc	),
+		.s8_stb_o(	m12s8_stb	),
+		.s8_ack_i(	m12s8_ack	),
+		.s8_err_i(	m12s8_err	),
+		.s8_rty_i(	m12s8_rty	),
+		.s9_data_i(	m12s9_data_i	),
+		.s9_data_o(	m12s9_data_o	),
+		.s9_addr_o(	m12s9_addr	),
+		.s9_sel_o(	m12s9_sel	),
+		.s9_we_o(	m12s9_we		),
+		.s9_cyc_o(	m12s9_cyc	),
+		.s9_stb_o(	m12s9_stb	),
+		.s9_ack_i(	m12s9_ack	),
+		.s9_err_i(	m12s9_err	),
+		.s9_rty_i(	m12s9_rty	),
+		.s10_data_i(	m12s10_data_i	),
+		.s10_data_o(	m12s10_data_o	),
+		.s10_addr_o(	m12s10_addr	),
+		.s10_sel_o(	m12s10_sel	),
+		.s10_we_o(	m12s10_we	),
+		.s10_cyc_o(	m12s10_cyc	),
+		.s10_stb_o(	m12s10_stb	),
+		.s10_ack_i(	m12s10_ack	),
+		.s10_err_i(	m12s10_err	),
+		.s10_rty_i(	m12s10_rty	),
+		.s11_data_i(	m12s11_data_i	),
+		.s11_data_o(	m12s11_data_o	),
+		.s11_addr_o(	m12s11_addr	),
+		.s11_sel_o(	m12s11_sel	),
+		.s11_we_o(	m12s11_we	),
+		.s11_cyc_o(	m12s11_cyc	),
+		.s11_stb_o(	m12s11_stb	),
+		.s11_ack_i(	m12s11_ack	),
+		.s11_err_i(	m12s11_err	),
+		.s11_rty_i(	m12s11_rty	),
+		.s12_data_i(	m12s12_data_i	),
+		.s12_data_o(	m12s12_data_o	),
+		.s12_addr_o(	m12s12_addr	),
+		.s12_sel_o(	m12s12_sel	),
+		.s12_we_o(	m12s12_we	),
+		.s12_cyc_o(	m12s12_cyc	),
+		.s12_stb_o(	m12s12_stb	),
+		.s12_ack_i(	m12s12_ack	),
+		.s12_err_i(	m12s12_err	),
+		.s12_rty_i(	m12s12_rty	),
+		.s13_data_i(	m12s13_data_i	),
+		.s13_data_o(	m12s13_data_o	),
+		.s13_addr_o(	m12s13_addr	),
+		.s13_sel_o(	m12s13_sel	),
+		.s13_we_o(	m12s13_we	),
+		.s13_cyc_o(	m12s13_cyc	),
+		.s13_stb_o(	m12s13_stb	),
+		.s13_ack_i(	m12s13_ack	),
+		.s13_err_i(	m12s13_err	),
+		.s13_rty_i(	m12s13_rty	),
+		.s14_data_i(	m12s14_data_i	),
+		.s14_data_o(	m12s14_data_o	),
+		.s14_addr_o(	m12s14_addr	),
+		.s14_sel_o(	m12s14_sel	),
+		.s14_we_o(	m12s14_we	),
+		.s14_cyc_o(	m12s14_cyc	),
+		.s14_stb_o(	m12s14_stb	),
+		.s14_ack_i(	m12s14_ack	),
+		.s14_err_i(	m12s14_err	),
+		.s14_rty_i(	m12s14_rty	),
+		.s15_data_i(	m12s15_data_i	),
+		.s15_data_o(	m12s15_data_o	),
+		.s15_addr_o(	m12s15_addr	),
+		.s15_sel_o(	m12s15_sel	),
+		.s15_we_o(	m12s15_we	),
+		.s15_cyc_o(	m12s15_cyc	),
+		.s15_stb_o(	m12s15_stb	),
+		.s15_ack_i(	m12s15_ack	),
+		.s15_err_i(	m12s15_err	),
+		.s15_rty_i(	m12s15_rty	)
+		);
+
+wb_conmax_master_if #(dw,aw,sw)	m13(
+		.clk_i(		clk_i		),
+		.rst_i(		rst_i		),
+		.wb_data_i(	m13_data_i	),
+		.wb_data_o(	m13_data_o	),
+		.wb_addr_i(	m13_addr_i	),
+		.wb_sel_i(	m13_sel_i	),
+		.wb_we_i(	m13_we_i		),
+		.wb_cyc_i(	m13_cyc_i	),
+		.wb_stb_i(	m13_stb_i	),
+		.wb_ack_o(	m13_ack_o	),
+		.wb_err_o(	m13_err_o	),
+		.wb_rty_o(	m13_rty_o	),
+		.s0_data_i(	m13s0_data_i	),
+		.s0_data_o(	m13s0_data_o	),
+		.s0_addr_o(	m13s0_addr	),
+		.s0_sel_o(	m13s0_sel	),
+		.s0_we_o(	m13s0_we		),
+		.s0_cyc_o(	m13s0_cyc	),
+		.s0_stb_o(	m13s0_stb	),
+		.s0_ack_i(	m13s0_ack	),
+		.s0_err_i(	m13s0_err	),
+		.s0_rty_i(	m13s0_rty	),
+		.s1_data_i(	m13s1_data_i	),
+		.s1_data_o(	m13s1_data_o	),
+		.s1_addr_o(	m13s1_addr	),
+		.s1_sel_o(	m13s1_sel	),
+		.s1_we_o(	m13s1_we		),
+		.s1_cyc_o(	m13s1_cyc	),
+		.s1_stb_o(	m13s1_stb	),
+		.s1_ack_i(	m13s1_ack	),
+		.s1_err_i(	m13s1_err	),
+		.s1_rty_i(	m13s1_rty	),
+		.s2_data_i(	m13s2_data_i	),
+		.s2_data_o(	m13s2_data_o	),
+		.s2_addr_o(	m13s2_addr	),
+		.s2_sel_o(	m13s2_sel	),
+		.s2_we_o(	m13s2_we		),
+		.s2_cyc_o(	m13s2_cyc	),
+		.s2_stb_o(	m13s2_stb	),
+		.s2_ack_i(	m13s2_ack	),
+		.s2_err_i(	m13s2_err	),
+		.s2_rty_i(	m13s2_rty	),
+		.s3_data_i(	m13s3_data_i	),
+		.s3_data_o(	m13s3_data_o	),
+		.s3_addr_o(	m13s3_addr	),
+		.s3_sel_o(	m13s3_sel	),
+		.s3_we_o(	m13s3_we		),
+		.s3_cyc_o(	m13s3_cyc	),
+		.s3_stb_o(	m13s3_stb	),
+		.s3_ack_i(	m13s3_ack	),
+		.s3_err_i(	m13s3_err	),
+		.s3_rty_i(	m13s3_rty	),
+		.s4_data_i(	m13s4_data_i	),
+		.s4_data_o(	m13s4_data_o	),
+		.s4_addr_o(	m13s4_addr	),
+		.s4_sel_o(	m13s4_sel	),
+		.s4_we_o(	m13s4_we		),
+		.s4_cyc_o(	m13s4_cyc	),
+		.s4_stb_o(	m13s4_stb	),
+		.s4_ack_i(	m13s4_ack	),
+		.s4_err_i(	m13s4_err	),
+		.s4_rty_i(	m13s4_rty	),
+		.s5_data_i(	m13s5_data_i	),
+		.s5_data_o(	m13s5_data_o	),
+		.s5_addr_o(	m13s5_addr	),
+		.s5_sel_o(	m13s5_sel	),
+		.s5_we_o(	m13s5_we		),
+		.s5_cyc_o(	m13s5_cyc	),
+		.s5_stb_o(	m13s5_stb	),
+		.s5_ack_i(	m13s5_ack	),
+		.s5_err_i(	m13s5_err	),
+		.s5_rty_i(	m13s5_rty	),
+		.s6_data_i(	m13s6_data_i	),
+		.s6_data_o(	m13s6_data_o	),
+		.s6_addr_o(	m13s6_addr	),
+		.s6_sel_o(	m13s6_sel	),
+		.s6_we_o(	m13s6_we		),
+		.s6_cyc_o(	m13s6_cyc	),
+		.s6_stb_o(	m13s6_stb	),
+		.s6_ack_i(	m13s6_ack	),
+		.s6_err_i(	m13s6_err	),
+		.s6_rty_i(	m13s6_rty	),
+		.s7_data_i(	m13s7_data_i	),
+		.s7_data_o(	m13s7_data_o	),
+		.s7_addr_o(	m13s7_addr	),
+		.s7_sel_o(	m13s7_sel	),
+		.s7_we_o(	m13s7_we		),
+		.s7_cyc_o(	m13s7_cyc	),
+		.s7_stb_o(	m13s7_stb	),
+		.s7_ack_i(	m13s7_ack	),
+		.s7_err_i(	m13s7_err	),
+		.s7_rty_i(	m13s7_rty	),
+		.s8_data_i(	m13s8_data_i	),
+		.s8_data_o(	m13s8_data_o	),
+		.s8_addr_o(	m13s8_addr	),
+		.s8_sel_o(	m13s8_sel	),
+		.s8_we_o(	m13s8_we		),
+		.s8_cyc_o(	m13s8_cyc	),
+		.s8_stb_o(	m13s8_stb	),
+		.s8_ack_i(	m13s8_ack	),
+		.s8_err_i(	m13s8_err	),
+		.s8_rty_i(	m13s8_rty	),
+		.s9_data_i(	m13s9_data_i	),
+		.s9_data_o(	m13s9_data_o	),
+		.s9_addr_o(	m13s9_addr	),
+		.s9_sel_o(	m13s9_sel	),
+		.s9_we_o(	m13s9_we		),
+		.s9_cyc_o(	m13s9_cyc	),
+		.s9_stb_o(	m13s9_stb	),
+		.s9_ack_i(	m13s9_ack	),
+		.s9_err_i(	m13s9_err	),
+		.s9_rty_i(	m13s9_rty	),
+		.s10_data_i(	m13s10_data_i	),
+		.s10_data_o(	m13s10_data_o	),
+		.s10_addr_o(	m13s10_addr	),
+		.s10_sel_o(	m13s10_sel	),
+		.s10_we_o(	m13s10_we	),
+		.s10_cyc_o(	m13s10_cyc	),
+		.s10_stb_o(	m13s10_stb	),
+		.s10_ack_i(	m13s10_ack	),
+		.s10_err_i(	m13s10_err	),
+		.s10_rty_i(	m13s10_rty	),
+		.s11_data_i(	m13s11_data_i	),
+		.s11_data_o(	m13s11_data_o	),
+		.s11_addr_o(	m13s11_addr	),
+		.s11_sel_o(	m13s11_sel	),
+		.s11_we_o(	m13s11_we	),
+		.s11_cyc_o(	m13s11_cyc	),
+		.s11_stb_o(	m13s11_stb	),
+		.s11_ack_i(	m13s11_ack	),
+		.s11_err_i(	m13s11_err	),
+		.s11_rty_i(	m13s11_rty	),
+		.s12_data_i(	m13s12_data_i	),
+		.s12_data_o(	m13s12_data_o	),
+		.s12_addr_o(	m13s12_addr	),
+		.s12_sel_o(	m13s12_sel	),
+		.s12_we_o(	m13s12_we	),
+		.s12_cyc_o(	m13s12_cyc	),
+		.s12_stb_o(	m13s12_stb	),
+		.s12_ack_i(	m13s12_ack	),
+		.s12_err_i(	m13s12_err	),
+		.s12_rty_i(	m13s12_rty	),
+		.s13_data_i(	m13s13_data_i	),
+		.s13_data_o(	m13s13_data_o	),
+		.s13_addr_o(	m13s13_addr	),
+		.s13_sel_o(	m13s13_sel	),
+		.s13_we_o(	m13s13_we	),
+		.s13_cyc_o(	m13s13_cyc	),
+		.s13_stb_o(	m13s13_stb	),
+		.s13_ack_i(	m13s13_ack	),
+		.s13_err_i(	m13s13_err	),
+		.s13_rty_i(	m13s13_rty	),
+		.s14_data_i(	m13s14_data_i	),
+		.s14_data_o(	m13s14_data_o	),
+		.s14_addr_o(	m13s14_addr	),
+		.s14_sel_o(	m13s14_sel	),
+		.s14_we_o(	m13s14_we	),
+		.s14_cyc_o(	m13s14_cyc	),
+		.s14_stb_o(	m13s14_stb	),
+		.s14_ack_i(	m13s14_ack	),
+		.s14_err_i(	m13s14_err	),
+		.s14_rty_i(	m13s14_rty	),
+		.s15_data_i(	m13s15_data_i	),
+		.s15_data_o(	m13s15_data_o	),
+		.s15_addr_o(	m13s15_addr	),
+		.s15_sel_o(	m13s15_sel	),
+		.s15_we_o(	m13s15_we	),
+		.s15_cyc_o(	m13s15_cyc	),
+		.s15_stb_o(	m13s15_stb	),
+		.s15_ack_i(	m13s15_ack	),
+		.s15_err_i(	m13s15_err	),
+		.s15_rty_i(	m13s15_rty	)
+		);
+
+wb_conmax_master_if #(dw,aw,sw)	m14(
+		.clk_i(		clk_i		),
+		.rst_i(		rst_i		),
+		.wb_data_i(	m14_data_i	),
+		.wb_data_o(	m14_data_o	),
+		.wb_addr_i(	m14_addr_i	),
+		.wb_sel_i(	m14_sel_i	),
+		.wb_we_i(	m14_we_i		),
+		.wb_cyc_i(	m14_cyc_i	),
+		.wb_stb_i(	m14_stb_i	),
+		.wb_ack_o(	m14_ack_o	),
+		.wb_err_o(	m14_err_o	),
+		.wb_rty_o(	m14_rty_o	),
+		.s0_data_i(	m14s0_data_i	),
+		.s0_data_o(	m14s0_data_o	),
+		.s0_addr_o(	m14s0_addr	),
+		.s0_sel_o(	m14s0_sel	),
+		.s0_we_o(	m14s0_we		),
+		.s0_cyc_o(	m14s0_cyc	),
+		.s0_stb_o(	m14s0_stb	),
+		.s0_ack_i(	m14s0_ack	),
+		.s0_err_i(	m14s0_err	),
+		.s0_rty_i(	m14s0_rty	),
+		.s1_data_i(	m14s1_data_i	),
+		.s1_data_o(	m14s1_data_o	),
+		.s1_addr_o(	m14s1_addr	),
+		.s1_sel_o(	m14s1_sel	),
+		.s1_we_o(	m14s1_we		),
+		.s1_cyc_o(	m14s1_cyc	),
+		.s1_stb_o(	m14s1_stb	),
+		.s1_ack_i(	m14s1_ack	),
+		.s1_err_i(	m14s1_err	),
+		.s1_rty_i(	m14s1_rty	),
+		.s2_data_i(	m14s2_data_i	),
+		.s2_data_o(	m14s2_data_o	),
+		.s2_addr_o(	m14s2_addr	),
+		.s2_sel_o(	m14s2_sel	),
+		.s2_we_o(	m14s2_we		),
+		.s2_cyc_o(	m14s2_cyc	),
+		.s2_stb_o(	m14s2_stb	),
+		.s2_ack_i(	m14s2_ack	),
+		.s2_err_i(	m14s2_err	),
+		.s2_rty_i(	m14s2_rty	),
+		.s3_data_i(	m14s3_data_i	),
+		.s3_data_o(	m14s3_data_o	),
+		.s3_addr_o(	m14s3_addr	),
+		.s3_sel_o(	m14s3_sel	),
+		.s3_we_o(	m14s3_we		),
+		.s3_cyc_o(	m14s3_cyc	),
+		.s3_stb_o(	m14s3_stb	),
+		.s3_ack_i(	m14s3_ack	),
+		.s3_err_i(	m14s3_err	),
+		.s3_rty_i(	m14s3_rty	),
+		.s4_data_i(	m14s4_data_i	),
+		.s4_data_o(	m14s4_data_o	),
+		.s4_addr_o(	m14s4_addr	),
+		.s4_sel_o(	m14s4_sel	),
+		.s4_we_o(	m14s4_we		),
+		.s4_cyc_o(	m14s4_cyc	),
+		.s4_stb_o(	m14s4_stb	),
+		.s4_ack_i(	m14s4_ack	),
+		.s4_err_i(	m14s4_err	),
+		.s4_rty_i(	m14s4_rty	),
+		.s5_data_i(	m14s5_data_i	),
+		.s5_data_o(	m14s5_data_o	),
+		.s5_addr_o(	m14s5_addr	),
+		.s5_sel_o(	m14s5_sel	),
+		.s5_we_o(	m14s5_we		),
+		.s5_cyc_o(	m14s5_cyc	),
+		.s5_stb_o(	m14s5_stb	),
+		.s5_ack_i(	m14s5_ack	),
+		.s5_err_i(	m14s5_err	),
+		.s5_rty_i(	m14s5_rty	),
+		.s6_data_i(	m14s6_data_i	),
+		.s6_data_o(	m14s6_data_o	),
+		.s6_addr_o(	m14s6_addr	),
+		.s6_sel_o(	m14s6_sel	),
+		.s6_we_o(	m14s6_we		),
+		.s6_cyc_o(	m14s6_cyc	),
+		.s6_stb_o(	m14s6_stb	),
+		.s6_ack_i(	m14s6_ack	),
+		.s6_err_i(	m14s6_err	),
+		.s6_rty_i(	m14s6_rty	),
+		.s7_data_i(	m14s7_data_i	),
+		.s7_data_o(	m14s7_data_o	),
+		.s7_addr_o(	m14s7_addr	),
+		.s7_sel_o(	m14s7_sel	),
+		.s7_we_o(	m14s7_we		),
+		.s7_cyc_o(	m14s7_cyc	),
+		.s7_stb_o(	m14s7_stb	),
+		.s7_ack_i(	m14s7_ack	),
+		.s7_err_i(	m14s7_err	),
+		.s7_rty_i(	m14s7_rty	),
+		.s8_data_i(	m14s8_data_i	),
+		.s8_data_o(	m14s8_data_o	),
+		.s8_addr_o(	m14s8_addr	),
+		.s8_sel_o(	m14s8_sel	),
+		.s8_we_o(	m14s8_we		),
+		.s8_cyc_o(	m14s8_cyc	),
+		.s8_stb_o(	m14s8_stb	),
+		.s8_ack_i(	m14s8_ack	),
+		.s8_err_i(	m14s8_err	),
+		.s8_rty_i(	m14s8_rty	),
+		.s9_data_i(	m14s9_data_i	),
+		.s9_data_o(	m14s9_data_o	),
+		.s9_addr_o(	m14s9_addr	),
+		.s9_sel_o(	m14s9_sel	),
+		.s9_we_o(	m14s9_we		),
+		.s9_cyc_o(	m14s9_cyc	),
+		.s9_stb_o(	m14s9_stb	),
+		.s9_ack_i(	m14s9_ack	),
+		.s9_err_i(	m14s9_err	),
+		.s9_rty_i(	m14s9_rty	),
+		.s10_data_i(	m14s10_data_i	),
+		.s10_data_o(	m14s10_data_o	),
+		.s10_addr_o(	m14s10_addr	),
+		.s10_sel_o(	m14s10_sel	),
+		.s10_we_o(	m14s10_we	),
+		.s10_cyc_o(	m14s10_cyc	),
+		.s10_stb_o(	m14s10_stb	),
+		.s10_ack_i(	m14s10_ack	),
+		.s10_err_i(	m14s10_err	),
+		.s10_rty_i(	m14s10_rty	),
+		.s11_data_i(	m14s11_data_i	),
+		.s11_data_o(	m14s11_data_o	),
+		.s11_addr_o(	m14s11_addr	),
+		.s11_sel_o(	m14s11_sel	),
+		.s11_we_o(	m14s11_we	),
+		.s11_cyc_o(	m14s11_cyc	),
+		.s11_stb_o(	m14s11_stb	),
+		.s11_ack_i(	m14s11_ack	),
+		.s11_err_i(	m14s11_err	),
+		.s11_rty_i(	m14s11_rty	),
+		.s12_data_i(	m14s12_data_i	),
+		.s12_data_o(	m14s12_data_o	),
+		.s12_addr_o(	m14s12_addr	),
+		.s12_sel_o(	m14s12_sel	),
+		.s12_we_o(	m14s12_we	),
+		.s12_cyc_o(	m14s12_cyc	),
+		.s12_stb_o(	m14s12_stb	),
+		.s12_ack_i(	m14s12_ack	),
+		.s12_err_i(	m14s12_err	),
+		.s12_rty_i(	m14s12_rty	),
+		.s13_data_i(	m14s13_data_i	),
+		.s13_data_o(	m14s13_data_o	),
+		.s13_addr_o(	m14s13_addr	),
+		.s13_sel_o(	m14s13_sel	),
+		.s13_we_o(	m14s13_we	),
+		.s13_cyc_o(	m14s13_cyc	),
+		.s13_stb_o(	m14s13_stb	),
+		.s13_ack_i(	m14s13_ack	),
+		.s13_err_i(	m14s13_err	),
+		.s13_rty_i(	m14s13_rty	),
+		.s14_data_i(	m14s14_data_i	),
+		.s14_data_o(	m14s14_data_o	),
+		.s14_addr_o(	m14s14_addr	),
+		.s14_sel_o(	m14s14_sel	),
+		.s14_we_o(	m14s14_we	),
+		.s14_cyc_o(	m14s14_cyc	),
+		.s14_stb_o(	m14s14_stb	),
+		.s14_ack_i(	m14s14_ack	),
+		.s14_err_i(	m14s14_err	),
+		.s14_rty_i(	m14s14_rty	),
+		.s15_data_i(	m14s15_data_i	),
+		.s15_data_o(	m14s15_data_o	),
+		.s15_addr_o(	m14s15_addr	),
+		.s15_sel_o(	m14s15_sel	),
+		.s15_we_o(	m14s15_we	),
+		.s15_cyc_o(	m14s15_cyc	),
+		.s15_stb_o(	m14s15_stb	),
+		.s15_ack_i(	m14s15_ack	),
+		.s15_err_i(	m14s15_err	),
+		.s15_rty_i(	m14s15_rty	)
+		);
+
+wb_conmax_master_if #(dw,aw,sw)	m15(
+		.clk_i(		clk_i		),
+		.rst_i(		rst_i		),
+		.wb_data_i(	m15_data_i	),
+		.wb_data_o(	m15_data_o	),
+		.wb_addr_i(	m15_addr_i	),
+		.wb_sel_i(	m15_sel_i	),
+		.wb_we_i(	m15_we_i		),
+		.wb_cyc_i(	m15_cyc_i	),
+		.wb_stb_i(	m15_stb_i	),
+		.wb_ack_o(	m15_ack_o	),
+		.wb_err_o(	m15_err_o	),
+		.wb_rty_o(	m15_rty_o	),
+		.s0_data_i(	m15s0_data_i	),
+		.s0_data_o(	m15s0_data_o	),
+		.s0_addr_o(	m15s0_addr	),
+		.s0_sel_o(	m15s0_sel	),
+		.s0_we_o(	m15s0_we		),
+		.s0_cyc_o(	m15s0_cyc	),
+		.s0_stb_o(	m15s0_stb	),
+		.s0_ack_i(	m15s0_ack	),
+		.s0_err_i(	m15s0_err	),
+		.s0_rty_i(	m15s0_rty	),
+		.s1_data_i(	m15s1_data_i	),
+		.s1_data_o(	m15s1_data_o	),
+		.s1_addr_o(	m15s1_addr	),
+		.s1_sel_o(	m15s1_sel	),
+		.s1_we_o(	m15s1_we		),
+		.s1_cyc_o(	m15s1_cyc	),
+		.s1_stb_o(	m15s1_stb	),
+		.s1_ack_i(	m15s1_ack	),
+		.s1_err_i(	m15s1_err	),
+		.s1_rty_i(	m15s1_rty	),
+		.s2_data_i(	m15s2_data_i	),
+		.s2_data_o(	m15s2_data_o	),
+		.s2_addr_o(	m15s2_addr	),
+		.s2_sel_o(	m15s2_sel	),
+		.s2_we_o(	m15s2_we		),
+		.s2_cyc_o(	m15s2_cyc	),
+		.s2_stb_o(	m15s2_stb	),
+		.s2_ack_i(	m15s2_ack	),
+		.s2_err_i(	m15s2_err	),
+		.s2_rty_i(	m15s2_rty	),
+		.s3_data_i(	m15s3_data_i	),
+		.s3_data_o(	m15s3_data_o	),
+		.s3_addr_o(	m15s3_addr	),
+		.s3_sel_o(	m15s3_sel	),
+		.s3_we_o(	m15s3_we		),
+		.s3_cyc_o(	m15s3_cyc	),
+		.s3_stb_o(	m15s3_stb	),
+		.s3_ack_i(	m15s3_ack	),
+		.s3_err_i(	m15s3_err	),
+		.s3_rty_i(	m15s3_rty	),
+		.s4_data_i(	m15s4_data_i	),
+		.s4_data_o(	m15s4_data_o	),
+		.s4_addr_o(	m15s4_addr	),
+		.s4_sel_o(	m15s4_sel	),
+		.s4_we_o(	m15s4_we		),
+		.s4_cyc_o(	m15s4_cyc	),
+		.s4_stb_o(	m15s4_stb	),
+		.s4_ack_i(	m15s4_ack	),
+		.s4_err_i(	m15s4_err	),
+		.s4_rty_i(	m15s4_rty	),
+		.s5_data_i(	m15s5_data_i	),
+		.s5_data_o(	m15s5_data_o	),
+		.s5_addr_o(	m15s5_addr	),
+		.s5_sel_o(	m15s5_sel	),
+		.s5_we_o(	m15s5_we		),
+		.s5_cyc_o(	m15s5_cyc	),
+		.s5_stb_o(	m15s5_stb	),
+		.s5_ack_i(	m15s5_ack	),
+		.s5_err_i(	m15s5_err	),
+		.s5_rty_i(	m15s5_rty	),
+		.s6_data_i(	m15s6_data_i	),
+		.s6_data_o(	m15s6_data_o	),
+		.s6_addr_o(	m15s6_addr	),
+		.s6_sel_o(	m15s6_sel	),
+		.s6_we_o(	m15s6_we		),
+		.s6_cyc_o(	m15s6_cyc	),
+		.s6_stb_o(	m15s6_stb	),
+		.s6_ack_i(	m15s6_ack	),
+		.s6_err_i(	m15s6_err	),
+		.s6_rty_i(	m15s6_rty	),
+		.s7_data_i(	m15s7_data_i	),
+		.s7_data_o(	m15s7_data_o	),
+		.s7_addr_o(	m15s7_addr	),
+		.s7_sel_o(	m15s7_sel	),
+		.s7_we_o(	m15s7_we		),
+		.s7_cyc_o(	m15s7_cyc	),
+		.s7_stb_o(	m15s7_stb	),
+		.s7_ack_i(	m15s7_ack	),
+		.s7_err_i(	m15s7_err	),
+		.s7_rty_i(	m15s7_rty	),
+		.s8_data_i(	m15s8_data_i	),
+		.s8_data_o(	m15s8_data_o	),
+		.s8_addr_o(	m15s8_addr	),
+		.s8_sel_o(	m15s8_sel	),
+		.s8_we_o(	m15s8_we		),
+		.s8_cyc_o(	m15s8_cyc	),
+		.s8_stb_o(	m15s8_stb	),
+		.s8_ack_i(	m15s8_ack	),
+		.s8_err_i(	m15s8_err	),
+		.s8_rty_i(	m15s8_rty	),
+		.s9_data_i(	m15s9_data_i	),
+		.s9_data_o(	m15s9_data_o	),
+		.s9_addr_o(	m15s9_addr	),
+		.s9_sel_o(	m15s9_sel	),
+		.s9_we_o(	m15s9_we		),
+		.s9_cyc_o(	m15s9_cyc	),
+		.s9_stb_o(	m15s9_stb	),
+		.s9_ack_i(	m15s9_ack	),
+		.s9_err_i(	m15s9_err	),
+		.s9_rty_i(	m15s9_rty	),
+		.s10_data_i(	m15s10_data_i	),
+		.s10_data_o(	m15s10_data_o	),
+		.s10_addr_o(	m15s10_addr	),
+		.s10_sel_o(	m15s10_sel	),
+		.s10_we_o(	m15s10_we	),
+		.s10_cyc_o(	m15s10_cyc	),
+		.s10_stb_o(	m15s10_stb	),
+		.s10_ack_i(	m15s10_ack	),
+		.s10_err_i(	m15s10_err	),
+		.s10_rty_i(	m15s10_rty	),
+		.s11_data_i(	m15s11_data_i	),
+		.s11_data_o(	m15s11_data_o	),
+		.s11_addr_o(	m15s11_addr	),
+		.s11_sel_o(	m15s11_sel	),
+		.s11_we_o(	m15s11_we	),
+		.s11_cyc_o(	m15s11_cyc	),
+		.s11_stb_o(	m15s11_stb	),
+		.s11_ack_i(	m15s11_ack	),
+		.s11_err_i(	m15s11_err	),
+		.s11_rty_i(	m15s11_rty	),
+		.s12_data_i(	m15s12_data_i	),
+		.s12_data_o(	m15s12_data_o	),
+		.s12_addr_o(	m15s12_addr	),
+		.s12_sel_o(	m15s12_sel	),
+		.s12_we_o(	m15s12_we	),
+		.s12_cyc_o(	m15s12_cyc	),
+		.s12_stb_o(	m15s12_stb	),
+		.s12_ack_i(	m15s12_ack	),
+		.s12_err_i(	m15s12_err	),
+		.s12_rty_i(	m15s12_rty	),
+		.s13_data_i(	m15s13_data_i	),
+		.s13_data_o(	m15s13_data_o	),
+		.s13_addr_o(	m15s13_addr	),
+		.s13_sel_o(	m15s13_sel	),
+		.s13_we_o(	m15s13_we	),
+		.s13_cyc_o(	m15s13_cyc	),
+		.s13_stb_o(	m15s13_stb	),
+		.s13_ack_i(	m15s13_ack	),
+		.s13_err_i(	m15s13_err	),
+		.s13_rty_i(	m15s13_rty	),
+		.s14_data_i(	m15s14_data_i	),
+		.s14_data_o(	m15s14_data_o	),
+		.s14_addr_o(	m15s14_addr	),
+		.s14_sel_o(	m15s14_sel	),
+		.s14_we_o(	m15s14_we	),
+		.s14_cyc_o(	m15s14_cyc	),
+		.s14_stb_o(	m15s14_stb	),
+		.s14_ack_i(	m15s14_ack	),
+		.s14_err_i(	m15s14_err	),
+		.s14_rty_i(	m15s14_rty	),
+		.s15_data_i(	m15s15_data_i	),
+		.s15_data_o(	m15s15_data_o	),
+		.s15_addr_o(	m15s15_addr	),
+		.s15_sel_o(	m15s15_sel	),
+		.s15_we_o(	m15s15_we	),
+		.s15_cyc_o(	m15s15_cyc	),
+		.s15_stb_o(	m15s15_stb	),
+		.s15_ack_i(	m15s15_ack	),
+		.s15_err_i(	m15s15_err	),
+		.s15_rty_i(	m15s15_rty	)
+		);
+
 ////////////////////////////////////////////////////////////////////
 //
 // Slave Interfaces
@@ -3314,7 +6122,87 @@ wb_conmax_slave_if #(pri_sel0,aw,dw,sw) s0(
 		.m7_stb_i(	m7s0_stb	),
 		.m7_ack_o(	m7s0_ack	),
 		.m7_err_o(	m7s0_err	),
-		.m7_rty_o(	m7s0_rty	)
+		.m7_rty_o(	m7s0_rty	),
+		.m8_data_i(	m8s0_data_o	),
+		.m8_data_o(	m8s0_data_i	),
+		.m8_addr_i(	m8s0_addr	),
+		.m8_sel_i(	m8s0_sel	),
+		.m8_we_i(	m8s0_we	),
+		.m8_cyc_i(	m8s0_cyc	),
+		.m8_stb_i(	m8s0_stb	),
+		.m8_ack_o(	m8s0_ack	),
+		.m8_err_o(	m8s0_err	),
+		.m8_rty_o(	m8s0_rty	),
+		.m9_data_i(	m9s0_data_o	),
+		.m9_data_o(	m9s0_data_i	),
+		.m9_addr_i(	m9s0_addr	),
+		.m9_sel_i(	m9s0_sel	),
+		.m9_we_i(	m9s0_we	),
+		.m9_cyc_i(	m9s0_cyc	),
+		.m9_stb_i(	m9s0_stb	),
+		.m9_ack_o(	m9s0_ack	),
+		.m9_err_o(	m9s0_err	),
+		.m9_rty_o(	m9s0_rty	),
+		.m10_data_i(	m10s0_data_o	),
+		.m10_data_o(	m10s0_data_i	),
+		.m10_addr_i(	m10s0_addr	),
+		.m10_sel_i(	m10s0_sel	),
+		.m10_we_i(	m10s0_we	),
+		.m10_cyc_i(	m10s0_cyc	),
+		.m10_stb_i(	m10s0_stb	),
+		.m10_ack_o(	m10s0_ack	),
+		.m10_err_o(	m10s0_err	),
+		.m10_rty_o(	m10s0_rty	),
+		.m11_data_i(	m11s0_data_o	),
+		.m11_data_o(	m11s0_data_i	),
+		.m11_addr_i(	m11s0_addr	),
+		.m11_sel_i(	m11s0_sel	),
+		.m11_we_i(	m11s0_we	),
+		.m11_cyc_i(	m11s0_cyc	),
+		.m11_stb_i(	m11s0_stb	),
+		.m11_ack_o(	m11s0_ack	),
+		.m11_err_o(	m11s0_err	),
+		.m11_rty_o(	m11s0_rty	),
+		.m12_data_i(	m12s0_data_o	),
+		.m12_data_o(	m12s0_data_i	),
+		.m12_addr_i(	m12s0_addr	),
+		.m12_sel_i(	m12s0_sel	),
+		.m12_we_i(	m12s0_we	),
+		.m12_cyc_i(	m12s0_cyc	),
+		.m12_stb_i(	m12s0_stb	),
+		.m12_ack_o(	m12s0_ack	),
+		.m12_err_o(	m12s0_err	),
+		.m12_rty_o(	m12s0_rty	),
+		.m13_data_i(	m13s0_data_o	),
+		.m13_data_o(	m13s0_data_i	),
+		.m13_addr_i(	m13s0_addr	),
+		.m13_sel_i(	m13s0_sel	),
+		.m13_we_i(	m13s0_we	),
+		.m13_cyc_i(	m13s0_cyc	),
+		.m13_stb_i(	m13s0_stb	),
+		.m13_ack_o(	m13s0_ack	),
+		.m13_err_o(	m13s0_err	),
+		.m13_rty_o(	m13s0_rty	),
+		.m14_data_i(	m14s0_data_o	),
+		.m14_data_o(	m14s0_data_i	),
+		.m14_addr_i(	m14s0_addr	),
+		.m14_sel_i(	m14s0_sel	),
+		.m14_we_i(	m14s0_we	),
+		.m14_cyc_i(	m14s0_cyc	),
+		.m14_stb_i(	m14s0_stb	),
+		.m14_ack_o(	m14s0_ack	),
+		.m14_err_o(	m14s0_err	),
+		.m14_rty_o(	m14s0_rty	),
+		.m15_data_i(	m15s0_data_o	),
+		.m15_data_o(	m15s0_data_i	),
+		.m15_addr_i(	m15s0_addr	),
+		.m15_sel_i(	m15s0_sel	),
+		.m15_we_i(	m15s0_we	),
+		.m15_cyc_i(	m15s0_cyc	),
+		.m15_stb_i(	m15s0_stb	),
+		.m15_ack_o(	m15s0_ack	),
+		.m15_err_o(	m15s0_err	),
+		.m15_rty_o(	m15s0_rty	)
 		);
 
 wb_conmax_slave_if #(pri_sel1,aw,dw,sw) s1(
@@ -3410,7 +6298,87 @@ wb_conmax_slave_if #(pri_sel1,aw,dw,sw) s1(
 		.m7_stb_i(	m7s1_stb	),
 		.m7_ack_o(	m7s1_ack	),
 		.m7_err_o(	m7s1_err	),
-		.m7_rty_o(	m7s1_rty	)
+		.m7_rty_o(	m7s1_rty	),
+		.m8_data_i(	m8s1_data_o	),
+		.m8_data_o(	m8s1_data_i	),
+		.m8_addr_i(	m8s1_addr	),
+		.m8_sel_i(	m8s1_sel	),
+		.m8_we_i(	m8s1_we	),
+		.m8_cyc_i(	m8s1_cyc	),
+		.m8_stb_i(	m8s1_stb	),
+		.m8_ack_o(	m8s1_ack	),
+		.m8_err_o(	m8s1_err	),
+		.m8_rty_o(	m8s1_rty	),
+		.m9_data_i(	m9s1_data_o	),
+		.m9_data_o(	m9s1_data_i	),
+		.m9_addr_i(	m9s1_addr	),
+		.m9_sel_i(	m9s1_sel	),
+		.m9_we_i(	m9s1_we	),
+		.m9_cyc_i(	m9s1_cyc	),
+		.m9_stb_i(	m9s1_stb	),
+		.m9_ack_o(	m9s1_ack	),
+		.m9_err_o(	m9s1_err	),
+		.m9_rty_o(	m9s1_rty	),
+		.m10_data_i(	m10s1_data_o	),
+		.m10_data_o(	m10s1_data_i	),
+		.m10_addr_i(	m10s1_addr	),
+		.m10_sel_i(	m10s1_sel	),
+		.m10_we_i(	m10s1_we	),
+		.m10_cyc_i(	m10s1_cyc	),
+		.m10_stb_i(	m10s1_stb	),
+		.m10_ack_o(	m10s1_ack	),
+		.m10_err_o(	m10s1_err	),
+		.m10_rty_o(	m10s1_rty	),
+		.m11_data_i(	m11s1_data_o	),
+		.m11_data_o(	m11s1_data_i	),
+		.m11_addr_i(	m11s1_addr	),
+		.m11_sel_i(	m11s1_sel	),
+		.m11_we_i(	m11s1_we	),
+		.m11_cyc_i(	m11s1_cyc	),
+		.m11_stb_i(	m11s1_stb	),
+		.m11_ack_o(	m11s1_ack	),
+		.m11_err_o(	m11s1_err	),
+		.m11_rty_o(	m11s1_rty	),
+		.m12_data_i(	m12s1_data_o	),
+		.m12_data_o(	m12s1_data_i	),
+		.m12_addr_i(	m12s1_addr	),
+		.m12_sel_i(	m12s1_sel	),
+		.m12_we_i(	m12s1_we	),
+		.m12_cyc_i(	m12s1_cyc	),
+		.m12_stb_i(	m12s1_stb	),
+		.m12_ack_o(	m12s1_ack	),
+		.m12_err_o(	m12s1_err	),
+		.m12_rty_o(	m12s1_rty	),
+		.m13_data_i(	m13s1_data_o	),
+		.m13_data_o(	m13s1_data_i	),
+		.m13_addr_i(	m13s1_addr	),
+		.m13_sel_i(	m13s1_sel	),
+		.m13_we_i(	m13s1_we	),
+		.m13_cyc_i(	m13s1_cyc	),
+		.m13_stb_i(	m13s1_stb	),
+		.m13_ack_o(	m13s1_ack	),
+		.m13_err_o(	m13s1_err	),
+		.m13_rty_o(	m13s1_rty	),
+		.m14_data_i(	m14s1_data_o	),
+		.m14_data_o(	m14s1_data_i	),
+		.m14_addr_i(	m14s1_addr	),
+		.m14_sel_i(	m14s1_sel	),
+		.m14_we_i(	m14s1_we	),
+		.m14_cyc_i(	m14s1_cyc	),
+		.m14_stb_i(	m14s1_stb	),
+		.m14_ack_o(	m14s1_ack	),
+		.m14_err_o(	m14s1_err	),
+		.m14_rty_o(	m14s1_rty	),
+		.m15_data_i(	m15s1_data_o	),
+		.m15_data_o(	m15s1_data_i	),
+		.m15_addr_i(	m15s1_addr	),
+		.m15_sel_i(	m15s1_sel	),
+		.m15_we_i(	m15s1_we	),
+		.m15_cyc_i(	m15s1_cyc	),
+		.m15_stb_i(	m15s1_stb	),
+		.m15_ack_o(	m15s1_ack	),
+		.m15_err_o(	m15s1_err	),
+		.m15_rty_o(	m15s1_rty	)
 		);
 
 wb_conmax_slave_if #(pri_sel2,aw,dw,sw) s2(
@@ -3506,7 +6474,87 @@ wb_conmax_slave_if #(pri_sel2,aw,dw,sw) s2(
 		.m7_stb_i(	m7s2_stb	),
 		.m7_ack_o(	m7s2_ack	),
 		.m7_err_o(	m7s2_err	),
-		.m7_rty_o(	m7s2_rty	)
+		.m7_rty_o(	m7s2_rty	),
+		.m8_data_i(	m8s2_data_o	),
+		.m8_data_o(	m8s2_data_i	),
+		.m8_addr_i(	m8s2_addr	),
+		.m8_sel_i(	m8s2_sel	),
+		.m8_we_i(	m8s2_we	),
+		.m8_cyc_i(	m8s2_cyc	),
+		.m8_stb_i(	m8s2_stb	),
+		.m8_ack_o(	m8s2_ack	),
+		.m8_err_o(	m8s2_err	),
+		.m8_rty_o(	m8s2_rty	),
+		.m9_data_i(	m9s2_data_o	),
+		.m9_data_o(	m9s2_data_i	),
+		.m9_addr_i(	m9s2_addr	),
+		.m9_sel_i(	m9s2_sel	),
+		.m9_we_i(	m9s2_we	),
+		.m9_cyc_i(	m9s2_cyc	),
+		.m9_stb_i(	m9s2_stb	),
+		.m9_ack_o(	m9s2_ack	),
+		.m9_err_o(	m9s2_err	),
+		.m9_rty_o(	m9s2_rty	),
+		.m10_data_i(	m10s2_data_o	),
+		.m10_data_o(	m10s2_data_i	),
+		.m10_addr_i(	m10s2_addr	),
+		.m10_sel_i(	m10s2_sel	),
+		.m10_we_i(	m10s2_we	),
+		.m10_cyc_i(	m10s2_cyc	),
+		.m10_stb_i(	m10s2_stb	),
+		.m10_ack_o(	m10s2_ack	),
+		.m10_err_o(	m10s2_err	),
+		.m10_rty_o(	m10s2_rty	),
+		.m11_data_i(	m11s2_data_o	),
+		.m11_data_o(	m11s2_data_i	),
+		.m11_addr_i(	m11s2_addr	),
+		.m11_sel_i(	m11s2_sel	),
+		.m11_we_i(	m11s2_we	),
+		.m11_cyc_i(	m11s2_cyc	),
+		.m11_stb_i(	m11s2_stb	),
+		.m11_ack_o(	m11s2_ack	),
+		.m11_err_o(	m11s2_err	),
+		.m11_rty_o(	m11s2_rty	),
+		.m12_data_i(	m12s2_data_o	),
+		.m12_data_o(	m12s2_data_i	),
+		.m12_addr_i(	m12s2_addr	),
+		.m12_sel_i(	m12s2_sel	),
+		.m12_we_i(	m12s2_we	),
+		.m12_cyc_i(	m12s2_cyc	),
+		.m12_stb_i(	m12s2_stb	),
+		.m12_ack_o(	m12s2_ack	),
+		.m12_err_o(	m12s2_err	),
+		.m12_rty_o(	m12s2_rty	),
+		.m13_data_i(	m13s2_data_o	),
+		.m13_data_o(	m13s2_data_i	),
+		.m13_addr_i(	m13s2_addr	),
+		.m13_sel_i(	m13s2_sel	),
+		.m13_we_i(	m13s2_we	),
+		.m13_cyc_i(	m13s2_cyc	),
+		.m13_stb_i(	m13s2_stb	),
+		.m13_ack_o(	m13s2_ack	),
+		.m13_err_o(	m13s2_err	),
+		.m13_rty_o(	m13s2_rty	),
+		.m14_data_i(	m14s2_data_o	),
+		.m14_data_o(	m14s2_data_i	),
+		.m14_addr_i(	m14s2_addr	),
+		.m14_sel_i(	m14s2_sel	),
+		.m14_we_i(	m14s2_we	),
+		.m14_cyc_i(	m14s2_cyc	),
+		.m14_stb_i(	m14s2_stb	),
+		.m14_ack_o(	m14s2_ack	),
+		.m14_err_o(	m14s2_err	),
+		.m14_rty_o(	m14s2_rty	),
+		.m15_data_i(	m15s2_data_o	),
+		.m15_data_o(	m15s2_data_i	),
+		.m15_addr_i(	m15s2_addr	),
+		.m15_sel_i(	m15s2_sel	),
+		.m15_we_i(	m15s2_we	),
+		.m15_cyc_i(	m15s2_cyc	),
+		.m15_stb_i(	m15s2_stb	),
+		.m15_ack_o(	m15s2_ack	),
+		.m15_err_o(	m15s2_err	),
+		.m15_rty_o(	m15s2_rty	)
 		);
 
 wb_conmax_slave_if #(pri_sel3,aw,dw,sw) s3(
@@ -3602,7 +6650,87 @@ wb_conmax_slave_if #(pri_sel3,aw,dw,sw) s3(
 		.m7_stb_i(	m7s3_stb	),
 		.m7_ack_o(	m7s3_ack	),
 		.m7_err_o(	m7s3_err	),
-		.m7_rty_o(	m7s3_rty	)
+		.m7_rty_o(	m7s3_rty	),
+		.m8_data_i(	m8s3_data_o	),
+		.m8_data_o(	m8s3_data_i	),
+		.m8_addr_i(	m8s3_addr	),
+		.m8_sel_i(	m8s3_sel	),
+		.m8_we_i(	m8s3_we	),
+		.m8_cyc_i(	m8s3_cyc	),
+		.m8_stb_i(	m8s3_stb	),
+		.m8_ack_o(	m8s3_ack	),
+		.m8_err_o(	m8s3_err	),
+		.m8_rty_o(	m8s3_rty	),
+		.m9_data_i(	m9s3_data_o	),
+		.m9_data_o(	m9s3_data_i	),
+		.m9_addr_i(	m9s3_addr	),
+		.m9_sel_i(	m9s3_sel	),
+		.m9_we_i(	m9s3_we	),
+		.m9_cyc_i(	m9s3_cyc	),
+		.m9_stb_i(	m9s3_stb	),
+		.m9_ack_o(	m9s3_ack	),
+		.m9_err_o(	m9s3_err	),
+		.m9_rty_o(	m9s3_rty	),
+		.m10_data_i(	m10s3_data_o	),
+		.m10_data_o(	m10s3_data_i	),
+		.m10_addr_i(	m10s3_addr	),
+		.m10_sel_i(	m10s3_sel	),
+		.m10_we_i(	m10s3_we	),
+		.m10_cyc_i(	m10s3_cyc	),
+		.m10_stb_i(	m10s3_stb	),
+		.m10_ack_o(	m10s3_ack	),
+		.m10_err_o(	m10s3_err	),
+		.m10_rty_o(	m10s3_rty	),
+		.m11_data_i(	m11s3_data_o	),
+		.m11_data_o(	m11s3_data_i	),
+		.m11_addr_i(	m11s3_addr	),
+		.m11_sel_i(	m11s3_sel	),
+		.m11_we_i(	m11s3_we	),
+		.m11_cyc_i(	m11s3_cyc	),
+		.m11_stb_i(	m11s3_stb	),
+		.m11_ack_o(	m11s3_ack	),
+		.m11_err_o(	m11s3_err	),
+		.m11_rty_o(	m11s3_rty	),
+		.m12_data_i(	m12s3_data_o	),
+		.m12_data_o(	m12s3_data_i	),
+		.m12_addr_i(	m12s3_addr	),
+		.m12_sel_i(	m12s3_sel	),
+		.m12_we_i(	m12s3_we	),
+		.m12_cyc_i(	m12s3_cyc	),
+		.m12_stb_i(	m12s3_stb	),
+		.m12_ack_o(	m12s3_ack	),
+		.m12_err_o(	m12s3_err	),
+		.m12_rty_o(	m12s3_rty	),
+		.m13_data_i(	m13s3_data_o	),
+		.m13_data_o(	m13s3_data_i	),
+		.m13_addr_i(	m13s3_addr	),
+		.m13_sel_i(	m13s3_sel	),
+		.m13_we_i(	m13s3_we	),
+		.m13_cyc_i(	m13s3_cyc	),
+		.m13_stb_i(	m13s3_stb	),
+		.m13_ack_o(	m13s3_ack	),
+		.m13_err_o(	m13s3_err	),
+		.m13_rty_o(	m13s3_rty	),
+		.m14_data_i(	m14s3_data_o	),
+		.m14_data_o(	m14s3_data_i	),
+		.m14_addr_i(	m14s3_addr	),
+		.m14_sel_i(	m14s3_sel	),
+		.m14_we_i(	m14s3_we	),
+		.m14_cyc_i(	m14s3_cyc	),
+		.m14_stb_i(	m14s3_stb	),
+		.m14_ack_o(	m14s3_ack	),
+		.m14_err_o(	m14s3_err	),
+		.m14_rty_o(	m14s3_rty	),
+		.m15_data_i(	m15s3_data_o	),
+		.m15_data_o(	m15s3_data_i	),
+		.m15_addr_i(	m15s3_addr	),
+		.m15_sel_i(	m15s3_sel	),
+		.m15_we_i(	m15s3_we	),
+		.m15_cyc_i(	m15s3_cyc	),
+		.m15_stb_i(	m15s3_stb	),
+		.m15_ack_o(	m15s3_ack	),
+		.m15_err_o(	m15s3_err	),
+		.m15_rty_o(	m15s3_rty	)
 		);
 
 wb_conmax_slave_if #(pri_sel4,aw,dw,sw) s4(
@@ -3698,7 +6826,87 @@ wb_conmax_slave_if #(pri_sel4,aw,dw,sw) s4(
 		.m7_stb_i(	m7s4_stb	),
 		.m7_ack_o(	m7s4_ack	),
 		.m7_err_o(	m7s4_err	),
-		.m7_rty_o(	m7s4_rty	)
+		.m7_rty_o(	m7s4_rty	),
+		.m8_data_i(	m8s4_data_o	),
+		.m8_data_o(	m8s4_data_i	),
+		.m8_addr_i(	m8s4_addr	),
+		.m8_sel_i(	m8s4_sel	),
+		.m8_we_i(	m8s4_we	),
+		.m8_cyc_i(	m8s4_cyc	),
+		.m8_stb_i(	m8s4_stb	),
+		.m8_ack_o(	m8s4_ack	),
+		.m8_err_o(	m8s4_err	),
+		.m8_rty_o(	m8s4_rty	),
+		.m9_data_i(	m9s4_data_o	),
+		.m9_data_o(	m9s4_data_i	),
+		.m9_addr_i(	m9s4_addr	),
+		.m9_sel_i(	m9s4_sel	),
+		.m9_we_i(	m9s4_we	),
+		.m9_cyc_i(	m9s4_cyc	),
+		.m9_stb_i(	m9s4_stb	),
+		.m9_ack_o(	m9s4_ack	),
+		.m9_err_o(	m9s4_err	),
+		.m9_rty_o(	m9s4_rty	),
+		.m10_data_i(	m10s4_data_o	),
+		.m10_data_o(	m10s4_data_i	),
+		.m10_addr_i(	m10s4_addr	),
+		.m10_sel_i(	m10s4_sel	),
+		.m10_we_i(	m10s4_we	),
+		.m10_cyc_i(	m10s4_cyc	),
+		.m10_stb_i(	m10s4_stb	),
+		.m10_ack_o(	m10s4_ack	),
+		.m10_err_o(	m10s4_err	),
+		.m10_rty_o(	m10s4_rty	),
+		.m11_data_i(	m11s4_data_o	),
+		.m11_data_o(	m11s4_data_i	),
+		.m11_addr_i(	m11s4_addr	),
+		.m11_sel_i(	m11s4_sel	),
+		.m11_we_i(	m11s4_we	),
+		.m11_cyc_i(	m11s4_cyc	),
+		.m11_stb_i(	m11s4_stb	),
+		.m11_ack_o(	m11s4_ack	),
+		.m11_err_o(	m11s4_err	),
+		.m11_rty_o(	m11s4_rty	),
+		.m12_data_i(	m12s4_data_o	),
+		.m12_data_o(	m12s4_data_i	),
+		.m12_addr_i(	m12s4_addr	),
+		.m12_sel_i(	m12s4_sel	),
+		.m12_we_i(	m12s4_we	),
+		.m12_cyc_i(	m12s4_cyc	),
+		.m12_stb_i(	m12s4_stb	),
+		.m12_ack_o(	m12s4_ack	),
+		.m12_err_o(	m12s4_err	),
+		.m12_rty_o(	m12s4_rty	),
+		.m13_data_i(	m13s4_data_o	),
+		.m13_data_o(	m13s4_data_i	),
+		.m13_addr_i(	m13s4_addr	),
+		.m13_sel_i(	m13s4_sel	),
+		.m13_we_i(	m13s4_we	),
+		.m13_cyc_i(	m13s4_cyc	),
+		.m13_stb_i(	m13s4_stb	),
+		.m13_ack_o(	m13s4_ack	),
+		.m13_err_o(	m13s4_err	),
+		.m13_rty_o(	m13s4_rty	),
+		.m14_data_i(	m14s4_data_o	),
+		.m14_data_o(	m14s4_data_i	),
+		.m14_addr_i(	m14s4_addr	),
+		.m14_sel_i(	m14s4_sel	),
+		.m14_we_i(	m14s4_we	),
+		.m14_cyc_i(	m14s4_cyc	),
+		.m14_stb_i(	m14s4_stb	),
+		.m14_ack_o(	m14s4_ack	),
+		.m14_err_o(	m14s4_err	),
+		.m14_rty_o(	m14s4_rty	),
+		.m15_data_i(	m15s4_data_o	),
+		.m15_data_o(	m15s4_data_i	),
+		.m15_addr_i(	m15s4_addr	),
+		.m15_sel_i(	m15s4_sel	),
+		.m15_we_i(	m15s4_we	),
+		.m15_cyc_i(	m15s4_cyc	),
+		.m15_stb_i(	m15s4_stb	),
+		.m15_ack_o(	m15s4_ack	),
+		.m15_err_o(	m15s4_err	),
+		.m15_rty_o(	m15s4_rty	)
 		);
 
 wb_conmax_slave_if #(pri_sel5,aw,dw,sw) s5(
@@ -3794,7 +7002,87 @@ wb_conmax_slave_if #(pri_sel5,aw,dw,sw) s5(
 		.m7_stb_i(	m7s5_stb	),
 		.m7_ack_o(	m7s5_ack	),
 		.m7_err_o(	m7s5_err	),
-		.m7_rty_o(	m7s5_rty	)
+		.m7_rty_o(	m7s5_rty	),
+		.m8_data_i(	m8s5_data_o	),
+		.m8_data_o(	m8s5_data_i	),
+		.m8_addr_i(	m8s5_addr	),
+		.m8_sel_i(	m8s5_sel	),
+		.m8_we_i(	m8s5_we	),
+		.m8_cyc_i(	m8s5_cyc	),
+		.m8_stb_i(	m8s5_stb	),
+		.m8_ack_o(	m8s5_ack	),
+		.m8_err_o(	m8s5_err	),
+		.m8_rty_o(	m8s5_rty	),
+		.m9_data_i(	m9s5_data_o	),
+		.m9_data_o(	m9s5_data_i	),
+		.m9_addr_i(	m9s5_addr	),
+		.m9_sel_i(	m9s5_sel	),
+		.m9_we_i(	m9s5_we	),
+		.m9_cyc_i(	m9s5_cyc	),
+		.m9_stb_i(	m9s5_stb	),
+		.m9_ack_o(	m9s5_ack	),
+		.m9_err_o(	m9s5_err	),
+		.m9_rty_o(	m9s5_rty	),
+		.m10_data_i(	m10s5_data_o	),
+		.m10_data_o(	m10s5_data_i	),
+		.m10_addr_i(	m10s5_addr	),
+		.m10_sel_i(	m10s5_sel	),
+		.m10_we_i(	m10s5_we	),
+		.m10_cyc_i(	m10s5_cyc	),
+		.m10_stb_i(	m10s5_stb	),
+		.m10_ack_o(	m10s5_ack	),
+		.m10_err_o(	m10s5_err	),
+		.m10_rty_o(	m10s5_rty	),
+		.m11_data_i(	m11s5_data_o	),
+		.m11_data_o(	m11s5_data_i	),
+		.m11_addr_i(	m11s5_addr	),
+		.m11_sel_i(	m11s5_sel	),
+		.m11_we_i(	m11s5_we	),
+		.m11_cyc_i(	m11s5_cyc	),
+		.m11_stb_i(	m11s5_stb	),
+		.m11_ack_o(	m11s5_ack	),
+		.m11_err_o(	m11s5_err	),
+		.m11_rty_o(	m11s5_rty	),
+		.m12_data_i(	m12s5_data_o	),
+		.m12_data_o(	m12s5_data_i	),
+		.m12_addr_i(	m12s5_addr	),
+		.m12_sel_i(	m12s5_sel	),
+		.m12_we_i(	m12s5_we	),
+		.m12_cyc_i(	m12s5_cyc	),
+		.m12_stb_i(	m12s5_stb	),
+		.m12_ack_o(	m12s5_ack	),
+		.m12_err_o(	m12s5_err	),
+		.m12_rty_o(	m12s5_rty	),
+		.m13_data_i(	m13s5_data_o	),
+		.m13_data_o(	m13s5_data_i	),
+		.m13_addr_i(	m13s5_addr	),
+		.m13_sel_i(	m13s5_sel	),
+		.m13_we_i(	m13s5_we	),
+		.m13_cyc_i(	m13s5_cyc	),
+		.m13_stb_i(	m13s5_stb	),
+		.m13_ack_o(	m13s5_ack	),
+		.m13_err_o(	m13s5_err	),
+		.m13_rty_o(	m13s5_rty	),
+		.m14_data_i(	m14s5_data_o	),
+		.m14_data_o(	m14s5_data_i	),
+		.m14_addr_i(	m14s5_addr	),
+		.m14_sel_i(	m14s5_sel	),
+		.m14_we_i(	m14s5_we	),
+		.m14_cyc_i(	m14s5_cyc	),
+		.m14_stb_i(	m14s5_stb	),
+		.m14_ack_o(	m14s5_ack	),
+		.m14_err_o(	m14s5_err	),
+		.m14_rty_o(	m14s5_rty	),
+		.m15_data_i(	m15s5_data_o	),
+		.m15_data_o(	m15s5_data_i	),
+		.m15_addr_i(	m15s5_addr	),
+		.m15_sel_i(	m15s5_sel	),
+		.m15_we_i(	m15s5_we	),
+		.m15_cyc_i(	m15s5_cyc	),
+		.m15_stb_i(	m15s5_stb	),
+		.m15_ack_o(	m15s5_ack	),
+		.m15_err_o(	m15s5_err	),
+		.m15_rty_o(	m15s5_rty	)
 		);
 
 wb_conmax_slave_if #(pri_sel6,aw,dw,sw) s6(
@@ -3890,7 +7178,87 @@ wb_conmax_slave_if #(pri_sel6,aw,dw,sw) s6(
 		.m7_stb_i(	m7s6_stb	),
 		.m7_ack_o(	m7s6_ack	),
 		.m7_err_o(	m7s6_err	),
-		.m7_rty_o(	m7s6_rty	)
+		.m7_rty_o(	m7s6_rty	),
+		.m8_data_i(	m8s6_data_o	),
+		.m8_data_o(	m8s6_data_i	),
+		.m8_addr_i(	m8s6_addr	),
+		.m8_sel_i(	m8s6_sel	),
+		.m8_we_i(	m8s6_we	),
+		.m8_cyc_i(	m8s6_cyc	),
+		.m8_stb_i(	m8s6_stb	),
+		.m8_ack_o(	m8s6_ack	),
+		.m8_err_o(	m8s6_err	),
+		.m8_rty_o(	m8s6_rty	),
+		.m9_data_i(	m9s6_data_o	),
+		.m9_data_o(	m9s6_data_i	),
+		.m9_addr_i(	m9s6_addr	),
+		.m9_sel_i(	m9s6_sel	),
+		.m9_we_i(	m9s6_we	),
+		.m9_cyc_i(	m9s6_cyc	),
+		.m9_stb_i(	m9s6_stb	),
+		.m9_ack_o(	m9s6_ack	),
+		.m9_err_o(	m9s6_err	),
+		.m9_rty_o(	m9s6_rty	),
+		.m10_data_i(	m10s6_data_o	),
+		.m10_data_o(	m10s6_data_i	),
+		.m10_addr_i(	m10s6_addr	),
+		.m10_sel_i(	m10s6_sel	),
+		.m10_we_i(	m10s6_we	),
+		.m10_cyc_i(	m10s6_cyc	),
+		.m10_stb_i(	m10s6_stb	),
+		.m10_ack_o(	m10s6_ack	),
+		.m10_err_o(	m10s6_err	),
+		.m10_rty_o(	m10s6_rty	),
+		.m11_data_i(	m11s6_data_o	),
+		.m11_data_o(	m11s6_data_i	),
+		.m11_addr_i(	m11s6_addr	),
+		.m11_sel_i(	m11s6_sel	),
+		.m11_we_i(	m11s6_we	),
+		.m11_cyc_i(	m11s6_cyc	),
+		.m11_stb_i(	m11s6_stb	),
+		.m11_ack_o(	m11s6_ack	),
+		.m11_err_o(	m11s6_err	),
+		.m11_rty_o(	m11s6_rty	),
+		.m12_data_i(	m12s6_data_o	),
+		.m12_data_o(	m12s6_data_i	),
+		.m12_addr_i(	m12s6_addr	),
+		.m12_sel_i(	m12s6_sel	),
+		.m12_we_i(	m12s6_we	),
+		.m12_cyc_i(	m12s6_cyc	),
+		.m12_stb_i(	m12s6_stb	),
+		.m12_ack_o(	m12s6_ack	),
+		.m12_err_o(	m12s6_err	),
+		.m12_rty_o(	m12s6_rty	),
+		.m13_data_i(	m13s6_data_o	),
+		.m13_data_o(	m13s6_data_i	),
+		.m13_addr_i(	m13s6_addr	),
+		.m13_sel_i(	m13s6_sel	),
+		.m13_we_i(	m13s6_we	),
+		.m13_cyc_i(	m13s6_cyc	),
+		.m13_stb_i(	m13s6_stb	),
+		.m13_ack_o(	m13s6_ack	),
+		.m13_err_o(	m13s6_err	),
+		.m13_rty_o(	m13s6_rty	),
+		.m14_data_i(	m14s6_data_o	),
+		.m14_data_o(	m14s6_data_i	),
+		.m14_addr_i(	m14s6_addr	),
+		.m14_sel_i(	m14s6_sel	),
+		.m14_we_i(	m14s6_we	),
+		.m14_cyc_i(	m14s6_cyc	),
+		.m14_stb_i(	m14s6_stb	),
+		.m14_ack_o(	m14s6_ack	),
+		.m14_err_o(	m14s6_err	),
+		.m14_rty_o(	m14s6_rty	),
+		.m15_data_i(	m15s6_data_o	),
+		.m15_data_o(	m15s6_data_i	),
+		.m15_addr_i(	m15s6_addr	),
+		.m15_sel_i(	m15s6_sel	),
+		.m15_we_i(	m15s6_we	),
+		.m15_cyc_i(	m15s6_cyc	),
+		.m15_stb_i(	m15s6_stb	),
+		.m15_ack_o(	m15s6_ack	),
+		.m15_err_o(	m15s6_err	),
+		.m15_rty_o(	m15s6_rty	)
 		);
 
 wb_conmax_slave_if #(pri_sel7,aw,dw,sw) s7(
@@ -3986,7 +7354,87 @@ wb_conmax_slave_if #(pri_sel7,aw,dw,sw) s7(
 		.m7_stb_i(	m7s7_stb	),
 		.m7_ack_o(	m7s7_ack	),
 		.m7_err_o(	m7s7_err	),
-		.m7_rty_o(	m7s7_rty	)
+		.m7_rty_o(	m7s7_rty	),
+		.m8_data_i(	m8s7_data_o	),
+		.m8_data_o(	m8s7_data_i	),
+		.m8_addr_i(	m8s7_addr	),
+		.m8_sel_i(	m8s7_sel	),
+		.m8_we_i(	m8s7_we	),
+		.m8_cyc_i(	m8s7_cyc	),
+		.m8_stb_i(	m8s7_stb	),
+		.m8_ack_o(	m8s7_ack	),
+		.m8_err_o(	m8s7_err	),
+		.m8_rty_o(	m8s7_rty	),
+		.m9_data_i(	m9s7_data_o	),
+		.m9_data_o(	m9s7_data_i	),
+		.m9_addr_i(	m9s7_addr	),
+		.m9_sel_i(	m9s7_sel	),
+		.m9_we_i(	m9s7_we	),
+		.m9_cyc_i(	m9s7_cyc	),
+		.m9_stb_i(	m9s7_stb	),
+		.m9_ack_o(	m9s7_ack	),
+		.m9_err_o(	m9s7_err	),
+		.m9_rty_o(	m9s7_rty	),
+		.m10_data_i(	m10s7_data_o	),
+		.m10_data_o(	m10s7_data_i	),
+		.m10_addr_i(	m10s7_addr	),
+		.m10_sel_i(	m10s7_sel	),
+		.m10_we_i(	m10s7_we	),
+		.m10_cyc_i(	m10s7_cyc	),
+		.m10_stb_i(	m10s7_stb	),
+		.m10_ack_o(	m10s7_ack	),
+		.m10_err_o(	m10s7_err	),
+		.m10_rty_o(	m10s7_rty	),
+		.m11_data_i(	m11s7_data_o	),
+		.m11_data_o(	m11s7_data_i	),
+		.m11_addr_i(	m11s7_addr	),
+		.m11_sel_i(	m11s7_sel	),
+		.m11_we_i(	m11s7_we	),
+		.m11_cyc_i(	m11s7_cyc	),
+		.m11_stb_i(	m11s7_stb	),
+		.m11_ack_o(	m11s7_ack	),
+		.m11_err_o(	m11s7_err	),
+		.m11_rty_o(	m11s7_rty	),
+		.m12_data_i(	m12s7_data_o	),
+		.m12_data_o(	m12s7_data_i	),
+		.m12_addr_i(	m12s7_addr	),
+		.m12_sel_i(	m12s7_sel	),
+		.m12_we_i(	m12s7_we	),
+		.m12_cyc_i(	m12s7_cyc	),
+		.m12_stb_i(	m12s7_stb	),
+		.m12_ack_o(	m12s7_ack	),
+		.m12_err_o(	m12s7_err	),
+		.m12_rty_o(	m12s7_rty	),
+		.m13_data_i(	m13s7_data_o	),
+		.m13_data_o(	m13s7_data_i	),
+		.m13_addr_i(	m13s7_addr	),
+		.m13_sel_i(	m13s7_sel	),
+		.m13_we_i(	m13s7_we	),
+		.m13_cyc_i(	m13s7_cyc	),
+		.m13_stb_i(	m13s7_stb	),
+		.m13_ack_o(	m13s7_ack	),
+		.m13_err_o(	m13s7_err	),
+		.m13_rty_o(	m13s7_rty	),
+		.m14_data_i(	m14s7_data_o	),
+		.m14_data_o(	m14s7_data_i	),
+		.m14_addr_i(	m14s7_addr	),
+		.m14_sel_i(	m14s7_sel	),
+		.m14_we_i(	m14s7_we	),
+		.m14_cyc_i(	m14s7_cyc	),
+		.m14_stb_i(	m14s7_stb	),
+		.m14_ack_o(	m14s7_ack	),
+		.m14_err_o(	m14s7_err	),
+		.m14_rty_o(	m14s7_rty	),
+		.m15_data_i(	m15s7_data_o	),
+		.m15_data_o(	m15s7_data_i	),
+		.m15_addr_i(	m15s7_addr	),
+		.m15_sel_i(	m15s7_sel	),
+		.m15_we_i(	m15s7_we	),
+		.m15_cyc_i(	m15s7_cyc	),
+		.m15_stb_i(	m15s7_stb	),
+		.m15_ack_o(	m15s7_ack	),
+		.m15_err_o(	m15s7_err	),
+		.m15_rty_o(	m15s7_rty	)
 		);
 
 wb_conmax_slave_if #(pri_sel8,aw,dw,sw) s8(
@@ -4082,7 +7530,87 @@ wb_conmax_slave_if #(pri_sel8,aw,dw,sw) s8(
 		.m7_stb_i(	m7s8_stb	),
 		.m7_ack_o(	m7s8_ack	),
 		.m7_err_o(	m7s8_err	),
-		.m7_rty_o(	m7s8_rty	)
+		.m7_rty_o(	m7s8_rty	),
+		.m8_data_i(	m8s8_data_o	),
+		.m8_data_o(	m8s8_data_i	),
+		.m8_addr_i(	m8s8_addr	),
+		.m8_sel_i(	m8s8_sel	),
+		.m8_we_i(	m8s8_we	),
+		.m8_cyc_i(	m8s8_cyc	),
+		.m8_stb_i(	m8s8_stb	),
+		.m8_ack_o(	m8s8_ack	),
+		.m8_err_o(	m8s8_err	),
+		.m8_rty_o(	m8s8_rty	),
+		.m9_data_i(	m9s8_data_o	),
+		.m9_data_o(	m9s8_data_i	),
+		.m9_addr_i(	m9s8_addr	),
+		.m9_sel_i(	m9s8_sel	),
+		.m9_we_i(	m9s8_we	),
+		.m9_cyc_i(	m9s8_cyc	),
+		.m9_stb_i(	m9s8_stb	),
+		.m9_ack_o(	m9s8_ack	),
+		.m9_err_o(	m9s8_err	),
+		.m9_rty_o(	m9s8_rty	),
+		.m10_data_i(	m10s8_data_o	),
+		.m10_data_o(	m10s8_data_i	),
+		.m10_addr_i(	m10s8_addr	),
+		.m10_sel_i(	m10s8_sel	),
+		.m10_we_i(	m10s8_we	),
+		.m10_cyc_i(	m10s8_cyc	),
+		.m10_stb_i(	m10s8_stb	),
+		.m10_ack_o(	m10s8_ack	),
+		.m10_err_o(	m10s8_err	),
+		.m10_rty_o(	m10s8_rty	),
+		.m11_data_i(	m11s8_data_o	),
+		.m11_data_o(	m11s8_data_i	),
+		.m11_addr_i(	m11s8_addr	),
+		.m11_sel_i(	m11s8_sel	),
+		.m11_we_i(	m11s8_we	),
+		.m11_cyc_i(	m11s8_cyc	),
+		.m11_stb_i(	m11s8_stb	),
+		.m11_ack_o(	m11s8_ack	),
+		.m11_err_o(	m11s8_err	),
+		.m11_rty_o(	m11s8_rty	),
+		.m12_data_i(	m12s8_data_o	),
+		.m12_data_o(	m12s8_data_i	),
+		.m12_addr_i(	m12s8_addr	),
+		.m12_sel_i(	m12s8_sel	),
+		.m12_we_i(	m12s8_we	),
+		.m12_cyc_i(	m12s8_cyc	),
+		.m12_stb_i(	m12s8_stb	),
+		.m12_ack_o(	m12s8_ack	),
+		.m12_err_o(	m12s8_err	),
+		.m12_rty_o(	m12s8_rty	),
+		.m13_data_i(	m13s8_data_o	),
+		.m13_data_o(	m13s8_data_i	),
+		.m13_addr_i(	m13s8_addr	),
+		.m13_sel_i(	m13s8_sel	),
+		.m13_we_i(	m13s8_we	),
+		.m13_cyc_i(	m13s8_cyc	),
+		.m13_stb_i(	m13s8_stb	),
+		.m13_ack_o(	m13s8_ack	),
+		.m13_err_o(	m13s8_err	),
+		.m13_rty_o(	m13s8_rty	),
+		.m14_data_i(	m14s8_data_o	),
+		.m14_data_o(	m14s8_data_i	),
+		.m14_addr_i(	m14s8_addr	),
+		.m14_sel_i(	m14s8_sel	),
+		.m14_we_i(	m14s8_we	),
+		.m14_cyc_i(	m14s8_cyc	),
+		.m14_stb_i(	m14s8_stb	),
+		.m14_ack_o(	m14s8_ack	),
+		.m14_err_o(	m14s8_err	),
+		.m14_rty_o(	m14s8_rty	),
+		.m15_data_i(	m15s8_data_o	),
+		.m15_data_o(	m15s8_data_i	),
+		.m15_addr_i(	m15s8_addr	),
+		.m15_sel_i(	m15s8_sel	),
+		.m15_we_i(	m15s8_we	),
+		.m15_cyc_i(	m15s8_cyc	),
+		.m15_stb_i(	m15s8_stb	),
+		.m15_ack_o(	m15s8_ack	),
+		.m15_err_o(	m15s8_err	),
+		.m15_rty_o(	m15s8_rty	)
 		);
 
 wb_conmax_slave_if #(pri_sel9,aw,dw,sw) s9(
@@ -4178,7 +7706,87 @@ wb_conmax_slave_if #(pri_sel9,aw,dw,sw) s9(
 		.m7_stb_i(	m7s9_stb	),
 		.m7_ack_o(	m7s9_ack	),
 		.m7_err_o(	m7s9_err	),
-		.m7_rty_o(	m7s9_rty	)
+		.m7_rty_o(	m7s9_rty	),
+		.m8_data_i(	m8s9_data_o	),
+		.m8_data_o(	m8s9_data_i	),
+		.m8_addr_i(	m8s9_addr	),
+		.m8_sel_i(	m8s9_sel	),
+		.m8_we_i(	m8s9_we	),
+		.m8_cyc_i(	m8s9_cyc	),
+		.m8_stb_i(	m8s9_stb	),
+		.m8_ack_o(	m8s9_ack	),
+		.m8_err_o(	m8s9_err	),
+		.m8_rty_o(	m8s9_rty	),
+		.m9_data_i(	m9s9_data_o	),
+		.m9_data_o(	m9s9_data_i	),
+		.m9_addr_i(	m9s9_addr	),
+		.m9_sel_i(	m9s9_sel	),
+		.m9_we_i(	m9s9_we	),
+		.m9_cyc_i(	m9s9_cyc	),
+		.m9_stb_i(	m9s9_stb	),
+		.m9_ack_o(	m9s9_ack	),
+		.m9_err_o(	m9s9_err	),
+		.m9_rty_o(	m9s9_rty	),
+		.m10_data_i(	m10s9_data_o	),
+		.m10_data_o(	m10s9_data_i	),
+		.m10_addr_i(	m10s9_addr	),
+		.m10_sel_i(	m10s9_sel	),
+		.m10_we_i(	m10s9_we	),
+		.m10_cyc_i(	m10s9_cyc	),
+		.m10_stb_i(	m10s9_stb	),
+		.m10_ack_o(	m10s9_ack	),
+		.m10_err_o(	m10s9_err	),
+		.m10_rty_o(	m10s9_rty	),
+		.m11_data_i(	m11s9_data_o	),
+		.m11_data_o(	m11s9_data_i	),
+		.m11_addr_i(	m11s9_addr	),
+		.m11_sel_i(	m11s9_sel	),
+		.m11_we_i(	m11s9_we	),
+		.m11_cyc_i(	m11s9_cyc	),
+		.m11_stb_i(	m11s9_stb	),
+		.m11_ack_o(	m11s9_ack	),
+		.m11_err_o(	m11s9_err	),
+		.m11_rty_o(	m11s9_rty	),
+		.m12_data_i(	m12s9_data_o	),
+		.m12_data_o(	m12s9_data_i	),
+		.m12_addr_i(	m12s9_addr	),
+		.m12_sel_i(	m12s9_sel	),
+		.m12_we_i(	m12s9_we	),
+		.m12_cyc_i(	m12s9_cyc	),
+		.m12_stb_i(	m12s9_stb	),
+		.m12_ack_o(	m12s9_ack	),
+		.m12_err_o(	m12s9_err	),
+		.m12_rty_o(	m12s9_rty	),
+		.m13_data_i(	m13s9_data_o	),
+		.m13_data_o(	m13s9_data_i	),
+		.m13_addr_i(	m13s9_addr	),
+		.m13_sel_i(	m13s9_sel	),
+		.m13_we_i(	m13s9_we	),
+		.m13_cyc_i(	m13s9_cyc	),
+		.m13_stb_i(	m13s9_stb	),
+		.m13_ack_o(	m13s9_ack	),
+		.m13_err_o(	m13s9_err	),
+		.m13_rty_o(	m13s9_rty	),
+		.m14_data_i(	m14s9_data_o	),
+		.m14_data_o(	m14s9_data_i	),
+		.m14_addr_i(	m14s9_addr	),
+		.m14_sel_i(	m14s9_sel	),
+		.m14_we_i(	m14s9_we	),
+		.m14_cyc_i(	m14s9_cyc	),
+		.m14_stb_i(	m14s9_stb	),
+		.m14_ack_o(	m14s9_ack	),
+		.m14_err_o(	m14s9_err	),
+		.m14_rty_o(	m14s9_rty	),
+		.m15_data_i(	m15s9_data_o	),
+		.m15_data_o(	m15s9_data_i	),
+		.m15_addr_i(	m15s9_addr	),
+		.m15_sel_i(	m15s9_sel	),
+		.m15_we_i(	m15s9_we	),
+		.m15_cyc_i(	m15s9_cyc	),
+		.m15_stb_i(	m15s9_stb	),
+		.m15_ack_o(	m15s9_ack	),
+		.m15_err_o(	m15s9_err	),
+		.m15_rty_o(	m15s9_rty	)
 		);
 
 wb_conmax_slave_if #(pri_sel10,aw,dw,sw) s10(
@@ -4274,7 +7882,87 @@ wb_conmax_slave_if #(pri_sel10,aw,dw,sw) s10(
 		.m7_stb_i(	m7s10_stb	),
 		.m7_ack_o(	m7s10_ack	),
 		.m7_err_o(	m7s10_err	),
-		.m7_rty_o(	m7s10_rty	)
+		.m7_rty_o(	m7s10_rty	),
+		.m8_data_i(	m8s10_data_o	),
+		.m8_data_o(	m8s10_data_i	),
+		.m8_addr_i(	m8s10_addr	),
+		.m8_sel_i(	m8s10_sel	),
+		.m8_we_i(	m8s10_we	),
+		.m8_cyc_i(	m8s10_cyc	),
+		.m8_stb_i(	m8s10_stb	),
+		.m8_ack_o(	m8s10_ack	),
+		.m8_err_o(	m8s10_err	),
+		.m8_rty_o(	m8s10_rty	),
+		.m9_data_i(	m9s10_data_o	),
+		.m9_data_o(	m9s10_data_i	),
+		.m9_addr_i(	m9s10_addr	),
+		.m9_sel_i(	m9s10_sel	),
+		.m9_we_i(	m9s10_we	),
+		.m9_cyc_i(	m9s10_cyc	),
+		.m9_stb_i(	m9s10_stb	),
+		.m9_ack_o(	m9s10_ack	),
+		.m9_err_o(	m9s10_err	),
+		.m9_rty_o(	m9s10_rty	),
+		.m10_data_i(	m10s10_data_o	),
+		.m10_data_o(	m10s10_data_i	),
+		.m10_addr_i(	m10s10_addr	),
+		.m10_sel_i(	m10s10_sel	),
+		.m10_we_i(	m10s10_we	),
+		.m10_cyc_i(	m10s10_cyc	),
+		.m10_stb_i(	m10s10_stb	),
+		.m10_ack_o(	m10s10_ack	),
+		.m10_err_o(	m10s10_err	),
+		.m10_rty_o(	m10s10_rty	),
+		.m11_data_i(	m11s10_data_o	),
+		.m11_data_o(	m11s10_data_i	),
+		.m11_addr_i(	m11s10_addr	),
+		.m11_sel_i(	m11s10_sel	),
+		.m11_we_i(	m11s10_we	),
+		.m11_cyc_i(	m11s10_cyc	),
+		.m11_stb_i(	m11s10_stb	),
+		.m11_ack_o(	m11s10_ack	),
+		.m11_err_o(	m11s10_err	),
+		.m11_rty_o(	m11s10_rty	),
+		.m12_data_i(	m12s10_data_o	),
+		.m12_data_o(	m12s10_data_i	),
+		.m12_addr_i(	m12s10_addr	),
+		.m12_sel_i(	m12s10_sel	),
+		.m12_we_i(	m12s10_we	),
+		.m12_cyc_i(	m12s10_cyc	),
+		.m12_stb_i(	m12s10_stb	),
+		.m12_ack_o(	m12s10_ack	),
+		.m12_err_o(	m12s10_err	),
+		.m12_rty_o(	m12s10_rty	),
+		.m13_data_i(	m13s10_data_o	),
+		.m13_data_o(	m13s10_data_i	),
+		.m13_addr_i(	m13s10_addr	),
+		.m13_sel_i(	m13s10_sel	),
+		.m13_we_i(	m13s10_we	),
+		.m13_cyc_i(	m13s10_cyc	),
+		.m13_stb_i(	m13s10_stb	),
+		.m13_ack_o(	m13s10_ack	),
+		.m13_err_o(	m13s10_err	),
+		.m13_rty_o(	m13s10_rty	),
+		.m14_data_i(	m14s10_data_o	),
+		.m14_data_o(	m14s10_data_i	),
+		.m14_addr_i(	m14s10_addr	),
+		.m14_sel_i(	m14s10_sel	),
+		.m14_we_i(	m14s10_we	),
+		.m14_cyc_i(	m14s10_cyc	),
+		.m14_stb_i(	m14s10_stb	),
+		.m14_ack_o(	m14s10_ack	),
+		.m14_err_o(	m14s10_err	),
+		.m14_rty_o(	m14s10_rty	),
+		.m15_data_i(	m15s10_data_o	),
+		.m15_data_o(	m15s10_data_i	),
+		.m15_addr_i(	m15s10_addr	),
+		.m15_sel_i(	m15s10_sel	),
+		.m15_we_i(	m15s10_we	),
+		.m15_cyc_i(	m15s10_cyc	),
+		.m15_stb_i(	m15s10_stb	),
+		.m15_ack_o(	m15s10_ack	),
+		.m15_err_o(	m15s10_err	),
+		.m15_rty_o(	m15s10_rty	)
 		);
 
 wb_conmax_slave_if #(pri_sel11,aw,dw,sw) s11(
@@ -4370,7 +8058,87 @@ wb_conmax_slave_if #(pri_sel11,aw,dw,sw) s11(
 		.m7_stb_i(	m7s11_stb	),
 		.m7_ack_o(	m7s11_ack	),
 		.m7_err_o(	m7s11_err	),
-		.m7_rty_o(	m7s11_rty	)
+		.m7_rty_o(	m7s11_rty	),
+		.m8_data_i(	m8s11_data_o	),
+		.m8_data_o(	m8s11_data_i	),
+		.m8_addr_i(	m8s11_addr	),
+		.m8_sel_i(	m8s11_sel	),
+		.m8_we_i(	m8s11_we	),
+		.m8_cyc_i(	m8s11_cyc	),
+		.m8_stb_i(	m8s11_stb	),
+		.m8_ack_o(	m8s11_ack	),
+		.m8_err_o(	m8s11_err	),
+		.m8_rty_o(	m8s11_rty	),
+		.m9_data_i(	m9s11_data_o	),
+		.m9_data_o(	m9s11_data_i	),
+		.m9_addr_i(	m9s11_addr	),
+		.m9_sel_i(	m9s11_sel	),
+		.m9_we_i(	m9s11_we	),
+		.m9_cyc_i(	m9s11_cyc	),
+		.m9_stb_i(	m9s11_stb	),
+		.m9_ack_o(	m9s11_ack	),
+		.m9_err_o(	m9s11_err	),
+		.m9_rty_o(	m9s11_rty	),
+		.m10_data_i(	m10s11_data_o	),
+		.m10_data_o(	m10s11_data_i	),
+		.m10_addr_i(	m10s11_addr	),
+		.m10_sel_i(	m10s11_sel	),
+		.m10_we_i(	m10s11_we	),
+		.m10_cyc_i(	m10s11_cyc	),
+		.m10_stb_i(	m10s11_stb	),
+		.m10_ack_o(	m10s11_ack	),
+		.m10_err_o(	m10s11_err	),
+		.m10_rty_o(	m10s11_rty	),
+		.m11_data_i(	m11s11_data_o	),
+		.m11_data_o(	m11s11_data_i	),
+		.m11_addr_i(	m11s11_addr	),
+		.m11_sel_i(	m11s11_sel	),
+		.m11_we_i(	m11s11_we	),
+		.m11_cyc_i(	m11s11_cyc	),
+		.m11_stb_i(	m11s11_stb	),
+		.m11_ack_o(	m11s11_ack	),
+		.m11_err_o(	m11s11_err	),
+		.m11_rty_o(	m11s11_rty	),
+		.m12_data_i(	m12s11_data_o	),
+		.m12_data_o(	m12s11_data_i	),
+		.m12_addr_i(	m12s11_addr	),
+		.m12_sel_i(	m12s11_sel	),
+		.m12_we_i(	m12s11_we	),
+		.m12_cyc_i(	m12s11_cyc	),
+		.m12_stb_i(	m12s11_stb	),
+		.m12_ack_o(	m12s11_ack	),
+		.m12_err_o(	m12s11_err	),
+		.m12_rty_o(	m12s11_rty	),
+		.m13_data_i(	m13s11_data_o	),
+		.m13_data_o(	m13s11_data_i	),
+		.m13_addr_i(	m13s11_addr	),
+		.m13_sel_i(	m13s11_sel	),
+		.m13_we_i(	m13s11_we	),
+		.m13_cyc_i(	m13s11_cyc	),
+		.m13_stb_i(	m13s11_stb	),
+		.m13_ack_o(	m13s11_ack	),
+		.m13_err_o(	m13s11_err	),
+		.m13_rty_o(	m13s11_rty	),
+		.m14_data_i(	m14s11_data_o	),
+		.m14_data_o(	m14s11_data_i	),
+		.m14_addr_i(	m14s11_addr	),
+		.m14_sel_i(	m14s11_sel	),
+		.m14_we_i(	m14s11_we	),
+		.m14_cyc_i(	m14s11_cyc	),
+		.m14_stb_i(	m14s11_stb	),
+		.m14_ack_o(	m14s11_ack	),
+		.m14_err_o(	m14s11_err	),
+		.m14_rty_o(	m14s11_rty	),
+		.m15_data_i(	m15s11_data_o	),
+		.m15_data_o(	m15s11_data_i	),
+		.m15_addr_i(	m15s11_addr	),
+		.m15_sel_i(	m15s11_sel	),
+		.m15_we_i(	m15s11_we	),
+		.m15_cyc_i(	m15s11_cyc	),
+		.m15_stb_i(	m15s11_stb	),
+		.m15_ack_o(	m15s11_ack	),
+		.m15_err_o(	m15s11_err	),
+		.m15_rty_o(	m15s11_rty	)
 		);
 
 wb_conmax_slave_if #(pri_sel12,aw,dw,sw) s12(
@@ -4466,7 +8234,87 @@ wb_conmax_slave_if #(pri_sel12,aw,dw,sw) s12(
 		.m7_stb_i(	m7s12_stb	),
 		.m7_ack_o(	m7s12_ack	),
 		.m7_err_o(	m7s12_err	),
-		.m7_rty_o(	m7s12_rty	)
+		.m7_rty_o(	m7s12_rty	),
+		.m8_data_i(	m8s12_data_o	),
+		.m8_data_o(	m8s12_data_i	),
+		.m8_addr_i(	m8s12_addr	),
+		.m8_sel_i(	m8s12_sel	),
+		.m8_we_i(	m8s12_we	),
+		.m8_cyc_i(	m8s12_cyc	),
+		.m8_stb_i(	m8s12_stb	),
+		.m8_ack_o(	m8s12_ack	),
+		.m8_err_o(	m8s12_err	),
+		.m8_rty_o(	m8s12_rty	),
+		.m9_data_i(	m9s12_data_o	),
+		.m9_data_o(	m9s12_data_i	),
+		.m9_addr_i(	m9s12_addr	),
+		.m9_sel_i(	m9s12_sel	),
+		.m9_we_i(	m9s12_we	),
+		.m9_cyc_i(	m9s12_cyc	),
+		.m9_stb_i(	m9s12_stb	),
+		.m9_ack_o(	m9s12_ack	),
+		.m9_err_o(	m9s12_err	),
+		.m9_rty_o(	m9s12_rty	),
+		.m10_data_i(	m10s12_data_o	),
+		.m10_data_o(	m10s12_data_i	),
+		.m10_addr_i(	m10s12_addr	),
+		.m10_sel_i(	m10s12_sel	),
+		.m10_we_i(	m10s12_we	),
+		.m10_cyc_i(	m10s12_cyc	),
+		.m10_stb_i(	m10s12_stb	),
+		.m10_ack_o(	m10s12_ack	),
+		.m10_err_o(	m10s12_err	),
+		.m10_rty_o(	m10s12_rty	),
+		.m11_data_i(	m11s12_data_o	),
+		.m11_data_o(	m11s12_data_i	),
+		.m11_addr_i(	m11s12_addr	),
+		.m11_sel_i(	m11s12_sel	),
+		.m11_we_i(	m11s12_we	),
+		.m11_cyc_i(	m11s12_cyc	),
+		.m11_stb_i(	m11s12_stb	),
+		.m11_ack_o(	m11s12_ack	),
+		.m11_err_o(	m11s12_err	),
+		.m11_rty_o(	m11s12_rty	),
+		.m12_data_i(	m12s12_data_o	),
+		.m12_data_o(	m12s12_data_i	),
+		.m12_addr_i(	m12s12_addr	),
+		.m12_sel_i(	m12s12_sel	),
+		.m12_we_i(	m12s12_we	),
+		.m12_cyc_i(	m12s12_cyc	),
+		.m12_stb_i(	m12s12_stb	),
+		.m12_ack_o(	m12s12_ack	),
+		.m12_err_o(	m12s12_err	),
+		.m12_rty_o(	m12s12_rty	),
+		.m13_data_i(	m13s12_data_o	),
+		.m13_data_o(	m13s12_data_i	),
+		.m13_addr_i(	m13s12_addr	),
+		.m13_sel_i(	m13s12_sel	),
+		.m13_we_i(	m13s12_we	),
+		.m13_cyc_i(	m13s12_cyc	),
+		.m13_stb_i(	m13s12_stb	),
+		.m13_ack_o(	m13s12_ack	),
+		.m13_err_o(	m13s12_err	),
+		.m13_rty_o(	m13s12_rty	),
+		.m14_data_i(	m14s12_data_o	),
+		.m14_data_o(	m14s12_data_i	),
+		.m14_addr_i(	m14s12_addr	),
+		.m14_sel_i(	m14s12_sel	),
+		.m14_we_i(	m14s12_we	),
+		.m14_cyc_i(	m14s12_cyc	),
+		.m14_stb_i(	m14s12_stb	),
+		.m14_ack_o(	m14s12_ack	),
+		.m14_err_o(	m14s12_err	),
+		.m14_rty_o(	m14s12_rty	),
+		.m15_data_i(	m15s12_data_o	),
+		.m15_data_o(	m15s12_data_i	),
+		.m15_addr_i(	m15s12_addr	),
+		.m15_sel_i(	m15s12_sel	),
+		.m15_we_i(	m15s12_we	),
+		.m15_cyc_i(	m15s12_cyc	),
+		.m15_stb_i(	m15s12_stb	),
+		.m15_ack_o(	m15s12_ack	),
+		.m15_err_o(	m15s12_err	),
+		.m15_rty_o(	m15s12_rty	)
 		);
 
 wb_conmax_slave_if #(pri_sel13,aw,dw,sw) s13(
@@ -4562,7 +8410,87 @@ wb_conmax_slave_if #(pri_sel13,aw,dw,sw) s13(
 		.m7_stb_i(	m7s13_stb	),
 		.m7_ack_o(	m7s13_ack	),
 		.m7_err_o(	m7s13_err	),
-		.m7_rty_o(	m7s13_rty	)
+		.m7_rty_o(	m7s13_rty	),
+		.m8_data_i(	m8s13_data_o	),
+		.m8_data_o(	m8s13_data_i	),
+		.m8_addr_i(	m8s13_addr	),
+		.m8_sel_i(	m8s13_sel	),
+		.m8_we_i(	m8s13_we	),
+		.m8_cyc_i(	m8s13_cyc	),
+		.m8_stb_i(	m8s13_stb	),
+		.m8_ack_o(	m8s13_ack	),
+		.m8_err_o(	m8s13_err	),
+		.m8_rty_o(	m8s13_rty	),
+		.m9_data_i(	m9s13_data_o	),
+		.m9_data_o(	m9s13_data_i	),
+		.m9_addr_i(	m9s13_addr	),
+		.m9_sel_i(	m9s13_sel	),
+		.m9_we_i(	m9s13_we	),
+		.m9_cyc_i(	m9s13_cyc	),
+		.m9_stb_i(	m9s13_stb	),
+		.m9_ack_o(	m9s13_ack	),
+		.m9_err_o(	m9s13_err	),
+		.m9_rty_o(	m9s13_rty	),
+		.m10_data_i(	m10s13_data_o	),
+		.m10_data_o(	m10s13_data_i	),
+		.m10_addr_i(	m10s13_addr	),
+		.m10_sel_i(	m10s13_sel	),
+		.m10_we_i(	m10s13_we	),
+		.m10_cyc_i(	m10s13_cyc	),
+		.m10_stb_i(	m10s13_stb	),
+		.m10_ack_o(	m10s13_ack	),
+		.m10_err_o(	m10s13_err	),
+		.m10_rty_o(	m10s13_rty	),
+		.m11_data_i(	m11s13_data_o	),
+		.m11_data_o(	m11s13_data_i	),
+		.m11_addr_i(	m11s13_addr	),
+		.m11_sel_i(	m11s13_sel	),
+		.m11_we_i(	m11s13_we	),
+		.m11_cyc_i(	m11s13_cyc	),
+		.m11_stb_i(	m11s13_stb	),
+		.m11_ack_o(	m11s13_ack	),
+		.m11_err_o(	m11s13_err	),
+		.m11_rty_o(	m11s13_rty	),
+		.m12_data_i(	m12s13_data_o	),
+		.m12_data_o(	m12s13_data_i	),
+		.m12_addr_i(	m12s13_addr	),
+		.m12_sel_i(	m12s13_sel	),
+		.m12_we_i(	m12s13_we	),
+		.m12_cyc_i(	m12s13_cyc	),
+		.m12_stb_i(	m12s13_stb	),
+		.m12_ack_o(	m12s13_ack	),
+		.m12_err_o(	m12s13_err	),
+		.m12_rty_o(	m12s13_rty	),
+		.m13_data_i(	m13s13_data_o	),
+		.m13_data_o(	m13s13_data_i	),
+		.m13_addr_i(	m13s13_addr	),
+		.m13_sel_i(	m13s13_sel	),
+		.m13_we_i(	m13s13_we	),
+		.m13_cyc_i(	m13s13_cyc	),
+		.m13_stb_i(	m13s13_stb	),
+		.m13_ack_o(	m13s13_ack	),
+		.m13_err_o(	m13s13_err	),
+		.m13_rty_o(	m13s13_rty	),
+		.m14_data_i(	m14s13_data_o	),
+		.m14_data_o(	m14s13_data_i	),
+		.m14_addr_i(	m14s13_addr	),
+		.m14_sel_i(	m14s13_sel	),
+		.m14_we_i(	m14s13_we	),
+		.m14_cyc_i(	m14s13_cyc	),
+		.m14_stb_i(	m14s13_stb	),
+		.m14_ack_o(	m14s13_ack	),
+		.m14_err_o(	m14s13_err	),
+		.m14_rty_o(	m14s13_rty	),
+		.m15_data_i(	m15s13_data_o	),
+		.m15_data_o(	m15s13_data_i	),
+		.m15_addr_i(	m15s13_addr	),
+		.m15_sel_i(	m15s13_sel	),
+		.m15_we_i(	m15s13_we	),
+		.m15_cyc_i(	m15s13_cyc	),
+		.m15_stb_i(	m15s13_stb	),
+		.m15_ack_o(	m15s13_ack	),
+		.m15_err_o(	m15s13_err	),
+		.m15_rty_o(	m15s13_rty	)
 		);
 
 wb_conmax_slave_if #(pri_sel14,aw,dw,sw) s14(
@@ -4658,7 +8586,87 @@ wb_conmax_slave_if #(pri_sel14,aw,dw,sw) s14(
 		.m7_stb_i(	m7s14_stb	),
 		.m7_ack_o(	m7s14_ack	),
 		.m7_err_o(	m7s14_err	),
-		.m7_rty_o(	m7s14_rty	)
+		.m7_rty_o(	m7s14_rty	),
+		.m8_data_i(	m8s14_data_o	),
+		.m8_data_o(	m8s14_data_i	),
+		.m8_addr_i(	m8s14_addr	),
+		.m8_sel_i(	m8s14_sel	),
+		.m8_we_i(	m8s14_we	),
+		.m8_cyc_i(	m8s14_cyc	),
+		.m8_stb_i(	m8s14_stb	),
+		.m8_ack_o(	m8s14_ack	),
+		.m8_err_o(	m8s14_err	),
+		.m8_rty_o(	m8s14_rty	),
+		.m9_data_i(	m9s14_data_o	),
+		.m9_data_o(	m9s14_data_i	),
+		.m9_addr_i(	m9s14_addr	),
+		.m9_sel_i(	m9s14_sel	),
+		.m9_we_i(	m9s14_we	),
+		.m9_cyc_i(	m9s14_cyc	),
+		.m9_stb_i(	m9s14_stb	),
+		.m9_ack_o(	m9s14_ack	),
+		.m9_err_o(	m9s14_err	),
+		.m9_rty_o(	m9s14_rty	),
+		.m10_data_i(	m10s14_data_o	),
+		.m10_data_o(	m10s14_data_i	),
+		.m10_addr_i(	m10s14_addr	),
+		.m10_sel_i(	m10s14_sel	),
+		.m10_we_i(	m10s14_we	),
+		.m10_cyc_i(	m10s14_cyc	),
+		.m10_stb_i(	m10s14_stb	),
+		.m10_ack_o(	m10s14_ack	),
+		.m10_err_o(	m10s14_err	),
+		.m10_rty_o(	m10s14_rty	),
+		.m11_data_i(	m11s14_data_o	),
+		.m11_data_o(	m11s14_data_i	),
+		.m11_addr_i(	m11s14_addr	),
+		.m11_sel_i(	m11s14_sel	),
+		.m11_we_i(	m11s14_we	),
+		.m11_cyc_i(	m11s14_cyc	),
+		.m11_stb_i(	m11s14_stb	),
+		.m11_ack_o(	m11s14_ack	),
+		.m11_err_o(	m11s14_err	),
+		.m11_rty_o(	m11s14_rty	),
+		.m12_data_i(	m12s14_data_o	),
+		.m12_data_o(	m12s14_data_i	),
+		.m12_addr_i(	m12s14_addr	),
+		.m12_sel_i(	m12s14_sel	),
+		.m12_we_i(	m12s14_we	),
+		.m12_cyc_i(	m12s14_cyc	),
+		.m12_stb_i(	m12s14_stb	),
+		.m12_ack_o(	m12s14_ack	),
+		.m12_err_o(	m12s14_err	),
+		.m12_rty_o(	m12s14_rty	),
+		.m13_data_i(	m13s14_data_o	),
+		.m13_data_o(	m13s14_data_i	),
+		.m13_addr_i(	m13s14_addr	),
+		.m13_sel_i(	m13s14_sel	),
+		.m13_we_i(	m13s14_we	),
+		.m13_cyc_i(	m13s14_cyc	),
+		.m13_stb_i(	m13s14_stb	),
+		.m13_ack_o(	m13s14_ack	),
+		.m13_err_o(	m13s14_err	),
+		.m13_rty_o(	m13s14_rty	),
+		.m14_data_i(	m14s14_data_o	),
+		.m14_data_o(	m14s14_data_i	),
+		.m14_addr_i(	m14s14_addr	),
+		.m14_sel_i(	m14s14_sel	),
+		.m14_we_i(	m14s14_we	),
+		.m14_cyc_i(	m14s14_cyc	),
+		.m14_stb_i(	m14s14_stb	),
+		.m14_ack_o(	m14s14_ack	),
+		.m14_err_o(	m14s14_err	),
+		.m14_rty_o(	m14s14_rty	),
+		.m15_data_i(	m15s14_data_o	),
+		.m15_data_o(	m15s14_data_i	),
+		.m15_addr_i(	m15s14_addr	),
+		.m15_sel_i(	m15s14_sel	),
+		.m15_we_i(	m15s14_we	),
+		.m15_cyc_i(	m15s14_cyc	),
+		.m15_stb_i(	m15s14_stb	),
+		.m15_ack_o(	m15s14_ack	),
+		.m15_err_o(	m15s14_err	),
+		.m15_rty_o(	m15s14_rty	)
 		);
 
 wb_conmax_slave_if #(pri_sel15,aw,dw,sw) s15(
@@ -4754,7 +8762,87 @@ wb_conmax_slave_if #(pri_sel15,aw,dw,sw) s15(
 		.m7_stb_i(	m7s15_stb	),
 		.m7_ack_o(	m7s15_ack	),
 		.m7_err_o(	m7s15_err	),
-		.m7_rty_o(	m7s15_rty	)
+		.m7_rty_o(	m7s15_rty	),
+		.m8_data_i(	m8s15_data_o	),
+		.m8_data_o(	m8s15_data_i	),
+		.m8_addr_i(	m8s15_addr	),
+		.m8_sel_i(	m8s15_sel	),
+		.m8_we_i(	m8s15_we	),
+		.m8_cyc_i(	m8s15_cyc	),
+		.m8_stb_i(	m8s15_stb	),
+		.m8_ack_o(	m8s15_ack	),
+		.m8_err_o(	m8s15_err	),
+		.m8_rty_o(	m8s15_rty	),
+		.m9_data_i(	m9s15_data_o	),
+		.m9_data_o(	m9s15_data_i	),
+		.m9_addr_i(	m9s15_addr	),
+		.m9_sel_i(	m9s15_sel	),
+		.m9_we_i(	m9s15_we	),
+		.m9_cyc_i(	m9s15_cyc	),
+		.m9_stb_i(	m9s15_stb	),
+		.m9_ack_o(	m9s15_ack	),
+		.m9_err_o(	m9s15_err	),
+		.m9_rty_o(	m9s15_rty	),
+		.m10_data_i(	m10s15_data_o	),
+		.m10_data_o(	m10s15_data_i	),
+		.m10_addr_i(	m10s15_addr	),
+		.m10_sel_i(	m10s15_sel	),
+		.m10_we_i(	m10s15_we	),
+		.m10_cyc_i(	m10s15_cyc	),
+		.m10_stb_i(	m10s15_stb	),
+		.m10_ack_o(	m10s15_ack	),
+		.m10_err_o(	m10s15_err	),
+		.m10_rty_o(	m10s15_rty	),
+		.m11_data_i(	m11s15_data_o	),
+		.m11_data_o(	m11s15_data_i	),
+		.m11_addr_i(	m11s15_addr	),
+		.m11_sel_i(	m11s15_sel	),
+		.m11_we_i(	m11s15_we	),
+		.m11_cyc_i(	m11s15_cyc	),
+		.m11_stb_i(	m11s15_stb	),
+		.m11_ack_o(	m11s15_ack	),
+		.m11_err_o(	m11s15_err	),
+		.m11_rty_o(	m11s15_rty	),
+		.m12_data_i(	m12s15_data_o	),
+		.m12_data_o(	m12s15_data_i	),
+		.m12_addr_i(	m12s15_addr	),
+		.m12_sel_i(	m12s15_sel	),
+		.m12_we_i(	m12s15_we	),
+		.m12_cyc_i(	m12s15_cyc	),
+		.m12_stb_i(	m12s15_stb	),
+		.m12_ack_o(	m12s15_ack	),
+		.m12_err_o(	m12s15_err	),
+		.m12_rty_o(	m12s15_rty	),
+		.m13_data_i(	m13s15_data_o	),
+		.m13_data_o(	m13s15_data_i	),
+		.m13_addr_i(	m13s15_addr	),
+		.m13_sel_i(	m13s15_sel	),
+		.m13_we_i(	m13s15_we	),
+		.m13_cyc_i(	m13s15_cyc	),
+		.m13_stb_i(	m13s15_stb	),
+		.m13_ack_o(	m13s15_ack	),
+		.m13_err_o(	m13s15_err	),
+		.m13_rty_o(	m13s15_rty	),
+		.m14_data_i(	m14s15_data_o	),
+		.m14_data_o(	m14s15_data_i	),
+		.m14_addr_i(	m14s15_addr	),
+		.m14_sel_i(	m14s15_sel	),
+		.m14_we_i(	m14s15_we	),
+		.m14_cyc_i(	m14s15_cyc	),
+		.m14_stb_i(	m14s15_stb	),
+		.m14_ack_o(	m14s15_ack	),
+		.m14_err_o(	m14s15_err	),
+		.m14_rty_o(	m14s15_rty	),
+		.m15_data_i(	m15s15_data_o	),
+		.m15_data_o(	m15s15_data_i	),
+		.m15_addr_i(	m15s15_addr	),
+		.m15_sel_i(	m15s15_sel	),
+		.m15_we_i(	m15s15_we	),
+		.m15_cyc_i(	m15s15_cyc	),
+		.m15_stb_i(	m15s15_stb	),
+		.m15_ack_o(	m15s15_ack	),
+		.m15_err_o(	m15s15_err	),
+		.m15_rty_o(	m15s15_rty	)
 		);
 
 wb_conmax_rf #(rf_addr,dw,aw,sw) rf(
