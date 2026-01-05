@@ -51,6 +51,96 @@ module d2d_link_top
    input wire [7:0]  cpuID
    );
    
+   // TX FIFO status sync to wb domain
+   reg [2:0] tx_fifo_full_sync;
+   reg [2:0] tx_fifo_empty_sync;
+   
+   // RX FIFO status sync to wb domain
+   reg [2:0] rx_fifo_full_sync;
+   reg [2:0] rx_fifo_empty_sync;
+   
+   reg [63:0] tx_fifo [0:7];
+   reg [3:0]  tx_fifo_wr_ptr;
+   reg [3:0]  tx_fifo_rd_ptr;
+   reg [3:0]  tx_fifo_count;
+   wire	      tx_fifo_full;
+   wire	      tx_fifo_empty;
+   
+   reg tx_dma_busy;
+   reg tx_dma_done;
+   reg [31:0] tx_dma_current_addr;
+   reg [31:0] tx_dma_remaining;
+   reg [2:0]  tx_dma_state;  // Changed from [1:0] to [2:0]
+   reg	      tx_fifo_wr_en;
+   reg [63:0] tx_fifo_wdata;
+   
+   reg [2:0] tx_fifo_rd_ptr_gray_d2d;
+   reg [2:0] tx_fifo_rd_ptr_gray_d2d_sync1;
+   reg [2:0] tx_fifo_rd_ptr_gray_d2d_sync2;
+   reg [2:0] tx_fifo_rd_ptr_wb_bin;
+
+   reg [3:0] tx_fifo_rd_ptr_d2d, n_tx_fifo_rd_ptr_d2d;
+   reg [3:0] tx_fifo_count_d2d;
+   reg [2:0] tx_fifo_rd_ptr_gray;
+   reg [2:0] tx_fifo_rd_ptr_gray_sync;
+   reg [2:0] tx_fifo_wr_ptr_gray;
+   reg [2:0] tx_fifo_wr_ptr_gray_sync;
+   
+   reg [2:0] wr_ptr_bin;
+   reg [2:0] rd_ptr_bin;
+
+   reg [63:0] rx_fifo [0:7];
+   reg [3:0]  rx_fifo_wr_ptr;
+   reg [3:0]  rx_fifo_rd_ptr_wb;
+   reg [3:0]  rx_fifo_count;
+   wire	      rx_fifo_full;
+   wire	      rx_fifo_empty;
+   
+   // CDC synchronization for RX FIFO write pointer from d2d_clk to wb_clk domain
+   reg [2:0]  rx_fifo_wr_ptr_gray_d2d;
+   reg [2:0]  rx_fifo_wr_ptr_gray_d2d_sync1;
+   reg [2:0]  rx_fifo_wr_ptr_gray_d2d_sync2;
+   reg [2:0]  rx_fifo_wr_ptr_wb_bin;
+   
+   // CDC synchronization for RX FIFO read pointer from wb_clk to d2d_clk domain
+   reg [2:0]  rx_fifo_rd_ptr_wb_gray;
+   reg [2:0]  rx_fifo_rd_ptr_wb_gray_sync1;
+   reg [2:0]  rx_fifo_rd_ptr_wb_gray_sync2;
+   reg [2:0]  rx_fifo_rd_ptr_d2d_bin;
+   
+   reg [1:0] rx_d2d_state;  // Changed from 1-bit to 2-bit for consistency
+   reg [1:0] n_rx_d2d_state;
+   
+   reg	     rx_fifo_wr_en;
+   reg [63:0] rx_fifo_wdata;
+   
+   reg rx_dma_busy;
+   reg rx_dma_done;
+   reg [31:0] rx_dma_current_addr;
+   reg [31:0] rx_dma_remaining;
+   reg [2:0]  rx_dma_state;  // Changed from [1:0] to [2:0]
+   reg [63:0] rx_fifo_rdata;
+   
+   localparam RX_DMA_IDLE = 3'd0;
+   localparam RX_DMA_WRITE = 3'd1;
+   localparam RX_DMA_WAIT_FIRST = 3'd2;
+   localparam RX_DMA_WAIT_SECOND = 3'd3;
+   localparam RX_DMA_WAIT_SECOND2 = 3'd4;
+   localparam RX_DMA_DONE = 3'd5;
+   
+   localparam RX_D2D_IDLE = 2'd0;
+   localparam RX_D2D_RECEIVE = 2'd1;
+   
+   localparam TX_DMA_IDLE = 3'd0;
+   localparam TX_DMA_FETCH = 3'd1;
+   localparam TX_DMA_WAIT = 3'd2;
+   localparam TX_DMA_WAIT2 = 3'd3;
+   localparam TX_DMA_WAIT3 = 3'd4;
+   localparam TX_DMA_DONE = 3'd5;
+   
+   localparam RX_FIFO_LAST_ENTRY=7;
+   localparam TX_FIFO_LAST_ENTRY=7;
+
    // ============================================================================
    // CSR Register Definitions and State Machine
    // ============================================================================
@@ -252,17 +342,6 @@ module d2d_link_top
       end
    end
    
-   // TX FIFO status sync to wb domain
-   reg [2:0] tx_fifo_full_sync;
-   reg [2:0] tx_fifo_empty_sync;
-   
-   // RX FIFO status sync to wb domain
-   reg [2:0] rx_fifo_full_sync;
-   reg [2:0] rx_fifo_empty_sync;
-   
-   localparam RX_FIFO_LAST_ENTRY=7;
-   localparam TX_FIFO_LAST_ENTRY=7;
-
    // Update status register
    always @(posedge wb_clk or negedge wb_rst_n) begin
       if (!wb_rst_n) begin
@@ -295,21 +374,10 @@ module d2d_link_top
    // TX FIFO (8 flits deep, 64-bit wide)
    // ============================================================================
    
-   reg [63:0] tx_fifo [0:7];
-   reg [3:0]  tx_fifo_wr_ptr;
-   reg [3:0]  tx_fifo_rd_ptr;
-   reg [3:0]  tx_fifo_count;
-   wire	      tx_fifo_full;
-   wire	      tx_fifo_empty;
-   
    assign tx_fifo_full = (tx_fifo_count == TX_FIFO_LAST_ENTRY);
    assign tx_fifo_empty = (tx_fifo_count == 4'd0);
    
    // CDC synchronization for TX FIFO read pointer from d2d_clk to wb_clk domain
-   reg [2:0] tx_fifo_rd_ptr_gray_d2d;
-   reg [2:0] tx_fifo_rd_ptr_gray_d2d_sync1;
-   reg [2:0] tx_fifo_rd_ptr_gray_d2d_sync2;
-   reg [2:0] tx_fifo_rd_ptr_wb_bin;
    
    // Capture read pointer in d2d_clk domain and convert to gray code
    always @(posedge d2d_clk or negedge d2d_rst_n) begin
@@ -362,15 +430,6 @@ module d2d_link_top
    end
    
    // CDC for TX FIFO read side (d2d_clk domain) - UPDATED VERSION
-   reg [3:0] tx_fifo_rd_ptr_d2d, n_tx_fifo_rd_ptr_d2d;
-   reg [3:0] tx_fifo_count_d2d;
-   reg [2:0] tx_fifo_rd_ptr_gray;
-   reg [2:0] tx_fifo_rd_ptr_gray_sync;
-   reg [2:0] tx_fifo_wr_ptr_gray;
-   reg [2:0] tx_fifo_wr_ptr_gray_sync;
-   
-   reg [2:0] wr_ptr_bin;
-   reg [2:0] rd_ptr_bin;
             
    // Convert write pointer to gray code and sync to d2d domain
    always @(posedge wb_clk or negedge wb_rst_n) begin
@@ -412,27 +471,8 @@ module d2d_link_top
    // RX FIFO (8 flits deep, 64-bit wide)
    // ============================================================================
    
-   reg [63:0] rx_fifo [0:7];
-   reg [3:0]  rx_fifo_wr_ptr;
-   reg [3:0]  rx_fifo_rd_ptr_wb;
-   reg [3:0]  rx_fifo_count;
-   wire	      rx_fifo_full;
-   wire	      rx_fifo_empty;
-   
    assign rx_fifo_full = (rx_fifo_count == RX_FIFO_LAST_ENTRY);
    assign rx_fifo_empty = (rx_fifo_count == 4'd0);
-   
-   // CDC synchronization for RX FIFO write pointer from d2d_clk to wb_clk domain
-   reg [2:0]  rx_fifo_wr_ptr_gray_d2d;
-   reg [2:0]  rx_fifo_wr_ptr_gray_d2d_sync1;
-   reg [2:0]  rx_fifo_wr_ptr_gray_d2d_sync2;
-   reg [2:0]  rx_fifo_wr_ptr_wb_bin;
-   
-   // CDC synchronization for RX FIFO read pointer from wb_clk to d2d_clk domain
-   reg [2:0]  rx_fifo_rd_ptr_wb_gray;
-   reg [2:0]  rx_fifo_rd_ptr_wb_gray_sync1;
-   reg [2:0]  rx_fifo_rd_ptr_wb_gray_sync2;
-   reg [2:0]  rx_fifo_rd_ptr_d2d_bin;
    
    // Capture write pointer in d2d_clk domain and convert to gray code
    always @(posedge d2d_clk or negedge d2d_rst_n) begin
@@ -532,21 +572,6 @@ module d2d_link_top
    // ============================================================================
    // TX DMA Engine
    // ============================================================================
-   
-   reg tx_dma_busy;
-   reg tx_dma_done;
-   reg [31:0] tx_dma_current_addr;
-   reg [31:0] tx_dma_remaining;
-   reg [2:0]  tx_dma_state;  // Changed from [1:0] to [2:0]
-   reg	      tx_fifo_wr_en;
-   reg [63:0] tx_fifo_wdata;
-   
-   localparam TX_DMA_IDLE = 3'd0;
-   localparam TX_DMA_FETCH = 3'd1;
-   localparam TX_DMA_WAIT = 3'd2;
-   localparam TX_DMA_WAIT2 = 3'd3;
-   localparam TX_DMA_WAIT3 = 3'd4;
-   localparam TX_DMA_DONE = 3'd5;
    
    // Wishbone master for TX DMA
    always @(posedge wb_clk or negedge wb_rst_n) begin
@@ -661,20 +686,6 @@ module d2d_link_top
    // ============================================================================
    // RX DMA Engine
    // ============================================================================
-   
-   reg rx_dma_busy;
-   reg rx_dma_done;
-   reg [31:0] rx_dma_current_addr;
-   reg [31:0] rx_dma_remaining;
-   reg [2:0]  rx_dma_state;  // Changed from [1:0] to [2:0]
-   reg [63:0] rx_fifo_rdata;
-   
-   localparam RX_DMA_IDLE = 3'd0;
-   localparam RX_DMA_WRITE = 3'd1;
-   localparam RX_DMA_WAIT_FIRST = 3'd2;
-   localparam RX_DMA_WAIT_SECOND = 3'd3;
-   localparam RX_DMA_WAIT_SECOND2 = 3'd4;
-   localparam RX_DMA_DONE = 3'd5;
    
    // Wishbone master for RX DMA
    always @(posedge wb_clk or negedge wb_rst_n) begin
@@ -857,15 +868,6 @@ module d2d_link_top
    // ============================================================================
    // RX D2D Interface (d2d_clk domain)
    // ============================================================================
-   
-   reg [1:0] rx_d2d_state;  // Changed from 1-bit to 2-bit for consistency
-   reg [1:0] n_rx_d2d_state;
-   
-   reg	     rx_fifo_wr_en;
-   reg [63:0] rx_fifo_wdata;
-   
-   localparam RX_D2D_IDLE = 2'd0;
-   localparam RX_D2D_RECEIVE = 2'd1;
    
    // RX ready logic: only assert if RX side is ready to receive
    wire	      rx_side_ready;
