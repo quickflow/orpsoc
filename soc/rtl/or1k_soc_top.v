@@ -103,14 +103,32 @@ module or1k_soc_top
    sd_card_cs_n_pad_o,
    
    // D2D
-   d2d_clk, 
-   d2d_rst_n,
-   d2d_tx_data,
-   d2d_tx_valid,
-   d2d_tx_ready,
-   d2d_rx_data,
-   d2d_rx_valid,
-   d2d_rx_ready,
+   d2d0_clk, 
+   d2d0_rst_n,
+   d2d0_tx_data,
+   d2d0_tx_valid,
+   d2d0_tx_ready,
+   d2d0_rx_data,
+   d2d0_rx_valid,
+   d2d0_rx_ready,
+   
+   d2d1_clk, 
+   d2d1_rst_n,
+   d2d1_tx_data,
+   d2d1_tx_valid,
+   d2d1_tx_ready,
+   d2d1_rx_data,
+   d2d1_rx_valid,
+   d2d1_rx_ready,
+   
+   d2d2_clk, 
+   d2d2_rst_n,
+   d2d2_tx_data,
+   d2d2_tx_valid,
+   d2d2_tx_ready,
+   d2d2_rx_data,
+   d2d2_rx_valid,
+   d2d2_rx_ready,
    
    // LEDs
    led3_pad_o,
@@ -210,14 +228,32 @@ module or1k_soc_top
    output	 sd_card_cs_n_pad_o;
    
    // D2D
-   input	 d2d_clk;
-   input	 d2d_rst_n;
-   output [63:0] d2d_tx_data;
-   output	 d2d_tx_valid;
-   input	 d2d_tx_ready;
-   input [63:0]	 d2d_rx_data;
-   input	 d2d_rx_valid;
-   output	 d2d_rx_ready;
+   input	 d2d0_clk;
+   input	 d2d0_rst_n;
+   output [63:0] d2d0_tx_data;
+   output	 d2d0_tx_valid;
+   input	 d2d0_tx_ready;
+   input [63:0]	 d2d0_rx_data;
+   input	 d2d0_rx_valid;
+   output	 d2d0_rx_ready;
+
+   input	 d2d1_clk;
+   input	 d2d1_rst_n;
+   output [63:0] d2d1_tx_data;
+   output	 d2d1_tx_valid;
+   input	 d2d1_tx_ready;
+   input [63:0]	 d2d1_rx_data;
+   input	 d2d1_rx_valid;
+   output	 d2d1_rx_ready;
+
+   input	 d2d2_clk;
+   input	 d2d2_rst_n;
+   output [63:0] d2d2_tx_data;
+   output	 d2d2_tx_valid;
+   input	 d2d2_tx_ready;
+   input [63:0]	 d2d2_rx_data;
+   input	 d2d2_rx_valid;
+   output	 d2d2_rx_ready;
 
    //
    // LEDs output
@@ -236,6 +272,11 @@ module or1k_soc_top
    parameter	 aw = `OR1200_OPERAND_WIDTH;
    parameter	 ppic_ints = `OR1200_PIC_INTS;
    
+   localparam	 ADDR_WIDTH = 32;
+   localparam	 DATA_WIDTH = 32;
+   localparam	 N_MASTERS  = 16;
+   localparam	 N_SLAVES   = 16;
+
    //
    // Signals for OR1200
    //
@@ -1135,59 +1176,161 @@ end
    // OrSoC D2D
    //
    
-   wire [31:0]		wbm_d2d_dat_o;	
-   wire [31:0]		wbm_d2d_dat_i;	
-   wire [31:0]		wbm_d2d_adr_o;	
-   wire [3:0]		wbm_d2d_sel_o;	
-   wire			wbm_d2d_we_o;	
-   wire			wbm_d2d_cyc_o;	
-   wire			wbm_d2d_stb_o;	
-   wire			wbm_d2d_ack_i;	
-   wire			wbm_d2d_err_i;	
+   wire [31:0]		wbm_d2d0_dat_o;	
+   wire [31:0]		wbm_d2d0_dat_i;	
+   wire [31:0]		wbm_d2d0_adr_o;	
+   wire [3:0]		wbm_d2d0_sel_o;	
+   wire			wbm_d2d0_we_o;	
+   wire			wbm_d2d0_cyc_o;	
+   wire			wbm_d2d0_stb_o;	
+   wire			wbm_d2d0_ack_i;	
+   wire			wbm_d2d0_err_i;	
    
-   wire [31:0]		wbs_d2d_dat_i;	
-   wire [31:0]		wbs_d2d_dat_o;	
-   wire [31:0]		wbs_d2d_adr_i;	
-   wire [3:0]		wbs_d2d_sel_i;	
-   wire			wbs_d2d_we_i;	
-   wire			wbs_d2d_cyc_i;	
-   wire			wbs_d2d_stb_i;	
-   wire			wbs_d2d_ack_o;	
-   wire			wbs_d2d_err_o;	
+   wire [31:0]		wbs_d2d0_dat_i;	
+   wire [31:0]		wbs_d2d0_dat_o;	
+   wire [31:0]		wbs_d2d0_adr_i;	
+   wire [3:0]		wbs_d2d0_sel_i;	
+   wire			wbs_d2d0_we_i;	
+   wire			wbs_d2d0_cyc_i;	
+   wire			wbs_d2d0_stb_i;	
+   wire			wbs_d2d0_ack_o;	
+   wire			wbs_d2d0_err_o;	
    
-   d2d_link_wrapper d2d
+   d2d_link_wrapper d2d0
      (
       .wb_clk       ( clk_cpu_25 ),
       .wb_rst_n     ( !wb_rst_pad_i ),
-      .wb_adr_o     ( wbm_d2d_adr_o ),
-      .wb_dat_o     ( wbm_d2d_dat_o ),
-      .wb_dat_i     ( wbm_d2d_dat_i ),
-      .wb_we_o      ( wbm_d2d_we_o ),
-      .wb_stb_o     ( wbm_d2d_stb_o ),
-      .wb_cyc_o     ( wbm_d2d_cyc_o ),
-      .wb_ack_i     ( wbm_d2d_ack_i ),
-      .csr_wb_adr_i ( wbs_d2d_adr_i ),
-      .csr_wb_dat_i ( wbs_d2d_dat_i ),
-      .csr_wb_dat_o ( wbs_d2d_dat_o ),
-      .csr_wb_we_i  ( wbs_d2d_we_i ),
-      .csr_wb_stb_i ( wbs_d2d_stb_i ),
-      .csr_wb_cyc_i ( wbs_d2d_cyc_i ),
-      .csr_wb_ack_o ( wbs_d2d_ack_o ),
-      .d2d_clk      ( d2d_clk ), 
-      .d2d_rst_n    ( d2d_rst_n ),
-      .tx_data      ( d2d_tx_data ),
-      .tx_valid     ( d2d_tx_valid ), 
-      .tx_ready     ( d2d_tx_ready ),
-      .rx_data      ( d2d_rx_data ),
-      .rx_valid     ( d2d_rx_valid ),
-      .rx_ready     ( d2d_rx_ready ),
+      .wb_adr_o     ( wbm_d2d0_adr_o ),
+      .wb_dat_o     ( wbm_d2d0_dat_o ),
+      .wb_dat_i     ( wbm_d2d0_dat_i ),
+      .wb_we_o      ( wbm_d2d0_we_o ),
+      .wb_stb_o     ( wbm_d2d0_stb_o ),
+      .wb_cyc_o     ( wbm_d2d0_cyc_o ),
+      .wb_ack_i     ( wbm_d2d0_ack_i ),
+      .csr_wb_adr_i ( wbs_d2d0_adr_i ),
+      .csr_wb_dat_i ( wbs_d2d0_dat_i ),
+      .csr_wb_dat_o ( wbs_d2d0_dat_o ),
+      .csr_wb_we_i  ( wbs_d2d0_we_i ),
+      .csr_wb_stb_i ( wbs_d2d0_stb_i ),
+      .csr_wb_cyc_i ( wbs_d2d0_cyc_i ),
+      .csr_wb_ack_o ( wbs_d2d0_ack_o ),
+      .d2d_clk      ( d2d0_clk ), 
+      .d2d_rst_n    ( d2d0_rst_n ),
+      .tx_data      ( d2d0_tx_data ),
+      .tx_valid     ( d2d0_tx_valid ), 
+      .tx_ready     ( d2d0_tx_ready ),
+      .rx_data      ( d2d0_rx_data ),
+      .rx_valid     ( d2d0_rx_valid ),
+      .rx_ready     ( d2d0_rx_ready ),
 
       .cpuID        (cpuID)
       );
    
+   wire [31:0]		wbm_d2d1_dat_o;	
+   wire [31:0]		wbm_d2d1_dat_i;	
+   wire [31:0]		wbm_d2d1_adr_o;	
+   wire [3:0]		wbm_d2d1_sel_o;	
+   wire			wbm_d2d1_we_o;	
+   wire			wbm_d2d1_cyc_o;	
+   wire			wbm_d2d1_stb_o;	
+   wire			wbm_d2d1_ack_i;	
+   wire			wbm_d2d1_err_i;	
+   
+   wire [31:0]		wbs_d2d1_dat_i;	
+   wire [31:0]		wbs_d2d1_dat_o;	
+   wire [31:0]		wbs_d2d1_adr_i;	
+   wire [3:0]		wbs_d2d1_sel_i;	
+   wire			wbs_d2d1_we_i;	
+   wire			wbs_d2d1_cyc_i;	
+   wire			wbs_d2d1_stb_i;	
+   wire			wbs_d2d1_ack_o;	
+   wire			wbs_d2d1_err_o;	
+   
+   d2d_link_wrapper d2d1
+     (
+      .wb_clk       ( clk_cpu_25 ),
+      .wb_rst_n     ( !wb_rst_pad_i ),
+      .wb_adr_o     ( wbm_d2d1_adr_o ),
+      .wb_dat_o     ( wbm_d2d1_dat_o ),
+      .wb_dat_i     ( wbm_d2d1_dat_i ),
+      .wb_we_o      ( wbm_d2d1_we_o ),
+      .wb_stb_o     ( wbm_d2d1_stb_o ),
+      .wb_cyc_o     ( wbm_d2d1_cyc_o ),
+      .wb_ack_i     ( wbm_d2d1_ack_i ),
+      .csr_wb_adr_i ( wbs_d2d1_adr_i ),
+      .csr_wb_dat_i ( wbs_d2d1_dat_i ),
+      .csr_wb_dat_o ( wbs_d2d1_dat_o ),
+      .csr_wb_we_i  ( wbs_d2d1_we_i ),
+      .csr_wb_stb_i ( wbs_d2d1_stb_i ),
+      .csr_wb_cyc_i ( wbs_d2d1_cyc_i ),
+      .csr_wb_ack_o ( wbs_d2d1_ack_o ),
+      .d2d_clk      ( d2d1_clk ), 
+      .d2d_rst_n    ( d2d1_rst_n ),
+      .tx_data      ( d2d1_tx_data ),
+      .tx_valid     ( d2d1_tx_valid ), 
+      .tx_ready     ( d2d1_tx_ready ),
+      .rx_data      ( d2d1_rx_data ),
+      .rx_valid     ( d2d1_rx_valid ),
+      .rx_ready     ( d2d1_rx_ready ),
+
+      .cpuID        (cpuID)
+      );
+   
+   wire [31:0]		wbm_d2d2_dat_o;	
+   wire [31:0]		wbm_d2d2_dat_i;	
+   wire [31:0]		wbm_d2d2_adr_o;	
+   wire [3:0]		wbm_d2d2_sel_o;	
+   wire			wbm_d2d2_we_o;	
+   wire			wbm_d2d2_cyc_o;	
+   wire			wbm_d2d2_stb_o;	
+   wire			wbm_d2d2_ack_i;	
+   wire			wbm_d2d2_err_i;	
+   
+   wire [31:0]		wbs_d2d2_dat_i;	
+   wire [31:0]		wbs_d2d2_dat_o;	
+   wire [31:0]		wbs_d2d2_adr_i;	
+   wire [3:0]		wbs_d2d2_sel_i;	
+   wire			wbs_d2d2_we_i;	
+   wire			wbs_d2d2_cyc_i;	
+   wire			wbs_d2d2_stb_i;	
+   wire			wbs_d2d2_ack_o;	
+   wire			wbs_d2d2_err_o;	
+   
+   d2d_link_wrapper d2d2
+     (
+      .wb_clk       ( clk_cpu_25 ),
+      .wb_rst_n     ( !wb_rst_pad_i ),
+      .wb_adr_o     ( wbm_d2d2_adr_o ),
+      .wb_dat_o     ( wbm_d2d2_dat_o ),
+      .wb_dat_i     ( wbm_d2d2_dat_i ),
+      .wb_we_o      ( wbm_d2d2_we_o ),
+      .wb_stb_o     ( wbm_d2d2_stb_o ),
+      .wb_cyc_o     ( wbm_d2d2_cyc_o ),
+      .wb_ack_i     ( wbm_d2d2_ack_i ),
+      .csr_wb_adr_i ( wbs_d2d2_adr_i ),
+      .csr_wb_dat_i ( wbs_d2d2_dat_i ),
+      .csr_wb_dat_o ( wbs_d2d2_dat_o ),
+      .csr_wb_we_i  ( wbs_d2d2_we_i ),
+      .csr_wb_stb_i ( wbs_d2d2_stb_i ),
+      .csr_wb_cyc_i ( wbs_d2d2_cyc_i ),
+      .csr_wb_ack_o ( wbs_d2d2_ack_o ),
+      .d2d_clk      ( d2d2_clk ), 
+      .d2d_rst_n    ( d2d2_rst_n ),
+      .tx_data      ( d2d2_tx_data ),
+      .tx_valid     ( d2d2_tx_valid ), 
+      .tx_ready     ( d2d2_tx_ready ),
+      .rx_data      ( d2d2_rx_data ),
+      .rx_valid     ( d2d2_rx_valid ),
+      .rx_ready     ( d2d2_rx_ready ),
+
+      .cpuID        (cpuID)
+      );
+   
+
    //
    // inter connect
    //
+
    wb_conmax_top #(
 		   32,	// Dada Bus width
 		   32,	// Address Bus width
@@ -1285,17 +1428,113 @@ end
       .m6_err_o	(),
       .m6_rty_o	(),
       
-      // Master 7 Interface. For D2D
-      .m7_data_i	(wbm_d2d_dat_o),
-      .m7_data_o	(wbm_d2d_dat_i),
-      .m7_addr_i	(wbm_d2d_adr_o),
+      // Master 7 Interface. For D2D0
+      .m7_data_i	(wbm_d2d0_dat_o),
+      .m7_data_o	(wbm_d2d0_dat_i),
+      .m7_addr_i	(wbm_d2d0_adr_o),
       .m7_sel_i	(4'b0),
-      .m7_we_i	(wbm_d2d_we_o),
-      .m7_cyc_i	(wbm_d2d_cyc_o),
-      .m7_stb_i	(wbm_d2d_stb_o),
-      .m7_ack_o	(wbm_d2d_ack_i),
+      .m7_we_i	(wbm_d2d0_we_o),
+      .m7_cyc_i	(wbm_d2d0_cyc_o),
+      .m7_stb_i	(wbm_d2d0_stb_o),
+      .m7_ack_o	(wbm_d2d0_ack_i),
       .m7_err_o	(),
       .m7_rty_o	(),
+      
+      // Master 8 Interface. For D2D1
+      .m8_data_i	(wbm_d2d1_dat_o),
+      .m8_data_o	(wbm_d2d1_dat_i),
+      .m8_addr_i	(wbm_d2d1_adr_o),
+      .m8_sel_i	(4'b0),
+      .m8_we_i	(wbm_d2d1_we_o),
+      .m8_cyc_i	(wbm_d2d1_cyc_o),
+      .m8_stb_i	(wbm_d2d1_stb_o),
+      .m8_ack_o	(wbm_d2d1_ack_i),
+      .m8_err_o	(),
+      .m8_rty_o	(),
+      
+      // Master 9 Interface. For D2D2
+      .m9_data_i	(wbm_d2d2_dat_o),
+      .m9_data_o	(wbm_d2d2_dat_i),
+      .m9_addr_i	(wbm_d2d2_adr_o),
+      .m9_sel_i	(4'b0),
+      .m9_we_i	(wbm_d2d2_we_o),
+      .m9_cyc_i	(wbm_d2d2_cyc_o),
+      .m9_stb_i	(wbm_d2d2_stb_o),
+      .m9_ack_o	(wbm_d2d2_ack_i),
+      .m9_err_o	(),
+      .m9_rty_o	(),
+      
+      // Master 10 Interface.
+      .m10_data_i	(),
+      .m10_data_o	(),
+      .m10_addr_i	(),
+      .m10_sel_i	(),
+      .m10_we_i	(1'b0),
+      .m10_cyc_i	(1'b0),
+      .m10_stb_i	(1'b0),
+      .m10_ack_o	(),
+      .m10_err_o	(),
+      .m10_rty_o	(),
+      
+      // Master 11 Interface.
+      .m11_data_i	(),
+      .m11_data_o	(),
+      .m11_addr_i	(),
+      .m11_sel_i	(),
+      .m11_we_i	(1'b0),
+      .m11_cyc_i	(1'b0),
+      .m11_stb_i	(1'b0),
+      .m11_ack_o	(),
+      .m11_err_o	(),
+      .m11_rty_o	(),
+      
+      // Master 12 Interface.
+      .m12_data_i	(),
+      .m12_data_o	(),
+      .m12_addr_i	(),
+      .m12_sel_i	(),
+      .m12_we_i	(1'b0),
+      .m12_cyc_i	(1'b0),
+      .m12_stb_i	(1'b0),
+      .m12_ack_o	(),
+      .m12_err_o	(),
+      .m12_rty_o	(),
+      
+      // Master 13 Interface.
+      .m13_data_i	(),
+      .m13_data_o	(),
+      .m13_addr_i	(),
+      .m13_sel_i	(),
+      .m13_we_i	(1'b0),
+      .m13_cyc_i	(1'b0),
+      .m13_stb_i	(1'b0),
+      .m13_ack_o	(),
+      .m13_err_o	(),
+      .m13_rty_o	(),
+      
+      // Master 14 Interface.
+      .m14_data_i	(),
+      .m14_data_o	(),
+      .m14_addr_i	(),
+      .m14_sel_i	(),
+      .m14_we_i	(1'b0),
+      .m14_cyc_i	(1'b0),
+      .m14_stb_i	(1'b0),
+      .m14_ack_o	(),
+      .m14_err_o	(),
+      .m14_rty_o	(),
+      
+      // Master 15 Interface.
+      .m15_data_i	(),
+      .m15_data_o	(),
+      .m15_addr_i	(),
+      .m15_sel_i	(),
+      .m15_we_i	(1'b0),
+      .m15_cyc_i	(1'b0),
+      .m15_stb_i	(1'b0),
+      .m15_ack_o	(),
+      .m15_err_o	(),
+      .m15_rty_o	(),
       
       // Slave 0 Interface. connect to memory controller
       .s0_data_i	(mem_if_wb_data_o),
@@ -1383,40 +1622,40 @@ end
       .s6_rty_i	(1'b0),
       
       // Slave 7 Interface
-      .s7_data_i	( wbs_d2d_dat_o ),
-      .s7_data_o	( wbs_d2d_dat_i ),
-      .s7_addr_o	( wbs_d2d_adr_i ),
-      .s7_sel_o	( wbs_d2d_sel_i ),
-      .s7_we_o	( wbs_d2d_we_i ),
-      .s7_cyc_o	( wbs_d2d_cyc_i ),
-      .s7_stb_o	( wbs_d2d_stb_i ),
-      .s7_ack_i	( wbs_d2d_ack_o ),
+      .s7_data_i	( wbs_d2d0_dat_o ),
+      .s7_data_o	( wbs_d2d0_dat_i ),
+      .s7_addr_o	( wbs_d2d0_adr_i ),
+      .s7_sel_o	( wbs_d2d0_sel_i ),
+      .s7_we_o	( wbs_d2d0_we_i ),
+      .s7_cyc_o	( wbs_d2d0_cyc_i ),
+      .s7_stb_o	( wbs_d2d0_stb_i ),
+      .s7_ack_i	( wbs_d2d0_ack_o ),
       .s7_err_i	( 1'b0 ),
       .s7_rty_i	( 1'b0 ),
       
       // Slave 8 Interface
-      .s8_data_i	(32'h0000_0000),
-      .s8_data_o	(),
-      .s8_addr_o	(),
-      .s8_sel_o	(),
-      .s8_we_o	(),
-      .s8_cyc_o	(),
-      .s8_stb_o	(),
-      .s8_ack_i	(1'b0),
-      .s8_err_i	(1'b1),
-      .s8_rty_i	(1'b0),
+      .s8_data_i	( wbs_d2d1_dat_o ),
+      .s8_data_o	( wbs_d2d1_dat_i ),
+      .s8_addr_o	( wbs_d2d1_adr_i ),
+      .s8_sel_o	( wbs_d2d1_sel_i ),
+      .s8_we_o	( wbs_d2d1_we_i ),
+      .s8_cyc_o	( wbs_d2d1_cyc_i ),
+      .s8_stb_o	( wbs_d2d1_stb_i ),
+      .s8_ack_i	( wbs_d2d1_ack_o ),
+      .s8_err_i	( 1'b0 ),
+      .s8_rty_i	( 1'b0 ),
       
       // Slave 9 Interface
-      .s9_data_i	(32'h0000_0000),
-      .s9_data_o	(),
-      .s9_addr_o	(),
-      .s9_sel_o	(),
-      .s9_we_o	(),
-      .s9_cyc_o	(),
-      .s9_stb_o	(),
-      .s9_ack_i	(1'b0),
-      .s9_err_i	(1'b1),
-      .s9_rty_i	(1'b0),
+      .s9_data_i	( wbs_d2d2_dat_o ),
+      .s9_data_o	( wbs_d2d2_dat_i ),
+      .s9_addr_o	( wbs_d2d2_adr_i ),
+      .s9_sel_o	( wbs_d2d2_sel_i ),
+      .s9_we_o	( wbs_d2d2_we_i ),
+      .s9_cyc_o	( wbs_d2d2_cyc_i ),
+      .s9_stb_o	( wbs_d2d2_stb_i ),
+      .s9_ack_i	( wbs_d2d2_ack_o ),
+      .s9_err_i	( 1'b0 ),
+      .s9_rty_i	( 1'b0 ),
       
       // Slave 10 Interface
       .s10_data_i	(32'h0000_0000),
@@ -1490,6 +1729,7 @@ end
       .s15_rty_i	(1'b0)
       
       );
+   
    
 endmodule
 
