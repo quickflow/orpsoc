@@ -51,6 +51,14 @@ module uart_mon
 	       fd = $fopen("uart1.txt", "w");
 	       $display("%m:: executed uart1.txt fopen");
 	    end
+	    else if (monID == 2) begin
+	       fd = $fopen("uart2.txt", "w");
+	       $display("%m:: executed uart2.txt fopen");
+	    end
+	    else if (monID == 3) begin
+	       fd = $fopen("uart3.txt", "w");
+	       $display("%m:: executed uart3.txt fopen");
+	    end
 	    file_opened <= 1;
 	 end
 	 
