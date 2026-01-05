@@ -741,9 +741,10 @@ module d2d_link_top
                  rx_dma_current_addr <= rx_dma_current_addr + 8;
                  rx_dma_remaining <= rx_dma_remaining - 1;
                  rx_wb_stb_o <= 1'b0;
+		 rx_wb_we_o <= 1'b0;
+                 rx_wb_cyc_o <= 1'b0;
                  
                  if (rx_dma_remaining == 1) begin
-                    rx_wb_cyc_o <= 1'b0;
                     rx_dma_state <= RX_DMA_DONE;
                  end else begin
                     rx_dma_state <= RX_DMA_WRITE;
@@ -754,6 +755,8 @@ module d2d_link_top
            RX_DMA_DONE: begin
               rx_dma_busy <= 1'b0;
               rx_dma_done <= 1'b1;
+              rx_wb_stb_o <= 1'b0;
+	      rx_wb_we_o <= 1'b0;
               rx_wb_cyc_o <= 1'b0;
               if (csr_control[CONTROL_RX_RESET]) begin
                  rx_dma_state <= RX_DMA_IDLE;
