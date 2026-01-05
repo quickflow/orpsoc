@@ -170,7 +170,8 @@
 
 ../../rtl/gfx/rtl/verilog/gfx_top.v
 
-../../rtl/d2d/verilog/d2d.v
+../../rtl/d2d/verilog/d2d_link_wrapper.v
+../../rtl/d2d/verilog/d2d_link_top.v
 
 ../../rtl/gfx/rtl/verilog/gfx_blender.v
 ../../rtl/gfx/rtl/verilog/gfx_clip.v
