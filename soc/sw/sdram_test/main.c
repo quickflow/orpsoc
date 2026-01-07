@@ -620,12 +620,13 @@ void gemm_test()
 /******************************************************************************/
 }
 
-uint32 d2d0_mat_rx[1024];
 uint32 d2d0_mat_tx[1024];
-uint32 d2d1_mat_rx[1024];
 uint32 d2d1_mat_tx[1024];
-uint32 d2d2_mat_rx[1024];
 uint32 d2d2_mat_tx[1024];
+
+uint32 d2d0_mat_rx[1024];
+uint32 d2d1_mat_rx[1024];
+uint32 d2d2_mat_rx[1024];
 
 #if 1
 void d2d_test()
@@ -766,8 +767,11 @@ void d2d_test()
       }
 
       //      if (tx_engines_done == 3)
-      if ((tx_engines_done > 0) || (count++ > 1000))
+      if ((tx_engines_done == 3) || (count++ > 1000)) {
+	if (count > 1000)
+	  GPIO_Write(0xffff0000 + tx_engines_done);
 	break;
+      }
 
       if ((count & 0xff) == 0xff)
 	GPIO_Write(0xcc000000 + count);
@@ -799,8 +803,11 @@ void d2d_test()
       }
       
       //      if (rx_engines_done == 3)
-      if ((rx_engines_done > 0) || (count++ > 1000))
+      if ((rx_engines_done == 3) || (count++ > 1000)) {
+	if (count > 1000)
+	  GPIO_Write(0xffff0000 + rx_engines_done);
 	break;
+      }
 
       if ((count & 0xff) == 0xff)
 	GPIO_Write(0xc2000000 + count);
@@ -821,8 +828,10 @@ void d2d_test()
     for(count=0; count<256; count++) {
       if (d2d0_mat_rx[count] == (val | count))
 	passCount++;
-      else
+      else {
 	failCount++;
+	GPIO_Write(0xe9000000 | d2d0_mat_rx[count]);
+      }
     }
     GPIO_Write(0xdd000000 | passCount);
     GPIO_Write(0xdf000000 | failCount);
@@ -833,10 +842,12 @@ void d2d_test()
       (myID == 2) ? 0x01010000 :
       (myID == 3) ? 0x02020000 : 0x00000000;
     for(count=0; count<256; count++) {
-      if (d2d0_mat_rx[count] == (val | count))
+      if (d2d1_mat_rx[count] == (val | count))
 	passCount++;
-      else
+      else {
 	failCount++;
+	GPIO_Write(0xe9100000 | d2d1_mat_rx[count]);
+      }
     }
     GPIO_Write(0xdd010000 | passCount);
     GPIO_Write(0xdf010000 | failCount);
@@ -847,10 +858,12 @@ void d2d_test()
       (myID == 2) ? 0x03010000 :
       (myID == 3) ? 0x01020000 : 0x00000000;
     for(count=0; count<256; count++) {
-      if (d2d0_mat_rx[count] == (val | count))
+      if (d2d2_mat_rx[count] == (val | count))
 	passCount++;
-      else
+      else {
 	failCount++;
+	GPIO_Write(0xe9200000 | d2d2_mat_rx[count]);
+      }
     }
     GPIO_Write(0xdd020000 | passCount);
     GPIO_Write(0xdf020000 | failCount);
