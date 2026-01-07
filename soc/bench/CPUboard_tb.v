@@ -53,8 +53,13 @@ module CPUboard_tb ();
    
    
    initial begin
-      $dumpfile("wavedump.lxt");
+`ifdef VCS
+      $fsdbDumpfile("wavedump.lxt");
+      $fsdbDumpvars(10, CPUboard_tb );
+`else
+      $dumpfile("wavedump.fsdb");
       $dumpvars(10, CPUboard_tb );
+`endif
    end
    
    initial
@@ -145,89 +150,53 @@ module CPUboard_tb ();
    // D2D
    wire [63:0]	c01_d2d_tx_data;
    wire		c01_d2d_tx_valid;
-   wire		c01_d2d_tx_ready;
-   wire [63:0]	c01_d2d_rx_data;
-   wire		c01_d2d_rx_valid;
    wire		c01_d2d_rx_ready;
 
    wire [63:0]	c02_d2d_tx_data;
    wire		c02_d2d_tx_valid;
-   wire		c02_d2d_tx_ready;
-   wire [63:0]	c02_d2d_rx_data;
-   wire		c02_d2d_rx_valid;
    wire		c02_d2d_rx_ready;
 
    wire [63:0]	c03_d2d_tx_data;
    wire		c03_d2d_tx_valid;
-   wire		c03_d2d_tx_ready;
-   wire [63:0]	c03_d2d_rx_data;
-   wire		c03_d2d_rx_valid;
    wire		c03_d2d_rx_ready;
    
    // D2D
    wire [63:0]	c10_d2d_tx_data;
    wire		c10_d2d_tx_valid;
-   wire		c10_d2d_tx_ready;
-   wire [63:0]	c10_d2d_rx_data;
-   wire		c10_d2d_rx_valid;
    wire		c10_d2d_rx_ready;
 
    wire [63:0]	c12_d2d_tx_data;
    wire		c12_d2d_tx_valid;
-   wire		c12_d2d_tx_ready;
-   wire [63:0]	c12_d2d_rx_data;
-   wire		c12_d2d_rx_valid;
    wire		c12_d2d_rx_ready;
 
    wire [63:0]	c13_d2d_tx_data;
    wire		c13_d2d_tx_valid;
-   wire		c13_d2d_tx_ready;
-   wire [63:0]	c13_d2d_rx_data;
-   wire		c13_d2d_rx_valid;
    wire		c13_d2d_rx_ready;
    
    // D2D
    wire [63:0]	c20_d2d_tx_data;
    wire		c20_d2d_tx_valid;
-   wire		c20_d2d_tx_ready;
-   wire [63:0]	c20_d2d_rx_data;
-   wire		c20_d2d_rx_valid;
    wire		c20_d2d_rx_ready;
 
    wire [63:0]	c21_d2d_tx_data;
    wire		c21_d2d_tx_valid;
-   wire		c21_d2d_tx_ready;
-   wire [63:0]	c21_d2d_rx_data;
-   wire		c21_d2d_rx_valid;
    wire		c21_d2d_rx_ready;
 
    wire [63:0]	c23_d2d_tx_data;
    wire		c23_d2d_tx_valid;
-   wire		c23_d2d_tx_ready;
-   wire [63:0]	c23_d2d_rx_data;
-   wire		c23_d2d_rx_valid;
    wire		c23_d2d_rx_ready;
    
    // D2D
    wire [63:0]	c30_d2d_tx_data;
    wire		c30_d2d_tx_valid;
-   wire		c30_d2d_tx_ready;
-   wire [63:0]	c30_d2d_rx_data;
-   wire		c30_d2d_rx_valid;
    wire		c30_d2d_rx_ready;
 
    wire [63:0]	c32_d2d_tx_data;
    wire		c32_d2d_tx_valid;
-   wire		c32_d2d_tx_ready;
-   wire [63:0]	c32_d2d_rx_data;
-   wire		c32_d2d_rx_valid;
    wire		c32_d2d_rx_ready;
 
    wire [63:0]	c31_d2d_tx_data;
    wire		c31_d2d_tx_valid;
-   wire		c31_d2d_tx_ready;
-   wire [63:0]	c31_d2d_rx_data;
-   wire		c31_d2d_rx_valid;
    wire		c31_d2d_rx_ready;
    
    assign c0_wb_clk = clk;
