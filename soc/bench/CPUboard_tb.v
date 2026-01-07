@@ -54,10 +54,10 @@ module CPUboard_tb ();
    
    initial begin
 `ifdef VCS
-      $fsdbDumpfile("wavedump.lxt");
+	   $fsdbDumpfile("wavedump.fsdb");
       $fsdbDumpvars(10, CPUboard_tb );
 `else
-      $dumpfile("wavedump.fsdb");
+	   $dumpfile("wavedump.lxt");
       $dumpvars(10, CPUboard_tb );
 `endif
    end
