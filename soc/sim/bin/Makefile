@@ -36,7 +36,7 @@ sim_vcd:
 	./sim.out | tee output.log
 
 sim_vcs:
-	vcs -full64 -f vcs.flist
+	vcs -full64 -f vcs.flist +define+VCS -debug_access+all -lca -kdb
 	./simv | tee output.log
 
 show_wave_lxt:
