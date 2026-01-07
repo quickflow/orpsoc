@@ -211,6 +211,9 @@
 ../../rtl/gfx/rtl/verilog/gfx_triangle.v
 ../../rtl/gfx/rtl/verilog/div_uu.v
 
+../../rtl/d2d/verilog/d2d_link_wrapper.v
+../../rtl/d2d/verilog/d2d_link_top.v
+
 -y ../../bench
 -y ../../bench/models
 -y ../../bench/models/28f016s3
