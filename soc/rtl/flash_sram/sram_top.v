@@ -177,7 +177,7 @@ assign wb_dat_o[31:24] = mem[adr+0];
 //
 // Writing to SRAM model
 //
-always @(posedge wb_rst_i or posedge wb_clk_i)
+always @(posedge wb_clk_i)
         if (wb_cyc_i & wb_stb_i & wb_we_i) begin
                 if (wb_sel_i[0])
                 	mem[adr+3] <=  wb_dat_i[7:0];
