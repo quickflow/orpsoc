@@ -137,7 +137,7 @@ module wb_conmax_slave_if(
 // Module Parameters
 //
 
-parameter [1:0]		pri_sel = 2'd2;
+parameter [1:0]		pri_sel = 2'd0;
 parameter		aw	= 32;		// Address bus Width
 parameter		dw	= 32;		// Data bus Width
 parameter		sw	= dw / 8;	// Number of Select Lines

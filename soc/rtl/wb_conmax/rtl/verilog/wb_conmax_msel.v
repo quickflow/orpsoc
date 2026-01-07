@@ -163,6 +163,14 @@ wb_conmax_pri_enc #(pri_sel) pri_enc(
 	.pri5(		pri5		),
 	.pri6(		pri6		),
 	.pri7(		pri7		),
+	.pri8(		pri8		),
+	.pri9(		pri9		),
+	.pri10(		pri10		),
+	.pri11(		pri11		),
+	.pri12(		pri12		),
+	.pri13(		pri13		),
+	.pri14(		pri14		),
+	.pri14(		pri15		),
 	.pri_out(	pri_out_d	)
 	);
 
