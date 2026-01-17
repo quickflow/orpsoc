@@ -53,11 +53,14 @@ module CPUboard_tb ();
    
    
    initial begin
-`ifdef VCS
-	   $fsdbDumpfile("wavedump.fsdb");
+`ifdef ZEBU
+      $dumpfile("wavedump.lxt");
+      $dumpvars(10, CPUboard_tb );
+`elsif VCS
+      $fsdbDumpfile("wavedump.fsdb");
       $fsdbDumpvars(10, CPUboard_tb );
 `else
-	   $dumpfile("wavedump.lxt");
+      $dumpfile("wavedump.lxt");
       $dumpvars(10, CPUboard_tb );
 `endif
    end
