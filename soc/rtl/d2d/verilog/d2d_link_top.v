@@ -185,6 +185,20 @@ module d2d_link_top
    reg [31:0]	     rx_dest_addr;
    reg [31:0]	     rx_length;
    
+   // Control signals from WB to D2D clock domain
+   reg [2:0] tx_start_sync;
+   reg [2:0] rx_start_sync;
+   reg [2:0] tx_enable_sync;
+   reg [2:0] rx_enable_sync;
+   reg [2:0] tx_reset_sync;
+   reg [2:0] rx_reset_sync;
+   
+   // Status signals from D2D to WB clock domain
+   reg [2:0] tx_done_sync;
+   reg [2:0] rx_done_sync;
+   reg [2:0] tx_busy_sync;
+   reg [2:0] rx_busy_sync;
+   
    // Gray code conversion functions - MUST BE DECLARED BEFORE USE
    function [2:0] bin2gray;
       input [2:0] bin;
@@ -218,8 +232,17 @@ module d2d_link_top
          rx_dest_addr <= 32'h0;
          rx_length <= 32'h0;
       end else begin
-         csr_wb_ack_o <= 1'b0;
-         
+         csr_status[STATUS_TX_DONE] <= tx_done_sync[2];
+         csr_status[STATUS_RX_DONE] <= rx_done_sync[2];
+         csr_status[STATUS_TX_BUSY] <= tx_busy_sync[2];
+         csr_status[STATUS_RX_BUSY] <= rx_busy_sync[2];
+         csr_status[STATUS_TX_FIFO_FULL] <= tx_fifo_full_sync[2];
+         csr_status[STATUS_TX_FIFO_EMPTY] <= tx_fifo_empty_sync[2];
+         csr_status[STATUS_RX_FIFO_FULL] <= rx_fifo_full_sync[2];
+         csr_status[STATUS_RX_FIFO_EMPTY] <= rx_fifo_empty_sync[2];
+
+	 csr_status[31:24] <= cpuID;
+	 
          if (csr_wb_cyc_i && csr_wb_stb_i && !csr_wb_ack_o) begin
             csr_wb_ack_o <= 1'b1;
             
@@ -285,28 +308,15 @@ module d2d_link_top
                     csr_wb_dat_o <= 32'hDEADBEEF;
                  end
                endcase
-            end
-         end
-      end
-   end
+            end // else: !if(csr_wb_we_i)
+	 end else // if (csr_wb_cyc_i && csr_wb_stb_i && !csr_wb_ack_o)
+           csr_wb_ack_o <= 1'b0;
+      end // else: !if(!wb_rst_n)
+   end // always @ (posedge wb_clk or negedge wb_rst_n)
    
    // ============================================================================
    // Clock Domain Crossing Synchronizers
    // ============================================================================
-   
-   // Control signals from WB to D2D clock domain
-   reg [2:0] tx_start_sync;
-   reg [2:0] rx_start_sync;
-   reg [2:0] tx_enable_sync;
-   reg [2:0] rx_enable_sync;
-   reg [2:0] tx_reset_sync;
-   reg [2:0] rx_reset_sync;
-   
-   // Status signals from D2D to WB clock domain
-   reg [2:0] tx_done_sync;
-   reg [2:0] rx_done_sync;
-   reg [2:0] tx_busy_sync;
-   reg [2:0] rx_busy_sync;
    
    // Synchronizers for WB -> D2D signals
    always @(posedge d2d_clk or negedge d2d_rst_n) begin
@@ -345,7 +355,6 @@ module d2d_link_top
    // Update status register
    always @(posedge wb_clk or negedge wb_rst_n) begin
       if (!wb_rst_n) begin
-         csr_status <= 32'h0;
          tx_fifo_full_sync <= 3'b0;
          tx_fifo_empty_sync <= 3'b0;
          rx_fifo_full_sync <= 3'b0;
@@ -356,17 +365,6 @@ module d2d_link_top
          rx_fifo_full_sync <= {rx_fifo_full_sync[1:0], rx_fifo_full};
          rx_fifo_empty_sync <= {rx_fifo_empty_sync[1:0], rx_fifo_empty};
          
-         csr_status[STATUS_TX_DONE] <= tx_done_sync[2];
-         csr_status[STATUS_RX_DONE] <= rx_done_sync[2];
-         csr_status[STATUS_TX_BUSY] <= tx_busy_sync[2];
-         csr_status[STATUS_RX_BUSY] <= rx_busy_sync[2];
-         csr_status[STATUS_TX_FIFO_FULL] <= tx_fifo_full_sync[2];
-         csr_status[STATUS_TX_FIFO_EMPTY] <= tx_fifo_empty_sync[2];
-         csr_status[STATUS_RX_FIFO_FULL] <= rx_fifo_full_sync[2];
-         csr_status[STATUS_RX_FIFO_EMPTY] <= rx_fifo_empty_sync[2];
-
-	 csr_status[31:24] <= cpuID;
-	 
       end
    end
    
@@ -417,8 +415,7 @@ module d2d_link_top
          end
          
          // Update read pointer from synchronized value
-         tx_fifo_rd_ptr[2:0] <= tx_fifo_rd_ptr_wb_bin;
-         tx_fifo_rd_ptr[3] <= 1'b0; // MSB is not needed for 8-entry FIFO
+         tx_fifo_rd_ptr <= {1'b0, tx_fifo_rd_ptr_wb_bin};
          
          // Calculate FIFO count based on synchronized read pointer
          if (tx_fifo_wr_ptr[2:0] >= tx_fifo_rd_ptr[2:0]) begin
@@ -450,7 +447,6 @@ module d2d_link_top
          tx_fifo_wr_ptr_gray_sync <= 3'b0;
          tx_fifo_rd_ptr_gray_sync <= 3'b0;
          tx_fifo_count_d2d <= 4'b0;
-         tx_fifo_rd_ptr_d2d <= 4'b0;
       end else begin
          tx_fifo_wr_ptr_gray_sync <= tx_fifo_wr_ptr_gray;
          tx_fifo_rd_ptr_gray_sync <= tx_fifo_rd_ptr_gray;
@@ -558,7 +554,6 @@ module d2d_link_top
    always @(posedge wb_clk or negedge wb_rst_n) begin
       if (!wb_rst_n) begin
 	 rx_fifo_count_wb <= 4'b0;
-	 rx_fifo_rd_ptr_wb <= 4'b0;
       end else begin
 	 // Calculate FIFO count in wb domain based on synchronized write pointer
 	 if (rx_fifo_wr_ptr_wb_bin >= rx_fifo_rd_ptr_wb[2:0]) begin
@@ -638,9 +633,9 @@ module d2d_link_top
                  tx_dma_current_addr <= tx_dma_current_addr + 8;
                  tx_dma_remaining <= tx_dma_remaining - 1;
                  tx_wb_stb_o <= 1'b0;
+                 tx_wb_cyc_o <= 1'b0;
                  
                  if (tx_dma_remaining == 1) begin
-                    tx_wb_cyc_o <= 1'b0;
                     tx_dma_state <= TX_DMA_DONE;
                  end else begin
                     tx_dma_state <= TX_DMA_FETCH;
