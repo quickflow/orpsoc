@@ -788,6 +788,7 @@ void d2d_test()
 
       if (enable_rx[myID][0]) {
 	rx_engines_done = (REG32(D2D0_BASE + D2D_STATUS) & (1 << D2D_STAT_RX_DONE)) == (1 << D2D_STAT_RX_DONE);
+	//	GPIO_Write(REG32(D2D0_BASE + D2D_STATUS));
 	if (rx_engines_done > 0)
 	  GPIO_Write(0x32100000 + rx_engines_done);
       }
@@ -915,7 +916,7 @@ void main()
 
   d2d_test();
 
-  //GPIO_Write(PASS_CODE);
+  //  GPIO_Write(PASS_CODE);
   
   GPIO_Write(0x4444);
 
@@ -928,6 +929,8 @@ void main()
   }
   
   print("\n\r");
-  GPIO_Write(PASS_CODE);
+
+  if (CPUID == 0)
+    GPIO_Write(PASS_CODE);
 }
 
