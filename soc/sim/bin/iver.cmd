@@ -19,6 +19,7 @@
 ../../rtl/wb_conmax/rtl/verilog/wb_conmax_rf.v
 ../../rtl/wb_conmax/rtl/verilog/wb_conmax_pri_dec.v
  
+../../rtl/chiplet.v
 ../../rtl/or1k_soc_top.v
  
 ../../rtl/rom_wb/rom_wb.v
