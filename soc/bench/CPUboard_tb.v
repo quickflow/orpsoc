@@ -24,7 +24,7 @@
 
 module CPUboard_tb ();
    
-   reg		clk, rstn, rstn_dly, pll_rstn, d2d_clk, d2d_rstn;
+   reg		clk, rstn, rstn_dly, pll_rstn, d2d_clk_source, d2d_rstn;
    
    //	wire [8:0]  iob;
    
@@ -60,8 +60,8 @@ module CPUboard_tb ();
       $fsdbDumpfile("wavedump.fsdb");
       $fsdbDumpvars(10, CPUboard_tb );
 `else
-      $dumpfile("wavedump.lxt");
-      $dumpvars(10, CPUboard_tb );
+//      $dumpfile("wavedump.lxt");
+//      $dumpvars(10, CPUboard_tb );
 `endif
    end
    
@@ -74,9 +74,9 @@ module CPUboard_tb ();
    
    initial
      begin
-	#0 d2d_clk = 1'b0;
+	#0 d2d_clk_source = 1'b0;
 	forever
-	  #23 d2d_clk = !d2d_clk;   // 25MHz
+	  #23 d2d_clk_source = !d2d_clk_source;   // 25MHz
      end
    
    initial
@@ -107,650 +107,90 @@ module CPUboard_tb ();
 	#15 pll_rstn <= 1'b1;
      end
    
-   //==================================================================
-   //==================================================================
-   //==================================================================
-   // CHIP instance 0
-   //==================================================================
-   //==================================================================
-   //==================================================================
-
-   // //   
-       defparam CPUboard_tb.soc0.i_spi_flash.MEMORY_FILE="memory.txt";
-   
-   integer	counter0;
-   
    // Signals for generic_pll
-   wire		c0_mc_clk;
-   wire		c0_wb_clk;
-   wire		c0_flash_clk;
-   wire		c0_pll_lock;
    
-   wire		c0_flash_rstn;
-   wire		c0_flash_oen;
-   wire		c0_flash_cen;
-   wire		c0_flash_wen;
-   wire		c0_flash_rdy;
-   wire [7:0]	c0_flash_d;
-   wire [20:0]	c0_flash_a;
-   wire [31:0]	c0_flash_vpp;		// Special flash inputs
-   wire [31:0]	c0_flash_vcc;		// Special flash inputs
-   wire [1:0]	c0_flash_rpblevel;		// Special flash inputs
+   wire [4*32-1:0]	gpio_pad_io;
+   wire [31:0]		curr_gpio_pad_io[3:0];
    
+   wire	[3:0]		uart_stx_pad_o;
    
-   /*
-    reg [12:0]  a;
-    reg [1:0]   ba;
-    reg         cke, csn;
-    wire        wen, rasn, casn;
-    wire [15:0] dq;
-    reg [1:0]   dqm;
-    */
-   wire [31:0]	c0_mem_dat_pad_io;
-   wire [12:0]	c0_mem_adr_pad_o;
-   wire [1:0]	c0_mem_ba_pad_o;
-   wire [3:0]	c0_mem_dqm_pad_o;
-   
-   wire [31:0]	c0_gpio_pad_io;
-   
-   // D2D
-   wire [63:0]	c01_d2d_tx_data;
-   wire		c01_d2d_tx_valid;
-   wire		c01_d2d_rx_ready;
+   integer		counter[3:0];
 
-   wire [63:0]	c02_d2d_tx_data;
-   wire		c02_d2d_tx_valid;
-   wire		c02_d2d_rx_ready;
-
-   wire [63:0]	c03_d2d_tx_data;
-   wire		c03_d2d_tx_valid;
-   wire		c03_d2d_rx_ready;
-   
-   // D2D
-   wire [63:0]	c10_d2d_tx_data;
-   wire		c10_d2d_tx_valid;
-   wire		c10_d2d_rx_ready;
-
-   wire [63:0]	c12_d2d_tx_data;
-   wire		c12_d2d_tx_valid;
-   wire		c12_d2d_rx_ready;
-
-   wire [63:0]	c13_d2d_tx_data;
-   wire		c13_d2d_tx_valid;
-   wire		c13_d2d_rx_ready;
-   
-   // D2D
-   wire [63:0]	c20_d2d_tx_data;
-   wire		c20_d2d_tx_valid;
-   wire		c20_d2d_rx_ready;
-
-   wire [63:0]	c21_d2d_tx_data;
-   wire		c21_d2d_tx_valid;
-   wire		c21_d2d_rx_ready;
-
-   wire [63:0]	c23_d2d_tx_data;
-   wire		c23_d2d_tx_valid;
-   wire		c23_d2d_rx_ready;
-   
-   // D2D
-   wire [63:0]	c30_d2d_tx_data;
-   wire		c30_d2d_tx_valid;
-   wire		c30_d2d_rx_ready;
-
-   wire [63:0]	c32_d2d_tx_data;
-   wire		c32_d2d_tx_valid;
-   wire		c32_d2d_rx_ready;
-
-   wire [63:0]	c31_d2d_tx_data;
-   wire		c31_d2d_tx_valid;
-   wire		c31_d2d_rx_ready;
-   
-   assign c0_wb_clk = clk;
-   wire c01_d2d_clk = d2d_clk;
-   wire	c01_d2d_rst_n = d2d_rstn;
-   wire c02_d2d_clk = d2d_clk;
-   wire	c02_d2d_rst_n = d2d_rstn;
-   wire c03_d2d_clk = d2d_clk;
-   wire	c03_d2d_rst_n = d2d_rstn;
-   
-   chiplet soc0
+   reg [31:0]		old_gpio_val[3:0];
+	 
+   multi_chip_package pkg
      (
       // Clk and reset
-      .wb_clk		(c0_wb_clk),
-      .rst_n		(rstn),
+      .clk		(clk),
+      .rstn		(rstn),
       
-      .gpio_pad_io          (c0_gpio_pad_io),
+      .d2d_clk_source   (d2d_clk_source),
+      .d2d_rstn         (d2d_rstn),
+
+      .gpio_pad_io      (gpio_pad_io),
       
       // UART0
-      .uart_srx_pad_i		(1'b1),  
-      .uart_stx_pad_o		(c0_uart_stx_pad_o),
-
-      .d2d0_clk                (c01_d2d_clk),
-      .d2d0_rst_n              (c01_d2d_rst_n),
-      .d2d0_tx_data            (c01_d2d_tx_data),
-      .d2d0_tx_valid           (c01_d2d_tx_valid),
-      .d2d0_tx_ready           (c10_d2d_rx_ready),
-      .d2d0_rx_data            (c10_d2d_tx_data),
-      .d2d0_rx_valid           (c10_d2d_tx_valid),
-      .d2d0_rx_ready           (c01_d2d_rx_ready),
-
-      .d2d1_clk                (c02_d2d_clk),
-      .d2d1_rst_n              (c02_d2d_rst_n),
-      .d2d1_tx_data            (c02_d2d_tx_data),
-      .d2d1_tx_valid           (c02_d2d_tx_valid),
-      .d2d1_tx_ready           (c20_d2d_rx_ready),
-      .d2d1_rx_data            (c20_d2d_tx_data),
-      .d2d1_rx_valid           (c20_d2d_tx_valid),
-      .d2d1_rx_ready           (c02_d2d_rx_ready),
-
-      .d2d2_clk                (c03_d2d_clk),
-      .d2d2_rst_n              (c03_d2d_rst_n),
-      .d2d2_tx_data            (c03_d2d_tx_data),
-      .d2d2_tx_valid           (c03_d2d_tx_valid),
-      .d2d2_tx_ready           (c30_d2d_rx_ready),
-      .d2d2_rx_data            (c30_d2d_tx_data),
-      .d2d2_rx_valid           (c30_d2d_tx_valid),
-      .d2d2_rx_ready           (c03_d2d_rx_ready),
-
-      .cpuID                  (8'h00)
-      
+      .uart_srx_pad_i	({1'b1, 1'b1, 1'b1, 1'b1}),  
+      .uart_stx_pad_o	(uart_stx_pad_o)
       );
    
-   reg [31:0] old_c0_gpio_val;
+   genvar	instance_count;
    
-   always @(posedge clk) begin
-      old_c0_gpio_val <= c0_gpio_pad_io;
-      if (old_c0_gpio_val != c0_gpio_pad_io)
-	$display("[%m]C0 GPIO val = %h", c0_gpio_pad_io);
-      
-      if (c0_gpio_pad_io == 32'hc001c0de) begin
-	 // 0xff has been written to GPIO, so the
-	 // sofware has completed its tests
-	 $display("\n\n**** PASS C0 **** indicator for Software execution complete.\n\n");
-//	 $fflush(uart_mon0.fd);
-	 //	       repeat(1000000) @(posedge clk);
-	 $finish();
-      end else if (c0_gpio_pad_io == 32'hdeadbeef) begin
-	 // 0x55 has been written to GPIO, so the
-	 // there was an error during the tests
-	 $display("\n\n**** FAIL C0 **** indicator during Software tests. Finishing simulation.");
-//	 $fflush(uart_mon0.fd);
-	 repeat(1000000) @(posedge clk);
-	 $finish();
-      end
-   end   
-   
-   
-   always @(posedge clk or posedge rstn) begin
-      if (!rstn) begin
-	 counter0 = 0;
-      end
-      else begin
-	 if (counter0 == 20000000) begin
-	    $display("Completed");
-	    //		 Flash.StoreToFile;
+   wire [7:0]	cpuID[3:0];
+
+   generate
+      for (instance_count = 0; instance_count < 4; instance_count = instance_count + 1) begin : monitors
+	 
+	 assign cpuID[instance_count] = instance_count;
+	 
+	 assign curr_gpio_pad_io[instance_count] = gpio_pad_io[(instance_count+1)*32-1:(instance_count)*32];
+	 
+	 //==================================================================
+	 
+	 always @(posedge clk) begin
+	    old_gpio_val[instance_count] <= curr_gpio_pad_io[instance_count];
+	    if (old_gpio_val[instance_count] != curr_gpio_pad_io[instance_count])
+	      $display("[%m]C%d GPIO val = %h", instance_count, curr_gpio_pad_io[instance_count]);
 	    
-//	    $fflush(uart_mon0.fd);
-	    $finish();
-	 end
-	 counter0 = counter0 + 1;
-      end
-      
-   end
-   
-   uart_mon uart_mon0
-     (
-      .clk (clk), // System clock
-      .reset (~rstn), // Reset signal
-      .rx (c0_uart_stx_pad_o),
-      .monID (8'h00)
-      );
-   
-   //==================================================================
-   //==================================================================
-   //==================================================================
-   // CHIP instance 1
-   //==================================================================
-   //==================================================================
-   //==================================================================
-
-   // //   
-       defparam CPUboard_tb.soc1.i_spi_flash.MEMORY_FILE="memory.txt";
-   
-   integer	counter1;
-   
-   // Signals for generic_pll
-   wire		c1_mc_clk;
-   wire		c1_wb_clk;
-   wire		c1_flash_clk;
-   wire		c1_pll_lock;
-   
-   wire		c1_flash_rstn;
-   wire		c1_flash_oen;
-   wire		c1_flash_cen;
-   wire		c1_flash_wen;
-   wire		c1_flash_rdy;
-   wire [7:0]	c1_flash_d;
-   wire [20:0]	c1_flash_a;
-   wire [31:0]	c1_flash_vpp;		// Special flash inputs
-   wire [31:0]	c1_flash_vcc;		// Special flash inputs
-   wire [1:0]	c1_flash_rpblevel;		// Special flash inputs
-   
-   
-   /*
-    reg [12:0]  a;
-    reg [1:0]   ba;
-    reg         cke, csn;
-    wire        wen, rasn, casn;
-    wire [15:0] dq;
-    reg [1:0]   dqm;
-    */
-   wire [31:0]	c1_mem_dat_pad_io;
-   wire [12:0]	c1_mem_adr_pad_o;
-   wire [1:0]	c1_mem_ba_pad_o;
-   wire [3:0]	c1_mem_dqm_pad_o;
-   
-   wire [31:0]	c1_gpio_pad_io;
-   
-   assign c1_wb_clk = clk;
-   wire c10_d2d_clk = d2d_clk;
-   wire	c10_d2d_rst_n = d2d_rstn;
-   wire c12_d2d_clk = d2d_clk;
-   wire	c12_d2d_rst_n = d2d_rstn;
-   wire c13_d2d_clk = d2d_clk;
-   wire	c13_d2d_rst_n = d2d_rstn;
-   
-   chiplet soc1
-     (
-      // Clk and reset
-      .wb_clk		(c1_wb_clk),
-      .rst_n		(rstn),
-      
-      .gpio_pad_io          (c1_gpio_pad_io),
-      
-      // UART0
-      .uart_srx_pad_i		(1'b1),  
-      .uart_stx_pad_o		(c1_uart_stx_pad_o),
-
-      .d2d0_clk                (c10_d2d_clk),
-      .d2d0_rst_n              (c10_d2d_rst_n),
-      .d2d0_tx_data            (c10_d2d_tx_data),
-      .d2d0_tx_valid           (c10_d2d_tx_valid),
-      .d2d0_tx_ready           (c01_d2d_rx_ready),
-      .d2d0_rx_data            (c01_d2d_tx_data),
-      .d2d0_rx_valid           (c01_d2d_tx_valid),
-      .d2d0_rx_ready           (c10_d2d_rx_ready),
-
-      .d2d1_clk                (c12_d2d_clk),
-      .d2d1_rst_n              (c12_d2d_rst_n),
-      .d2d1_tx_data            (c12_d2d_tx_data),
-      .d2d1_tx_valid           (c12_d2d_tx_valid),
-      .d2d1_tx_ready           (c21_d2d_rx_ready),
-      .d2d1_rx_data            (c21_d2d_tx_data),
-      .d2d1_rx_valid           (c21_d2d_tx_valid),
-      .d2d1_rx_ready           (c12_d2d_rx_ready),
-
-      .d2d2_clk                (c13_d2d_clk),
-      .d2d2_rst_n              (c13_d2d_rst_n),
-      .d2d2_tx_data            (c13_d2d_tx_data),
-      .d2d2_tx_valid           (c13_d2d_tx_valid),
-      .d2d2_tx_ready           (c31_d2d_rx_ready),
-      .d2d2_rx_data            (c31_d2d_tx_data),
-      .d2d2_rx_valid           (c31_d2d_tx_valid),
-      .d2d2_rx_ready           (c13_d2d_rx_ready),
-      
-      .cpuID                  (8'h01)
-      );
-   
-   
-   reg [31:0] old_c1_gpio_val;
-   
-   always @(posedge clk) begin
-      old_c1_gpio_val <= c1_gpio_pad_io;
-      if (old_c1_gpio_val != c1_gpio_pad_io)
-	$display("[%m]C1 GPIO val = %h", c1_gpio_pad_io);
-      
-      if (c1_gpio_pad_io == 32'hc001c0de) begin
-	 // 0xff has been written to GPIO, so the
-	 // sofware has completed its tests
-	 $display("\n\n**** PASS C1 **** indicator for Software execution complete.\n\n");
-//	 $fflush(uart_mon1.fd);
-	 //	       repeat(1000000) @(posedge clk);
-	 $finish();
-      end else if (c1_gpio_pad_io == 32'hdeadbeef) begin
-	 // 0x55 has been written to GPIO, so the
-	 // there was an error during the tests
-	 $display("\n\n**** FAIL C1 **** indicator during Software tests. Finishing simulation.");
-//	 $fflush(uart_mon1.fd);
-	 repeat(1000000) @(posedge clk);
-	 $finish();
-      end
-   end   
-   
-   
-   always @(posedge clk or posedge rstn) begin
-      if (!rstn) begin
-	 counter1 = 0;
-      end
-      else begin
-	 if (counter1 == 20000000) begin
-	    $display("Completed");
-	    //		 Flash.StoreToFile;
+	    if (curr_gpio_pad_io[instance_count] == 32'hc001c0de) begin
+	       // 0xff has been written to GPIO, so the
+	       // sofware has completed its tests
+	       $display("\n\n**** PASS C%d **** indicator for Software execution complete.\n\n", instance_count);
+	       $finish();
+	    end else if (curr_gpio_pad_io[instance_count] == 32'hdeadbeef) begin
+	       // 0x55 has been written to GPIO, so the
+	       // there was an error during the tests
+	       $display("\n\n**** FAIL C%d **** indicator during Software tests. Finishing simulation.", instance_count);
+	       repeat(1000000) @(posedge clk);
+	       $finish();
+	    end
+	 end   
+	 
+	 
+	 always @(posedge clk or posedge rstn) begin
+	    if (!rstn) begin
+	       counter[instance_count] = 0;
+	    end
+	    else begin
+	       if (counter[instance_count] == 20000000) begin
+		  $display("Completed");
+		  $finish();
+	       end
+	       counter[instance_count] = counter[instance_count] + 1;
+	    end
 	    
-//	    $fflush(uart_mon1.fd);
-	    $finish();
 	 end
-	 counter1 = counter1 + 1;
-      end
-      
-   end
-   
-   uart_mon uart_mon1
-     (
-      .clk (clk), // System clock
-      .reset (~rstn_dly),
-      .rx (c1_uart_stx_pad_o),
-      .monID (8'h01)
-      );
-   
-   //==================================================================
-   //==================================================================
-   //==================================================================
-   // CHIP instance 2
-   //==================================================================
-   //==================================================================
-   //==================================================================
-
-   // //   
-       defparam CPUboard_tb.soc2.i_spi_flash.MEMORY_FILE="memory.txt";
-   
-   integer	counter2;
-   
-   // Signals for generic_pll
-   wire		c2_mc_clk;
-   wire		c2_wb_clk;
-   wire		c2_flash_clk;
-   wire		c2_pll_lock;
-   
-   wire		c2_flash_rstn;
-   wire		c2_flash_oen;
-   wire		c2_flash_cen;
-   wire		c2_flash_wen;
-   wire		c2_flash_rdy;
-   wire [7:0]	c2_flash_d;
-   wire [20:0]	c2_flash_a;
-   wire [31:0]	c2_flash_vpp;		// Special flash inputs
-   wire [31:0]	c2_flash_vcc;		// Special flash inputs
-   wire [1:0]	c2_flash_rpblevel;		// Special flash inputs
-   
-   
-   /*
-    reg [12:0]  a;
-    reg [1:0]   ba;
-    reg         cke, csn;
-    wire        wen, rasn, casn;
-    wire [15:0] dq;
-    reg [1:0]   dqm;
-    */
-   wire [31:0]	c2_mem_dat_pad_io;
-   wire [12:0]	c2_mem_adr_pad_o;
-   wire [1:0]	c2_mem_ba_pad_o;
-   wire [3:0]	c2_mem_dqm_pad_o;
-   
-   wire [31:0]	c2_gpio_pad_io;
-   
-   assign c2_wb_clk = clk;
-
-   wire c20_d2d_clk = d2d_clk;
-   wire	c20_d2d_rst_n = d2d_rstn;
-   wire c21_d2d_clk = d2d_clk;
-   wire	c21_d2d_rst_n = d2d_rstn;
-   wire c23_d2d_clk = d2d_clk;
-   wire	c23_d2d_rst_n = d2d_rstn;
-   
-   chiplet soc2
-     (
-      // Clk and reset
-      .wb_clk		(c2_wb_clk),
-      .rst_n		(rstn_dly),
-      
-      // GPIO
-      .gpio_pad_io          (c2_gpio_pad_io),
-      
-      // UART0
-      .uart_srx_pad_i		(1'b1),  
-      .uart_stx_pad_o		(c2_uart_stx_pad_o),
-
-      .d2d0_clk                (c20_d2d_clk),
-      .d2d0_rst_n              (c20_d2d_rst_n),
-      .d2d0_tx_data            (c20_d2d_tx_data),
-      .d2d0_tx_valid           (c20_d2d_tx_valid),
-      .d2d0_tx_ready           (c02_d2d_rx_ready),
-      .d2d0_rx_data            (c02_d2d_tx_data),
-      .d2d0_rx_valid           (c02_d2d_tx_valid),
-      .d2d0_rx_ready           (c20_d2d_rx_ready),
-
-      .d2d1_clk                (c21_d2d_clk),
-      .d2d1_rst_n              (c21_d2d_rst_n),
-      .d2d1_tx_data            (c21_d2d_tx_data),
-      .d2d1_tx_valid           (c21_d2d_tx_valid),
-      .d2d1_tx_ready           (c12_d2d_rx_ready),
-      .d2d1_rx_data            (c12_d2d_tx_data),
-      .d2d1_rx_valid           (c12_d2d_tx_valid),
-      .d2d1_rx_ready           (c21_d2d_rx_ready),
-
-      .d2d2_clk                (c23_d2d_clk),
-      .d2d2_rst_n              (c23_d2d_rst_n),
-      .d2d2_tx_data            (c23_d2d_tx_data),
-      .d2d2_tx_valid           (c23_d2d_tx_valid),
-      .d2d2_tx_ready           (c32_d2d_rx_ready),
-      .d2d2_rx_data            (c32_d2d_tx_data),
-      .d2d2_rx_valid           (c32_d2d_tx_valid),
-      .d2d2_rx_ready           (c23_d2d_rx_ready),
-      
-      .cpuID                  (8'h02)
-      );
-   
-   
-   reg [31:0] old_c2_gpio_val;
-   
-   always @(posedge clk) begin
-      old_c2_gpio_val <= c2_gpio_pad_io;
-      if (old_c2_gpio_val != c2_gpio_pad_io)
-	$display("[%m]C2 GPIO val = %h", c2_gpio_pad_io);
-      
-      if (c2_gpio_pad_io == 32'hc001c0de) begin
-	 // 0xff has been written to GPIO, so the
-	 // sofware has completed its tests
-	 $display("\n\n**** PASS C2 **** indicator for Software execution complete.\n\n");
-//	 $fflush(uart_mon1.fd);
-	 //	       repeat(1000000) @(posedge clk);
-	 $finish();
-      end else if (c2_gpio_pad_io == 32'hdeadbeef) begin
-	 // 0x55 has been written to GPIO, so the
-	 // there was an error during the tests
-	 $display("\n\n**** FAIL C2 **** indicator during Software tests. Finishing simulation.");
-//	 $fflush(uart_mon1.fd);
-	 repeat(1000000) @(posedge clk);
-	 $finish();
-      end
-   end   
-   
-   
-   always @(posedge clk or posedge rstn) begin
-      if (!rstn) begin
-	 counter2 = 0;
-      end
-      else begin
-	 if (counter2 == 20000000) begin
-	    $display("Completed");
-	    //		 Flash.StoreToFile;
-	    
-//	    $fflush(uart_mon1.fd);
-	    $finish();
-	 end
-	 counter2 = counter2 + 1;
-      end
-      
-   end
-   
-   uart_mon uart_mon2
-     (
-      .clk (clk), // System clock
-      .reset (~rstn_dly),
-      .rx (c2_uart_stx_pad_o),
-      .monID (8'h02)
-      );
-   
-   //==================================================================
-   //==================================================================
-   //==================================================================
-   // CHIP instance 3
-   //==================================================================
-   //==================================================================
-   //==================================================================
-
-   // //   
-       defparam CPUboard_tb.soc3.i_spi_flash.MEMORY_FILE="memory.txt";
-   
-   integer	counter3;
-   
-   // Signals for generic_pll
-   wire		c3_mc_clk;
-   wire		c3_wb_clk;
-   wire		c3_flash_clk;
-   wire		c3_pll_lock;
-   
-   wire		c3_flash_rstn;
-   wire		c3_flash_oen;
-   wire		c3_flash_cen;
-   wire		c3_flash_wen;
-   wire		c3_flash_rdy;
-   wire [7:0]	c3_flash_d;
-   wire [20:0]	c3_flash_a;
-   wire [31:0]	c3_flash_vpp;		// Special flash inputs
-   wire [31:0]	c3_flash_vcc;		// Special flash inputs
-   wire [1:0]	c3_flash_rpblevel;		// Special flash inputs
-   
-   
-   /*
-    reg [12:0]  a;
-    reg [1:0]   ba;
-    reg         cke, csn;
-    wire        wen, rasn, casn;
-    wire [15:0] dq;
-    reg [1:0]   dqm;
-    */
-   wire [31:0]	c3_mem_dat_pad_io;
-   wire [12:0]	c3_mem_adr_pad_o;
-   wire [1:0]	c3_mem_ba_pad_o;
-   wire [3:0]	c3_mem_dqm_pad_o;
-   
-   wire [31:0]	c3_gpio_pad_io;
-   
-   assign c3_wb_clk = clk;
-
-   wire c30_d2d_clk = d2d_clk;
-   wire	c30_d2d_rst_n = d2d_rstn;
-   wire c31_d2d_clk = d2d_clk;
-   wire	c31_d2d_rst_n = d2d_rstn;
-   wire c32_d2d_clk = d2d_clk;
-   wire	c32_d2d_rst_n = d2d_rstn;
-   
-   chiplet soc3
-     (
-      // Clk and reset
-      .wb_clk		(c3_wb_clk),
-      .rst_n		(rstn_dly),
-      
-      // GPIO
-      .gpio_pad_io          (c3_gpio_pad_io),
-      
-      // UART0
-      .uart_srx_pad_i		(1'b1),  
-      .uart_stx_pad_o		(c3_uart_stx_pad_o),
-
-      .d2d0_clk                (c30_d2d_clk),
-      .d2d0_rst_n              (c30_d2d_rst_n),
-      .d2d0_tx_data            (c30_d2d_tx_data),
-      .d2d0_tx_valid           (c30_d2d_tx_valid),
-      .d2d0_tx_ready           (c03_d2d_rx_ready),
-      .d2d0_rx_data            (c03_d2d_tx_data),
-      .d2d0_rx_valid           (c03_d2d_tx_valid),
-      .d2d0_rx_ready           (c30_d2d_rx_ready),
-
-      .d2d1_clk                (c32_d2d_clk),
-      .d2d1_rst_n              (c32_d2d_rst_n),
-      .d2d1_tx_data            (c32_d2d_tx_data),
-      .d2d1_tx_valid           (c32_d2d_tx_valid),
-      .d2d1_tx_ready           (c23_d2d_rx_ready),
-      .d2d1_rx_data            (c23_d2d_tx_data),
-      .d2d1_rx_valid           (c23_d2d_tx_valid),
-      .d2d1_rx_ready           (c32_d2d_rx_ready),
-
-      .d2d2_clk                (c31_d2d_clk),
-      .d2d2_rst_n              (c31_d2d_rst_n),
-      .d2d2_tx_data            (c31_d2d_tx_data),
-      .d2d2_tx_valid           (c31_d2d_tx_valid),
-      .d2d2_tx_ready           (c13_d2d_rx_ready),
-      .d2d2_rx_data            (c13_d2d_tx_data),
-      .d2d2_rx_valid           (c13_d2d_tx_valid),
-      .d2d2_rx_ready           (c31_d2d_rx_ready),
-      
-      .cpuID                  (8'h03)
-      
-      );
-   
-   
-   reg [31:0] old_c3_gpio_val;
-   
-   always @(posedge clk) begin
-      old_c3_gpio_val <= c3_gpio_pad_io;
-      if (old_c3_gpio_val != c3_gpio_pad_io)
-	$display("[%m]C3 GPIO val = %h", c3_gpio_pad_io);
-      
-      if (c3_gpio_pad_io == 32'hc001c0de) begin
-	 // 0xff has been written to GPIO, so the
-	 // sofware has completed its tests
-	 $display("\n\n**** PASS C3 **** indicator for Software execution complete.\n\n");
-//	 $fflush(uart_mon1.fd);
-	 //	       repeat(1000000) @(posedge clk);
-	 $finish();
-      end else if (c3_gpio_pad_io == 32'hdeadbeef) begin
-	 // 0x55 has been written to GPIO, so the
-	 // there was an error during the tests
-	 $display("\n\n**** FAIL C3 **** indicator during Software tests. Finishing simulation.");
-//	 $fflush(uart_mon1.fd);
-	 repeat(1000000) @(posedge clk);
-	 $finish();
-      end
-   end   
-   
-   
-   always @(posedge clk or posedge rstn) begin
-      if (!rstn) begin
-	 counter3 = 0;
-      end
-      else begin
-	 if (counter3 == 20000000) begin
-	    $display("Completed");
-	    //		 Flash.StoreToFile;
-	    
-//	    $fflush(uart_mon1.fd);
-	    $finish();
-	 end
-	 counter3 = counter3 + 1;
-      end
-      
-   end
-   
-   uart_mon uart_mon3
-     (
-      .clk (clk), // System clock
-      .reset (~rstn_dly),
-      .rx (c3_uart_stx_pad_o),
-      .monID (8'h03)
-      );
+	 
+	 uart_mon uart_mon
+	   (
+	    .clk (clk), // System clock
+	    .reset (~rstn), // Reset signal
+	    .rx (uart_stx_pad_o[instance_count]),
+	    .monID (cpuID[instance_count])
+	    );
+	 
+      end // for (instance_count = 0; instance_count < 4; instance_count = instance_count + 1)
+   endgenerate
    
 endmodule
 
