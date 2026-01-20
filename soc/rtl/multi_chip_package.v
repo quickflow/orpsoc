@@ -97,7 +97,7 @@ module multi_chip_package
    genvar	instance_count;
 
    generate
-      for (instance_count = 0; instance_count < 4; instance_count = instance_count + 1) begin : chiplets
+      for (instance_count = 0; instance_count < 4; instance_count = instance_count + 1) begin : chiplet
 
 	 assign wb_clk[instance_count] = clk;
 	 
@@ -114,7 +114,7 @@ module multi_chip_package
 	 assign cpuID[instance_count] = instance_count;
 	 
 	 // //   
-		  defparam CPUboard_tb.chiplet[instance_count].chiplet.i_spi_flash.MEMORY_FILE="memory.txt";
+		  defparam CPUboard_tb.pkg.chiplet[instance_count].chiplet.i_spi_flash.MEMORY_FILE="memory.txt";
    
 	 chiplet chiplet
 	   (
