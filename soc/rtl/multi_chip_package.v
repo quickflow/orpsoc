@@ -114,7 +114,7 @@ module multi_chip_package
 	 assign cpuID[instance_count] = instance_count;
 	 
 	 // //   
-	 defparam CPUboard_tb.genblk[instance_count].soc.i_spi_flash.MEMORY_FILE="memory.txt";
+		  defparam CPUboard_tb.chiplet[instance_count].chiplet.i_spi_flash.MEMORY_FILE="memory.txt";
    
 	 chiplet chiplet
 	   (
