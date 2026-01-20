@@ -24,7 +24,7 @@
 
 ../../bench/CPUboard_tb.v
 ../../bench/sdram/sdr_sdram_model.v
-../../bench/generic_pll/generic_pll.v
+//../../bench/generic_pll/generic_pll.v
 //../../bench/models/512Kx8.v
 //../../bench/models/28f016s3/dp016s3.v
 //../../bench/models/28f016s3/bwsvff.v
@@ -43,6 +43,7 @@
 ../../rtl/wb_conmax/rtl/verilog/wb_conmax_rf.v
 ../../rtl/wb_conmax/rtl/verilog/wb_conmax_pri_dec.v
  
+../../rtl/multi_chip_package.v
 ../../rtl/chiplet.v
 ../../rtl/or1k_soc_top.v
  
